@@ -1,5 +1,24 @@
 require 'rails_helper'
 
 RSpec.describe Link, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  it 'validates url presence' do
+    link = FactoryGirl.build(:link, url: nil)
+    expect(link).not_to be_valid
+  end
+
+  it 'validates shortcode presence' do
+    link = FactoryGirl.build(:link, shortcode: nil)
+    expect(link).not_to be_valid
+  end
+
+  it 'validates shortcode format' do
+    link = FactoryGirl.build(:link, shortcode: 'abra-kadabra')
+    expect(link).not_to be_valid
+  end
+
+  it 'validates shortcode uniqueness' do
+    FactoryGirl.create(:link, shortcode: 'aaaaaa')
+    link = FactoryGirl.build(:link, shortcode: 'aaaaaa')
+    expect(link).not_to be_valid
+  end
 end
