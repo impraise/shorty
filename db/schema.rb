@@ -21,7 +21,7 @@ ActiveRecord::Schema.define(version: 20160714222426) do
     t.integer  "redirects"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["shortcode"], name: "index_links_on_shortcode", using: :btree
+    t.index ["shortcode"], name: "index_links_on_shortcode", unique: true, using: :btree
   end
 
 end
