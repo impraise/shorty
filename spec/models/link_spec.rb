@@ -21,4 +21,9 @@ RSpec.describe Link, type: :model do
     link = FactoryGirl.build(:link, shortcode: 'aaaaaa')
     expect(link).not_to be_valid
   end
+
+  it 'generates valid random shortcode' do
+    link = FactoryGirl.build(:link, shortcode: Link.generate_shortcode)
+    expect(link).to be_valid
+  end
 end
