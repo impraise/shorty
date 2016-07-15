@@ -4,6 +4,8 @@ gem 'rails', '~> 5.0.0'
 gem 'pg', '~> 0.18'
 gem 'puma', '~> 3.0'
 gem 'jbuilder', '~> 2.5'
+gem 'responders'
+gem 'active_model_serializers'
 
 group :development, :test do
   gem 'pry-rails'

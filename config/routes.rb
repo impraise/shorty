@@ -1,3 +1,7 @@
 Rails.application.routes.draw do
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+  scope defaults: { format: :json } do
+    post 'shorten', to: 'shorten#create'
+    get ':shortcode', to: 'shorten#show'
+    get ':shortcode/stats', to: 'shorten#stats'
+  end
 end
