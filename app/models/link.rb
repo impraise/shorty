@@ -11,8 +11,16 @@ class Link < ApplicationRecord
 
     def generate_shortcode
       shortcode = Array.new(6) { SHORTCODE_RANGE.sample }.join
-      shortcode = generate_shortcode unless Link.where(shortcode: shortcode).count == 0
+      shortcode = generate_shortcode unless where(shortcode: shortcode).count == 0
       shortcode
+    end
+
+    def shortcode_valid?(shortcode)
+      (shortcode =~ /\A[0-9a-zA-Z_]{6}\z/) == 0
+    end
+
+    def shortcode_uniq?(shortcode)
+      where(shortcode: shortcode).count == 0
     end
   end
 end

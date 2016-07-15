@@ -90,7 +90,7 @@ RSpec.describe 'Shorty', type: :request do
           as: :json
       expect(response.content_type).to eq('application/json')
       expect(response).to have_http_status(200)
-      expect(json['startDate']).to eq(link.created_at)
+      expect(json['startDate']).to eq(link.created_at.as_json)
       expect(json['lastSeenDate']).not_to be
       expect(json['redirectCount']).to eq(0)
     end
@@ -102,8 +102,8 @@ RSpec.describe 'Shorty', type: :request do
           as: :json
       expect(response.content_type).to eq('application/json')
       expect(response).to have_http_status(200)
-      expect(json['startDate']).to eq(link.created_at)
-      expect(json['lastSeenDate']).to eq(link.updated_at)
+      expect(json['startDate']).to eq(link.created_at.as_json)
+      expect(json['lastSeenDate']).to eq(link.updated_at.as_json)
       expect(json['redirectCount']).to eq(link.redirects)
     end
   end
