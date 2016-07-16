@@ -1,0 +1,19 @@
+version: '2'
+services:
+  db:
+    image: postgres
+    ports:
+      - "5432:5432"
+
+  api:
+    build: .
+    environment:
+      # Specify RAILS_ENV and SECRET_KEY_BASE in .env file for production
+      POSTGRES_HOST: 'db'
+    command: bin/rails server --port 3000 --binding 0.0.0.0
+    ports:
+      - "3000:3000"
+    links:
+      - db
+    volumes:
+      - .:/usr/src/app

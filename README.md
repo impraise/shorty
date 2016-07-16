@@ -26,6 +26,52 @@ The challenge, if you choose to accept it, is to create a micro service to short
 
 -------------------------------------------------------------------------
 
+## Installation
+
+First of all You need to have Docker Engine and Docker up and running. Read manual if needed: [Ubuntu install docs](https://docs.docker.com/engine/installation/linux/ubuntulinux/).
+
+If you are running Production environment, create `.env` file
+```
+# .env
+RAILS_ENV=production
+SECRET_KEY_BASE=<Make sure the secret is at least 30 characters and all random>
+```
+
+To start application you need to build images
+```
+$ docker-compose build
+```
+
+Create database and run migrations
+```
+$ docker-compose run api rake db:create db:migrate
+```
+
+Start service
+```
+$ docker-compose up
+```
+
+Running tests
+```
+$ docker-compose run -e RAILS_ENV=test api rake db:create db:migrate # if you haven't test database
+$ docker-compose run api rspec
+```
+
+Using API
+
+```
+curl -X POST -i -H "Content-Type: application/json" \
+     -d '{ "url": "https://google.com", "shortcode": "google" }' \
+     "http://localhost:3000/shorten"
+
+curl -X GET -i -H "Content-Type: application/json" \
+     "http://localhost:3000/google"
+
+curl -X GET -i -H "Content-Type: application/json" \
+     "http://localhost:3000/google/stats"
+```
+
 ## API Documentation
 
 **All responses must be encoded in JSON and have the appropriate Content-Type header**
@@ -131,5 +177,3 @@ lastSeenDate      | date of the last time the a redirect was issued, not present
 Error | Description
 ----- | ------------
 404   | The ```shortcode``` cannot be found in the system
-
-
