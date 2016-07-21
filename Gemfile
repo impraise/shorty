@@ -6,8 +6,7 @@ gem 'rails', '~> 5.0.0'
 gem 'sqlite3'
 gem 'pg' 
 gem 'puma', '~> 3.0'
-# Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-# gem 'jbuilder', '~> 2.5'
+gem 'jbuilder', '~> 2.5'
 
 group :development, :test do
   gem 'byebug', platform: :mri

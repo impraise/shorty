@@ -1,6 +1,6 @@
 class Link < ApplicationRecord
-  validates :url, presence: true
-  validates :code, presence: true
+  validates :url, presence: true, format: URI.regexp
+  validates :code, presence: true, format: /\A[0-9a-zA-Z_]{4,}\z/
   validates :code, uniqueness: true
 
   before_validation :generate_code, on: :create, unless: :code
@@ -8,9 +8,9 @@ class Link < ApplicationRecord
   private
 
   def generate_code
-
-    begin
+    loop do
       self.code = GenerateShortCode.new.call
-    end while self.class.exists?(code: code)
+      break unless self.class.exists?(code: code)
+    end
   end
 end
