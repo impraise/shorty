@@ -18,6 +18,7 @@ module Api
       def show
         link = Link.find_by!(code: params[:shortcode])
 
+        LinkStatService.new.link_showed!(link)
         redirect_to link.url
       end
     end

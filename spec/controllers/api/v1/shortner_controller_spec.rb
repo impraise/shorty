@@ -72,6 +72,13 @@ RSpec.describe Api::V1::ShortnerController do
         expect(response.status).to eq 302
         expect(response).to redirect_to('http://example.com')
       end
+
+      it 'updates stats' do
+        expect_any_instance_of(LinkStatService).to receive(:link_showed!)
+          .with(instance_of(Link))
+
+        get :show, params: { shortcode: 'somecode' }
+      end
     end
 
     context 'There no link with given shortcode' do
