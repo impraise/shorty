@@ -13,6 +13,13 @@ module Api
       rescue ApiErrors::Error => e
         render_error(e, status: 400)
       end
+
+      # GET /api/v1/:shortcode
+      def show
+        link = Link.find_by!(code: params[:shortcode])
+
+        redirect_to link.url
+      end
     end
   end
 end

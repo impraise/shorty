@@ -3,10 +3,11 @@ require 'rails_helper'
 RSpec.describe Api::V1::ShortnerController do
   include JsonResponse
 
+  let(:url) { 'http://example.com' }
+  let(:code) { 'somecode' }
+
   describe '#create' do
     context 'URL provided' do
-      let(:url) { 'http://example.com' }
-
       it 'creates a record' do
         expect { post :create, params: { url: url } }.to change(Link, :count).by(1)
       end
@@ -39,9 +40,6 @@ RSpec.describe Api::V1::ShortnerController do
     end
 
     context 'shortcode provided' do
-      let(:url) { 'http://example.com' }
-      let(:code) { 'somecode' }
-
       it 'assigned to the new record' do
         post :create, params: { url: url, shortcode: 'somecode' }
 
@@ -60,6 +58,27 @@ RSpec.describe Api::V1::ShortnerController do
         post :create, params: { url: url, shortcode: '!somecode' }
 
         expect(response.status).to eq 422
+      end
+    end
+  end
+
+  describe '#show' do
+    context 'Link with shortcode exist' do
+      let!(:link) { Link.create!(url: url, code: code) }
+
+      it "redirect to link's url" do
+        get :show, params: { shortcode: 'somecode' }
+
+        expect(response.status).to eq 302
+        expect(response).to redirect_to('http://example.com')
+      end
+    end
+
+    context 'There no link with given shortcode' do
+      it 'returns 404 status' do
+        get :show, params: { shortcode: 'realynotexistcode' }
+
+        expect(response.status).to eq 404
       end
     end
   end
