@@ -6,6 +6,8 @@ describe "Validators::ShortenURL" do
       url: "http://threefunkymonkeys.com",
       shortcode: SecureRandom.hex(3)
     }
+
+    @redis = Redis.client
   end
 
   it "Should be valid" do
@@ -30,6 +32,15 @@ describe "Validators::ShortenURL" do
 
     assert !action.valid?
     assert_equal [:format], action.errors[:shortcode]
+  end
+
+  it "Should not be valid (shortcode not unique)" do
+    @redis.call "SET", @valid_attributes[:shortcode], "http://impraise.com"
+
+    action = Validators::ShortenURL.new(@valid_attributes)
+
+    assert !action.valid?
+    assert_equal [:not_unique], action.errors[:shortcode]
   end
 end
 
