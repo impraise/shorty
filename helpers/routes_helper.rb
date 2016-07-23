@@ -21,11 +21,11 @@ module ShortyService
 
     def response(status:, body:)
       res.status = status
+
       format_json(body)
     end
 
     def unprocessable!(message: "Unprocessable Entity", description: "The submitted entity is unprocessable", errors: {})
-
       res.status = 422
 
       format_json({ message: message, description: description, errors: errors })
