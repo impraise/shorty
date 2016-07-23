@@ -26,8 +26,6 @@ group :development do
 end
 
 group :test do
-  gem 'capybara',           '~> 2.7'
-  gem 'database_cleaner',   '~> 1.5'
   gem 'factory_girl_rails', '~> 4.7'
   gem 'faker',              '~> 1.6'
 end
