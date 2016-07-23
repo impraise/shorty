@@ -8,11 +8,22 @@ module Validators
       assert_present(:url)
 
       unless shortcode.nil?
-        redis = Redis.client
-        url   = redis.call "GET", shortcode
+        url   = Redis.client.call "GET", shortcode
 
         assert_format(:shortcode, /^[0-9a-zA-Z_]{6}$/)
         assert(url.nil?, [:shortcode, :not_unique])
+      else
+        self.shortcode = valid_shortcode
+      end
+    end
+
+    private
+
+    def valid_shortcode
+      loop do
+        code = SecureRandom.hex(3)
+
+        return code unless Redis.client.call("GET", code)
       end
     end
   end

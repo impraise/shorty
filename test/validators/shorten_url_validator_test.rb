@@ -42,5 +42,14 @@ describe "Validators::ShortenURL" do
     assert !action.valid?
     assert_equal [:not_unique], action.errors[:shortcode]
   end
+
+  it "Should generate a valid code if not provided" do
+    @valid_attributes.delete(:shortcode)
+
+    action = Validators::ShortenURL.new(@valid_attributes)
+
+    assert action.valid?
+    assert_match /^[0-9a-zA-Z_]{6}$/, action.shortcode
+  end
 end
 
