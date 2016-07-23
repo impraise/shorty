@@ -21,6 +21,12 @@ module Api
         LinkStatService.new.link_showed!(link)
         redirect_to link.url
       end
+
+      # GET /api/v1/:shortcode/stats
+      def stats
+        stats = LinkStat.by_link_code(params[:shortcode])
+        @decorated_stats = LinkStatsPresenter.new(stats)
+      end
     end
   end
 end

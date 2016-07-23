@@ -82,11 +82,62 @@ RSpec.describe Api::V1::ShortnerController do
     end
 
     context 'There no link with given shortcode' do
-      it 'returns 404 status' do
-        get :show, params: { shortcode: 'realynotexistcode' }
+      subject { get :show, params: { shortcode: 'realynotexistcode' } }
 
-        expect(response.status).to eq 404
+      it { is_expected.to have_http_status(404) }
+    end
+  end
+
+  describe '#stats' do
+    render_views # because we using jbuilder
+
+    context 'link record exists and was visited before' do
+      let!(:link) { Link.create!(url: url, code: code) }
+      before { LinkStatService.new.link_showed!(link) }
+
+      subject { get :stats, params: { shortcode: code }, format: :json }
+
+      it { is_expected.to have_http_status(200) }
+
+      it 'returns json with stats info' do
+        expect(json_response[:redirectCount]).to eq 1
       end
+
+      it 'returns a startDate' do
+        start_date = Time.zone.parse(json_response[:startDate])
+        expect(start_date.to_i).to eq link.created_at.to_i
+      end
+
+      it 'returns a lastSeenDate of a record' do
+        expect(json_response).to include :lastSeenDate
+      end
+    end
+    context 'link record exists and not visited before' do
+      let!(:link) { Link.create!(url: url, code: code) }
+
+      subject { get :stats, params: { shortcode: code }, format: :json }
+
+      it { is_expected.to have_http_status(200) }
+
+      it 'returns json with stats info' do
+        expect(json_response[:redirectCount]).to eq 0
+      end
+
+      it 'returns a startDate' do
+        start_date = Time.zone.parse(json_response[:startDate])
+        expect(start_date.to_i).to eq link.created_at.to_i
+      end
+
+      it 'not returns a lastSeenDate of a record' do
+        expect(json_response).to_not include :lastSeenDate
+      end
+
+    end
+
+    context 'link record not exist' do
+      subject { get :stats, params: { shortcode: 'notexist' }, format: :json }
+
+      it { is_expected.to have_http_status(404) }
     end
   end
 end

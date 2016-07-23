@@ -4,9 +4,9 @@ RSpec.describe Link, type: :model do
   let(:url) { 'http://example.com' }
   let(:code) { nil }
 
-  subject { described_class.create!(url: url, code: code) }
-
   describe '#code' do
+    subject { described_class.create!(url: url, code: code) }
+
     it 'presents on create' do
       expect(subject.code).to be_present
     end
@@ -28,6 +28,14 @@ RSpec.describe Link, type: :model do
 
       it 'eq to the passed code' do
         expect(subject.code).to eq 'my_code'
+      end
+    end
+  end
+
+  describe '#save' do
+    context 'there is no stats record' do
+      it 'create stats record' do
+        expect { described_class.create!(url: url, code: code) }.to change(LinkStat, :count).by(1)
       end
     end
   end
