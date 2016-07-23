@@ -9,6 +9,8 @@ module ShortyService
         puts "See INSTALL.md for reference"
         exit 1
       end
+
+      Redis.connect(ENV.fetch("REDIS_URL"))
     end
 
     def self.set_env(env)
@@ -26,7 +28,7 @@ module ShortyService
     end
 
     def redis
-      @redis ||= Redic.new(ENV.fetch("REDIS_URL"))
+      Redis.client
     end
   end
 end

@@ -2,6 +2,7 @@ require "cuba"
 require "cuba/safe"
 require "redic"
 require_relative "helpers/environment_helper"
+require_relative "lib/redis"
 
 ENV["RACK_ENV"] ||= "development"
 ShortyService::Helpers.init_environment(ENV["RACK_ENV"])
