@@ -6,7 +6,6 @@ module Concerns
     end
 
     def execute
-      puts @attrs
       saved = @ctx.redis.call "SET", @attrs[:shortcode], @attrs[:url]
       
       if saved
