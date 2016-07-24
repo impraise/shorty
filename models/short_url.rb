@@ -18,6 +18,14 @@ class ShortURL
     @client.call("DEL", @shortcode)
   end
 
+  def register_view
+    @client.call("INCR", "#{@shortcode}:views")
+  end
+
+  def views
+    @client.call("GET", "#{@shortcode}:views").to_i
+  end
+
   def self.create(url:, shortcode:)
     short_url = self.new(url: url, shortcode: shortcode)
     short_url.created_at = Time.now.to_i
