@@ -1,8 +1,14 @@
 module Routes
   class Base < Cuba
     define do
-      on get, root do
-        format_json({ message: "Hello World" })
+      on get do
+        on ":shortcode" do |shortcode|
+          url = redis.call("GET", shortcode)
+
+          not_found! unless url
+
+          redirect!(url)
+        end
       end
 
       on post do
