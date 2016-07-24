@@ -2,7 +2,7 @@ require_relative "../test_helper"
 
 describe "GET /:shortcode" do
   it "Should redirect to the stored path" do
-    Redis.client.call "SET", "mycode", "http://myurl.com"
+    ShortURL.create(shortcode: "mycode", url: "http://myurl.com")
 
     json_get "/mycode"
 
@@ -19,5 +19,13 @@ describe "GET /:shortcode" do
 
     assert_equal 404, last_response.status
     assert_equal "The shortcode cannot be found in the system", response["description"]
+  end
+
+  it "Should register view" do
+    ShortURL.create(shortcode: "mycode", url: "http://myurl.com")
+
+    ShortURL.any_instance.expects(:register_view)
+
+    json_get "/mycode"
   end
 end

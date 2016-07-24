@@ -8,6 +8,7 @@ module Routes
           not_found! unless url
 
           on root do
+            url.register_view
             redirect!(url.url)
           end
         end
