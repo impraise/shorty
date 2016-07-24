@@ -6,9 +6,9 @@ module Concerns
     end
 
     def execute
-      saved = @ctx.redis.call "SET", @attrs[:shortcode], @attrs[:url]
+      result = @ctx.redis.call "SET", @attrs[:shortcode], @attrs[:url]
       
-      if saved
+      if result == "OK"
         @ctx.created!({ shortcode: @attrs[:shortcode] })
       else
         @ctx.server_error!("URL couldn't be shortened. Please try again later")
