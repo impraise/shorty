@@ -34,3 +34,9 @@ def json_post(path, params = {}, headers = {})
 
   post path, body, json_headers
 end
+
+def json_get(path, headers = {})
+  json_headers = headers.merge("CONTENT_TYPE" => "application/json")
+
+  get path, {}, json_headers
+end
