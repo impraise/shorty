@@ -11,6 +11,10 @@ module Routes
             url.register_view
             redirect!(url.url)
           end
+
+          on "stats" do
+            success!(stats_for(url))
+          end
         end
       end
 
