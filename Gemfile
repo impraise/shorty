@@ -7,6 +7,7 @@ gem 'pg', '~> 0.18'
 gem 'puma', '~> 3.0'
 gem 'active_model_serializers', '~> 0.10.2'
 gem 'rack-cors'
+gem 'rack-attack'
 
 group :development, :test do
   gem 'pry-rails'
