@@ -6,9 +6,9 @@ module Concerns
     end
 
     def execute
-      result = @ctx.redis.call "SET", @attrs[:shortcode], @attrs[:url]
+      url = ShortURL.create(url: @attrs[:url], shortcode: @attrs[:shortcode])
       
-      if result == "OK"
+      if url
         @ctx.created!({ shortcode: @attrs[:shortcode] })
       else
         @ctx.server_error!("URL couldn't be shortened. Please try again later")
