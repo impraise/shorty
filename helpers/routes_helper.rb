@@ -6,7 +6,7 @@ module ShortyService
       res.headers["Content-Type"] = "application/json; charset=UTF-8"
       res.write JSON.dump(resource)
 
-      res.finish
+      halt(res.finish)
     end
 
     def json_request?
