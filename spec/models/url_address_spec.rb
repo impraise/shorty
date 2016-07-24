@@ -18,7 +18,7 @@ describe UrlAddress, type: :model do
       subject.shortcode = 'm!5h0rtc0d3'
 
       expect(subject).to be_invalid
-      expect(subject.errors[:shortcode]).to eq(['must have six alphanumeric chars and/or underscore'])
+      expect(subject.errors[:shortcode]).to eq(['is invalid'])
     end
 
     it 'must have a valid HTTP URL' do
@@ -39,6 +39,14 @@ describe UrlAddress, type: :model do
       subject.valid?
 
       expect(subject.errors[:shortcode]).to be_empty
+      expect(subject.shortcode).to match(/\A[0-9a-zA-Z_]{4,}\z/)
+    end
+
+    it 'shortcode must have at leat 4 chars' do
+      subject.shortcode = 'sam'
+      subject.valid?
+
+      expect(subject.errors[:shortcode]).to eq(['is invalid'])
     end
 
     it 'must be valid' do
@@ -56,13 +64,17 @@ describe UrlAddress, type: :model do
       duplicated = build(:url_address, shortcode: url.shortcode)
 
       expect(duplicated).to be_invalid
-      expect(duplicated.errors[:shortcode]).to eq(['the the desired shortcode is already in use'])
+      expect(duplicated.errors[:shortcode]).to eq(['has already been taken'])
     end
 
     it 'must accept the given shortcode' do
-      url_address = create(:url_address, shortcode: 's4mp13')
+      url_address = create(:url_address, shortcode: 'example_shortcode')
 
-      expect(url_address.shortcode).to eq('s4mp13')
+      expect(url_address.shortcode).to eq('example_shortcode')
+    end
+
+    it 'must match the regex' do
+      expect(url.generate_shortcode!).to match(/\A[0-9a-zA-Z_]{6}\z/)
     end
 
     context 'not given' do
