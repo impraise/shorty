@@ -9,8 +9,6 @@ ShortyService::Helpers.init_environment(ENV["RACK_ENV"])
 
 Cuba.plugin Cuba::Safe
 
-Cuba.use Rack::Session::Cookie, :secret => ENV["SESSION_SECRET"]
-
 Cuba.use Rack::MethodOverride
 
 Dir["./lib/**/*.rb"].each     { |rb| require rb }
