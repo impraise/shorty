@@ -45,10 +45,10 @@ module ShortyService
 
     def error_response!(errors)
       if errors[:url] == [:not_present]
-        response(status: 406, body: { description: "URL is not present" })
+        response(status: 400, body: { message: "Bad Request", description: "URL is not present" })
 
       elsif errors[:shortcode] == [:not_unique]
-        response(status: 409, body: { description: "The the desired shortcode is already in use. Shortcodes are case-sensitive." })
+        response(status: 409, body: { message: "Conflict", description: "The the desired shortcode is already in use. Shortcodes are case-sensitive." })
 
       elsif errors[:shortcode] == [:format]
         unprocessable!(description: "The shortcode fails to meet the following regexp: ^[0-9a-zA-Z_]{4,}$")
