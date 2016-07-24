@@ -49,6 +49,12 @@ module ShortyService
       format_json({ message: "Not Found", description: "The shortcode cannot be found in the system" })
     end
 
+    def success!(body)
+      res.status = 200
+
+      format_json(body)
+    end
+
     def parse_request
       unprocessable!(description: "Wrong Request Content Type") unless json_request?
 
