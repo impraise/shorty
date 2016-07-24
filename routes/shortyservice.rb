@@ -1,5 +1,5 @@
 module Routes
-  class Base < Cuba
+  class ShortyService < Cuba
     define do
       on get do
         on ":shortcode" do |shortcode|

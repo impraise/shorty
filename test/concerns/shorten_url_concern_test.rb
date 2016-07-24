@@ -7,7 +7,7 @@ describe "Validators::ShortenURL" do
       shortcode: SecureRandom.hex(3)
     }
 
-    @context = Routes::Base.new
+    @context = Routes::ShortyService.new
   end
 
   it "Should respond created if shortened" do

@@ -23,5 +23,5 @@ Dir["./helpers/**/*.rb"].each { |rb| require rb }
 Cuba.plugin ShortyService::Helpers
 
 Cuba.define do
-  run Routes::Base
+  run Routes::ShortyService
 end
