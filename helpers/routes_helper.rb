@@ -31,7 +31,7 @@ module ShortyService
       format_json({ message: message, description: description, errors: errors })
     end
 
-    def server_error(message: "Internal Server Error", description: "Internal Error")
+    def server_error!(message: "Internal Server Error", description: "Internal Error")
       res.status = 500
 
       format_json({ message: message, description: description })
