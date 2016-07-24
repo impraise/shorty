@@ -48,6 +48,12 @@ describe "ShortURL" do
     assert (fetched != url)
   end
 
+  it "Should fetch nil if code doesn't exist" do
+    url = ShortURL.create(@valid_attributes)
+
+    assert !ShortURL.fetch("unknown")
+  end
+
   it "Should delete all data when deleted" do
     url  = ShortURL.create(@valid_attributes)
     code = @valid_attributes[:shortcode]
