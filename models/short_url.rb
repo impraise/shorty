@@ -33,4 +33,15 @@ class ShortURL
 
     short_url
   end
+
+  def self.fetch(shortcode)
+    url = Redis.client.call("GET", shortcode)
+
+    return nil unless url
+
+    instance = self.new(url: url, shortcode: shortcode)
+    instance.created_at = Redis.client.call("GET", "#{shortcode}:created")
+
+    instance
+  end
 end
