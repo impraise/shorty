@@ -15,6 +15,7 @@ class ShortURL
 
   def delete
     @client.call("DEL", "#{@shortcode}:created")
+    @client.call("DEL", "#{@shortcode}:views")
     @client.call("DEL", @shortcode)
   end
 
