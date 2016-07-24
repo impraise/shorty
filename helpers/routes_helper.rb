@@ -37,6 +37,18 @@ module ShortyService
       format_json({ message: message, description: description })
     end
 
+    def redirect!(location)
+      res.status = 302
+
+      res.headers["Location"] = location
+    end
+
+    def not_found!
+      res.status = 404
+
+      format_json({ message: "Not Found", description: "The shortcode cannot be found in the system" })
+    end
+
     def parse_request
       unprocessable!(description: "Wrong Request Content Type") unless json_request?
 
