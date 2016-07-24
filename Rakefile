@@ -17,15 +17,16 @@ namespace :test do
     Dir["test/models/*.rb"].each{ |file| load file }
   end
 
-  desc "Runs all tests in test/routes}"
+  desc "Runs all tests in test/routes"
   task :routes do
     Dir["test/routes/*.rb"].each{ |file| load file }
   end
 
-  desc "Runs all tests in test/{validators, concerns, routes}"
+  desc "Runs all tests in test/{validators, concerns, models, routes}"
   task :all => [:validators, :concerns, :models, :routes]
 end
 
+desc "Run all tests"
 task :test => "test:all"
 
 def load_files(dir)
