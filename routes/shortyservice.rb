@@ -3,11 +3,13 @@ module Routes
     define do
       on get do
         on ":shortcode" do |shortcode|
-          url = redis.call("GET", shortcode)
+          url = ShortURL.fetch(shortcode)
 
           not_found! unless url
 
-          redirect!(url)
+          on root do
+            redirect!(url.url)
+          end
         end
       end
 
