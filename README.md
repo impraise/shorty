@@ -1,28 +1,25 @@
 Shorty Challenge
 ================
 
-The trendy modern question for developer inteviews seems to be, "how to create an url shortner". Not wanting to fall too far from the cool kids, we have a challenge for you!
+## Requirements
 
-## The Challenge
+ * Ruby >= 2.2.2 (With bundler gem)
+ * SQLite or Postgres databases
 
-The challenge, if you choose to accept it, is to create a micro service to shorten urls, in the style that TinyURL and bit.ly made popular.
+## Local setup
+ * configure your database connection in `config/database.yml` (by default not required, sqlite used)
+ * install dependencies with `bundle install`
+ * create a db and rollup migrations with `bundle exec rake db:create db:migrate`
+ * run server `bundle exec rails server`
+ * server will listen requests on 3000 port
 
-## Rules
+ To run tests run `bundle exec rake`
 
-1. The service must expose HTTP endpoints according to the definition below.
-2. The service must be self contained, you can use any language and technology you like, but it must be possible to set it up from a fresh install of Ubuntu Server 14.04, by following the steps you write in the README.
-3. It must be well tested, it must also be possible to run the entire test suit with a single command from the directory of your repository.
-4. The service must be versioned using git and submitted by making a Pull Request against this repository, git history **should** be meaningful.
-5. You don't have to use a datastore, you can have all data in memory, but we'd be more impressed if you do use one.
+## Docker
 
-## Tips
-
-* Less is more, small is beautiful, you know the drill — stick to the requirements.
-* Don't try to make the microservice play well with others, the system is all yours.
-* No need to take care of domains, that's for a reverse proxy to handle.
-* Unit tests > Integration tests, but be careful with untested parts of the system.
-
-**Good Luck!** — not that you need any ;)
+ * Build container `docker-compose build`
+ * Run server `docker-compose up`
+ * To run tests exec `docker-compose run web bundle exec rake`
 
 -------------------------------------------------------------------------
 
