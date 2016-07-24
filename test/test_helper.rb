@@ -20,6 +20,10 @@ class MiniTest::Spec
 
   after do
     mocha_teardown
+
+    keys = Redis.client.call "KEYS", "*"
+
+    keys.each{ |k| Redis.client.call("DEL", k) }
   end
 end
 
