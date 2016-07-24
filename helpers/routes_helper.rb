@@ -75,5 +75,18 @@ module ShortyService
         unprocessable!
       end
     end
+
+    def stats_for(short_url)
+      views = short_url.views
+
+      stats = {
+        startDate: Time.at(short_url.created_at.to_i).iso8601,
+        redirectCount: views
+      }
+
+      stats.merge!(lastSeenDate: Time.at(short_url.last_seen.to_i).iso8601) if views > 0
+
+      stats
+    end
   end
 end
