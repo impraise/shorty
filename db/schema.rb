@@ -16,11 +16,11 @@ ActiveRecord::Schema.define(version: 20160723192345) do
   enable_extension "plpgsql"
 
   create_table "url_addresses", force: :cascade do |t|
-    t.text     "url",                                  null: false
+    t.text     "url",                                   null: false
     t.string   "shortcode",      limit: 40,             null: false
-    t.integer  "redirect_count",           default: 0
-    t.datetime "created_at",                           null: false
-    t.datetime "updated_at",                           null: false
+    t.integer  "redirect_count",            default: 0
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
     t.index ["shortcode"], name: "index_url_addresses_on_shortcode", unique: true, using: :btree
   end
 
