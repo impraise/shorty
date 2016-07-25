@@ -1,7 +1,7 @@
 Shorty Challenge
 ================
 
-Short is a micro service to shorten urls, in the style that TinyURL and bit.ly made popular.
+Shorty is a micro service to shorten urls, in the style that TinyURL and bit.ly made popular.
 
 ## Requirements
 
