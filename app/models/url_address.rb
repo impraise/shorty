@@ -14,7 +14,8 @@ class UrlAddress < ApplicationRecord
     shortcode
   end
 
-  protected
+  private
+
     def ensure_shortcode
       return if shortcode.present?
       self.shortcode = generate_shortcode!
