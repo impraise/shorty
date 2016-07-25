@@ -1,0 +1,70 @@
+AllCops:
+  Exclude:
+    - 'bin/**/*'
+    - 'db/**/*'
+    - 'config/**/*'
+
+MethodLength:
+  Enabled: false
+
+ClassLength:
+  Enabled: false
+
+LineLength:
+  Enabled: false
+
+MethodDefParentheses:
+  EnforcedStyle: require_no_parentheses
+
+AccessModifierIndentation:
+  Enabled: false
+
+IndentationWidth:
+  Enabled: false
+
+IndentationConsistency:
+  Enabled: false
+
+Documentation:
+  Enabled: false
+
+EmptyLinesAroundAccessModifier:
+  Enabled: false
+
+SpaceBeforeFirstArg:
+  Enabled: false
+
+Void:
+  Enabled: false
+
+WordArray:
+  Enabled: false
+
+IndentHash:
+  Enabled: false
+
+EndAlignment:
+  AlignWith: variable
+
+StringLiterals:
+  EnforcedStyle: single_quotes
+  Enabled: true
+
+Style/GlobalVars:
+  AllowedVariables:
+    - $redis_connection_pool
+
+Style/BlockDelimiters:
+  Enabled: false
+
+Style/MultilineOperationIndentation:
+  EnforcedStyle: indented
+
+Rails:
+  Enabled: true
+
+ClassAndModuleChildren:
+  Enabled: false
+
+MutableConstant:
+  Enabled: false

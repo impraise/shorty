@@ -1,30 +1,91 @@
 Shorty Challenge
 ================
 
-The trendy modern question for developer inteviews seems to be, "how to create an url shortner". Not wanting to fall too far from the cool kids, we have a challenge for you!
+Short is a micro service to shorten urls, in the style that TinyURL and bit.ly made popular.
 
-## The Challenge
+## Requirements
 
-The challenge, if you choose to accept it, is to create a micro service to shorten urls, in the style that TinyURL and bit.ly made popular.
+ * Ruby 2.3.1
+ * Postgres database
 
-## Rules
+## Getting Started
 
-1. The service must expose HTTP endpoints according to the definition below.
-2. The service must be self contained, you can use any language and technology you like, but it must be possible to set it up from a fresh install of Ubuntu Server 14.04, by following the steps you write in the README.
-3. It must be well tested, it must also be possible to run the entire test suit with a single command from the directory of your repository.
-4. The service must be versioned using git and submitted by making a Pull Request against this repository, git history **should** be meaningful.
-5. You don't have to use a datastore, you can have all data in memory, but we'd be more impressed if you do use one.
+Clone the repository, install gems and setup the database by running:
 
-## Tips
+```sh
+git clone git@github.com:evandrodutra/shorty.git
+cd shorty
+bundle install
+bundle exec rake db:setup
+bundle exec rake db:migrate
+bundle exec puma -p 3000
+```
 
-* Less is more, small is beautiful, you know the drill — stick to the requirements.
-* Don't try to make the microservice play well with others, the system is all yours.
-* No need to take care of domains, that's for a reverse proxy to handle.
-* Unit tests > Integration tests, but be careful with untested parts of the system.
+## Development
 
-**Good Luck!** — not that you need any ;)
+#### Tests
 
--------------------------------------------------------------------------
+To run tests exec:
+
+```sh
+bundle exec rspec
+```
+
+#### Guard
+
+You can use guard to automatically run tests and rubocop:
+
+```sh
+bundle exec guard
+```
+
+## Using Docker
+
+You can avoid all the setup above and run the project using Docker. To get Docker set up and running please read the docs: [Docker install](https://www.docker.com/products/overview).
+
+
+#### Build docker container:
+
+```sh
+docker-compose build
+```
+
+#### Initialize database and run migrations:
+
+```sh
+docker-compose run app rake db:setup db:migrate
+```
+
+#### Start container and services on [http://localhost:3000](http://localhost:3000):
+
+```sh
+docker-compose up
+```
+
+#### To run tests:
+
+```sh
+docker-compose run app bundle exec rspec
+```
+
+## API Usage
+
+#### POST /shorten
+```sh
+curl -X POST -i -H "Content-Type: application/json" -d '{ "url": "http://www.bbc.com/", "shortcode": "bbcnews" }' "http://localhost:3000/shorten"
+```
+
+#### GET /:shortcode
+
+```sh
+curl -X GET -i -H "Content-Type: application/json" "http://localhost:3000/bbcnews"
+```
+
+#### GET /:shortcode/stats
+
+```sh
+curl -X GET -i -H "Content-Type: application/json" "http://localhost:3000/bbcnews/stats"
+```
 
 ## API Documentation
 
@@ -33,7 +94,7 @@ The challenge, if you choose to accept it, is to create a micro service to short
 
 ### POST /shorten
 
-```
+```sh
 POST /shorten
 Content-Type: "application/json"
 
@@ -50,7 +111,7 @@ shortcode | preferential shortcode
 
 ##### Returns:
 
-```
+```sh
 201 Created
 Content-Type: "application/json"
 
@@ -72,7 +133,7 @@ Error | Description
 
 ### GET /:shortcode
 
-```
+```sh
 GET /:shortcode
 Content-Type: "application/json"
 ```
@@ -85,7 +146,7 @@ Attribute      | Description
 
 **302** response with the location header pointing to the shortened URL
 
-```
+```sh
 HTTP/1.1 302 Found
 Location: http://www.example.com
 ```
@@ -98,8 +159,8 @@ Error | Description
 
 ### GET /:shortcode/stats
 
-```
-GET /:code
+```sh
+GET /:shortcode/stats
 Content-Type: "application/json"
 ```
 
@@ -109,7 +170,7 @@ Attribute      | Description
 
 ##### Returns
 
-```
+```sh
 200 OK
 Content-Type: "application/json"
 
@@ -131,5 +192,3 @@ lastSeenDate      | date of the last time the a redirect was issued, not present
 Error | Description
 ----- | ------------
 404   | The ```shortcode``` cannot be found in the system
-
-
