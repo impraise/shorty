@@ -118,10 +118,34 @@ At this point you'll have the service listening at `http://localhost:9292`
 You can use curl to interact with it, for example:
 
 ```
-curl -v -XPOST -H"Content-type: application/json" http://localhost:9292/shorten -d "{\"url\":\"http://threefunkymonkeys.com\",\"shortcode\":\"1214sR\"}"
-```
+[kandalf@funkymonkey ~]$ curl -v -XPOST -H"Content-type: application/json" http://localhost:9292/shorten -d "{\"url\":\"http://threefunkymonkeys.com\",\"shortcode\":\"1214sR\"}"
 
-Make sure you read the [API Documentation](#api-documentation) the README.md file for this.
+*   Trying 127.0.0.1...
+* Connected to localhost (127.0.0.1) port 9292 (#0)
+> POST /shorten HTTP/1.1
+> Host: localhost:9292
+> User-Agent: curl/7.43.0
+> Accept: */*
+> Content-type: application/json
+> Content-Length: 35
+>
+* upload completely sent off: 35 out of 35 bytes
+< HTTP/1.1 201 Created
+< X-Content-Type-Options: nosniff
+< X-Download-Options: noopen
+< X-Frame-Options: SAMEORIGIN
+< X-Permitted-Cross-Domain-Policies: none
+< X-Xss-Protection: 1; mode=block
+< Strict-Transport-Security: max-age=2628000
+< Content-Type: application/json; charset=UTF-8
+< Content-Length: 22
+< Server: WEBrick/1.3.1 (Ruby/2.2.2/2015-04-13)
+< Date: Mon, 25 Jul 2016 20:36:55 GMT
+< Connection: Keep-Alive
+<
+* Connection #0 to host localhost left intact
+{"shortcode":"1214sR"}%
+```
 
 -------------------------------------------------------------------------
 
