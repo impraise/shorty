@@ -33,7 +33,11 @@ gem install dep
 dep install && dep -f .gems-test install
 ```
 
-Otherwise, you can just `gem install` them manually.
+Otherwise, you can just `gem install` them manually:
+
+```
+cat {.gems,.gems-test} | sed -e 's/ -v /:/g' | xargs -p gem install
+```
 
 ## Running the code
 
