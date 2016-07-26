@@ -1,0 +1,3 @@
+.gemsetrc
+.ruby-version
+*.env.sh
