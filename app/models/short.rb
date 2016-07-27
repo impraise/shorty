@@ -29,10 +29,9 @@ class Short < ActiveRecord::Base
   def new_shortcode
     begin
       random_shortcode = SecureRandom.urlsafe_base64(4)
-      no_match = ( /\A[0-9a-zA-Z_]{6}\z/ =~ random_shortcode ).nil?
-      taken = Short.exists?(shortcode: random_shortcode)
-    end while no_match && taken
-
+      match = !( /\A[0-9a-zA-Z_]{6}\z/ =~ random_shortcode ).nil?
+      available = !Short.exists?(shortcode: random_shortcode)
+    end until match && available
     random_shortcode
   end
 
