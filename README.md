@@ -1,34 +1,40 @@
-Shorty Challenge
+Shorty API
 ================
 
-The trendy modern question for developer inteviews seems to be, "how to create an url shortner". Not wanting to fall too far from the cool kids, we have a challenge for you!
+This is a Ruby on Rails API that allows you to create short URLs. Setup instructions as well as endpoint definitions follow.
 
-## The Challenge
 
-The challenge, if you choose to accept it, is to create a micro service to shorten urls, in the style that TinyURL and bit.ly made popular.
+## Deployment Documentation
 
-## Rules
+This assumes the following have been installed:
 
-1. The service must expose HTTP endpoints according to the definition below.
-2. The service must be self contained, you can use any language and technology you like, but it must be possible to set it up from a fresh install of Ubuntu Server 14.04, by following the steps you write in the README.
-3. It must be well tested, it must also be possible to run the entire test suit with a single command from the directory of your repository.
-4. The service must be versioned using git and submitted by making a Pull Request against this repository, git history **should** be meaningful.
-5. You don't have to use a datastore, you can have all data in memory, but we'd be more impressed if you do use one.
+* Ubuntu Machine
+* Ruby > 2.2.3
+* Git
+* Bundler
 
-## Tips
+In order to keep this as simple as possible as per the instructions, I stuck with sqlite3 and webrick.
 
-* Less is more, small is beautiful, you know the drill — stick to the requirements.
-* Don't try to make the microservice play well with others, the system is all yours.
-* No need to take care of domains, that's for a reverse proxy to handle.
-* Unit tests > Integration tests, but be careful with untested parts of the system.
+I also made a decision to return a 422 with multiple errors on POST /shorten as this seemed more user friendly in the event multiple errors were present.
 
-**Good Luck!** — not that you need any ;)
+1. Clone the repo: `git clone git@github.com:boobooninja/shorty.git`
+2. Change directory to shorty.
+3. Run `bundle install`
+4. DB setup: `rake db:create db:migrate`
+5. Start webserver: `bundle exec rails s`
+
+## Testing Documentation
+
+```
+$ cd to_shorty_directory
+$ bundle install
+$ RAILS_ENV=test bundle exec rake db:create db:migrate
+$ bundle exec rspec
+```
 
 -------------------------------------------------------------------------
 
 ## API Documentation
-
-**All responses must be encoded in JSON and have the appropriate Content-Type header**
 
 
 ### POST /shorten
@@ -65,9 +71,9 @@ A random shortcode is generated if none is requested, the generated short code h
 
 Error | Description
 ----- | ------------
-400   | ```url``` is not present
-409   | The the desired shortcode is already in use. **Shortcodes are case-sensitive**.
-422   | The shortcode fails to meet the following regexp: ```^[0-9a-zA-Z_]{4,}$```.
+422   | ```url``` is not present
+422   | The the desired shortcode is already in use. **Shortcodes are case-sensitive**.
+422   | The shortcode fails to meet the following regexp: ```^[0-9a-zA-Z_]{6}$```.
 
 
 ### GET /:shortcode
@@ -99,7 +105,7 @@ Error | Description
 ### GET /:shortcode/stats
 
 ```
-GET /:code
+GET /:shortcode/stats
 Content-Type: "application/json"
 ```
 
@@ -131,5 +137,3 @@ lastSeenDate      | date of the last time the a redirect was issued, not present
 Error | Description
 ----- | ------------
 404   | The ```shortcode``` cannot be found in the system
-
-
