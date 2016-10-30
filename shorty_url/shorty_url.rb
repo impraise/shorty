@@ -1,11 +1,11 @@
 require 'securerandom'
 
 require_relative 'errors'
-require_relative 'storage'
-require_relative 'stats'
+require_relative 'links_storage'
 
 module ShortyUrl
   SHORT_CODE_LENGTH = 6
+  STATS = Struct.new :start_date, :last_seen_date, :redirect_count
 
   class << self
     def shortcode(url, shortcode = nil)
@@ -22,23 +22,34 @@ module ShortyUrl
       link = decoded(shortcode)
       return unless link
 
-      link.stats.track_redirect!
-      link.url
+      @storage.update(
+        shortcode,
+        redirect_count: link[:redirect_count] + 1,
+        last_seen_date: Time.now
+      )
+
+      link[:url]
     end
 
     def stats(shortcode)
       link = decoded(shortcode)
-      link && link.stats
+      stats_for(link)
     end
 
     def storage
-      @storage ||= Storage.new
+      @storage ||= LinksStorage.new
     end
 
     private
 
     def decoded(shortcode)
       storage.find(shortcode)
+    end
+
+    def stats_for(link)
+      return unless link
+
+      STATS.new link[:start_date], link[:last_seen_date], link[:redirect_count]
     end
   end
 end
