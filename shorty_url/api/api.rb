@@ -1,3 +1,4 @@
+require_relative 'errors_helper'
 require_relative 'v1'
 
 module ShortyUrl

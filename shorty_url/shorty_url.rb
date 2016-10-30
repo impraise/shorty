@@ -9,7 +9,6 @@ module ShortyUrl
 
   class << self
     def shortcode(url, shortcode = nil)
-      # TODO: improve algorithm to avoid possible collisions
       shortcode ||= SecureRandom.hex(SHORT_CODE_LENGTH / 2)
 
       raise ::ShortyUrl::ShortCodeAlreadyInUseError if storage.find(shortcode)
