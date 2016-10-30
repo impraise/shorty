@@ -1,0 +1,9 @@
+test:
+  db_name: 'shorty_db'
+  user: 'postgres'
+  password: 'postgres'
+
+development:
+  db_name: 'shorty_db'
+  user: 'postgres'
+  password: 'postgres'
