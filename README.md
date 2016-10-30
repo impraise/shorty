@@ -134,3 +134,14 @@ Error | Description
 404   | The ```shortcode``` cannot be found in the system
 
 
+##### Set up project:
+To run project locally you need:
+1. Install ruby 2.2.3: `rvm install ruby-2.2.3`
+2. Create database in postgresql:
+   - type in the terminal `psql`
+   - type in pg console: `CREATE DATABASE database_name;`
+   - to quite from the console type: `\q` 
+
+3. Change extension of file `settings.example.yml` to `settings.yml`
+4. Run project: `rackup config.ru `    
+``
