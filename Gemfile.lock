@@ -43,6 +43,7 @@ GEM
       mustermann (= 0.4.0)
     parser (2.3.1.4)
       ast (~> 2.2)
+    pg (0.19.0)
     powerpack (0.1.1)
     pry (0.10.4)
       coderay (~> 1.1.0)
@@ -74,6 +75,7 @@ GEM
       ruby-progressbar (~> 1.7)
       unicode-display_width (~> 1.0, >= 1.0.1)
     ruby-progressbar (1.8.1)
+    sequel (4.40.0)
     slop (3.6.0)
     thread_safe (0.3.5)
     tool (0.2.3)
@@ -91,10 +93,12 @@ PLATFORMS
 
 DEPENDENCIES
   grape (~> 0.18.0)
+  pg
   pry
   rack-test
   rspec
   rubocop
+  sequel
 
 BUNDLED WITH
    1.13.6

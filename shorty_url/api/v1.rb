@@ -40,8 +40,8 @@ module ShortyUrl
       get '/:shortcode/stats' do
         stats = ShortyUrl.stats(params[:shortcode])
         if stats
-          present :startDate, stats.start_date
-          present :lastSeenDate, stats.last_seen_date unless stats.redirect_count.zero?
+          present :startDate, stats.start_date.iso8601
+          present :lastSeenDate, stats.last_seen_date.iso8601 unless stats.redirect_count.zero?
           present :redirectCount, stats.redirect_count
         else
           error!('The shortcode cannot be found in the system', 404)

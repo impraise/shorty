@@ -12,6 +12,10 @@ RSpec.configure do |config|
   config.shared_context_metadata_behavior = :apply_to_host_groups
   config.order = :random
 
+  config.before(:all) do
+    ENV['environment'] = 'test'
+  end
+
   config.after(:each) do
     ShortyUrl.storage.clear!
   end

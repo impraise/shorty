@@ -1,4 +1,6 @@
-describe ShortyUrl::Storage do
+require 'yaml'
+
+describe ShortyUrl::LinksStorage do
   let(:url) { 'www.google.com' }
   let(:shortcode) { 'asdf12' }
   subject { described_class.new }
@@ -6,7 +8,7 @@ describe ShortyUrl::Storage do
   context '#add' do
     it 'adds new LINK instance to the store' do
       subject.add(shortcode, url)
-      expect(subject.find(shortcode)).to be_a(described_class::LINK)
+      expect(subject.find(shortcode)).to_not be_nil
     end
   end
 
@@ -15,7 +17,7 @@ describe ShortyUrl::Storage do
       subject.add(shortcode, url)
       link = subject.find(shortcode)
 
-      expect(link.url).to eq(url)
+      expect(link[:url]).to eq(url)
     end
   end
 

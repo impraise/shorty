@@ -23,8 +23,8 @@ describe ShortyUrl::API::V1 do
 
     context 'shortcode is present in the system' do
       let(:desired_shortcode) { '111asd' }
-      let(:now) { Time.now }
-      let(:startDate) { now.utc.iso8601 }
+      let(:now) { Time.now.utc }
+      let(:startDate) { now.iso8601 }
 
       before do
         allow(Time).to receive(:now).and_return(now)

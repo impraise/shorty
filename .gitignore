@@ -1,3 +1,4 @@
 .gitignore
 .idea/
 .ruby-gemset
+/shorty_url/settings.yml

@@ -4,4 +4,7 @@ module ShortyUrl
 
   class ShortCodeAlreadyInUseError < Error
   end
+
+  class DbParamsAreNotValid < Error
+  end
 end

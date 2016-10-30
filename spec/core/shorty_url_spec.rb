@@ -55,9 +55,9 @@ describe ShortyUrl do
 
   context '.stats' do
     context 'shortcode exists in the system' do
-      it 'returns Stats instance' do
+      it 'returns STATS instance' do
         shortcode = described_class.shortcode(url)
-        expect(described_class.stats(shortcode)).to be_a(described_class::Stats)
+        expect(described_class.stats(shortcode)).to be_a(described_class::STATS)
       end
     end
 
