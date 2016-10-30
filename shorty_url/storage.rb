@@ -17,5 +17,9 @@ module ShortyUrl
     def delete(shortcode)
       @storage.delete(shortcode)
     end
+
+    def clear!
+      @storage = {}
+    end
   end
 end

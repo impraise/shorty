@@ -9,7 +9,7 @@ module ShortyUrl
       @redirect_count = 0
     end
 
-    def track_redirect
+    def track_redirect!
       @last_seen_date = formatted(Time.now)
       @redirect_count += 1
     end

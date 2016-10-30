@@ -9,14 +9,14 @@ describe ShortyUrl::Stats do
     end
   end
 
-  context '#track_redirect' do
+  context '#track_redirect!' do
     it 'increments redirect count' do
-      expect { subject.track_redirect }.to change(subject, :redirect_count).by(1)
+      expect { subject.track_redirect! }.to change(subject, :redirect_count).by(1)
     end
 
     it 'sets and formats :last_seen_date with iso8601 format' do
       allow(Time).to receive(:now).and_return(now)
-      subject.track_redirect
+      subject.track_redirect!
 
       expect(subject.last_seen_date).to eq(now.utc.iso8601)
     end
