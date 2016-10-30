@@ -4,6 +4,8 @@ module ShortyUrl
       format :json
       content_type :json, 'application/json'
 
+      helpers ::ShortyUrl::API::ErrorsHelper
+
       params do
         requires :url, type: String, desc: 'URL'
         optional :shortcode,
@@ -33,7 +35,7 @@ module ShortyUrl
           header 'Location', url
           status 302
         else
-          error!('The shortcode cannot be found in the system', 404)
+          shortcode_cannot_be_found
         end
       end
 
@@ -44,7 +46,7 @@ module ShortyUrl
           present :lastSeenDate, stats.last_seen_date.iso8601 unless stats.redirect_count.zero?
           present :redirectCount, stats.redirect_count
         else
-          error!('The shortcode cannot be found in the system', 404)
+          shortcode_cannot_be_found
         end
       end
     end
