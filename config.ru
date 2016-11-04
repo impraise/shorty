@@ -1,2 +1,2 @@
 require './shorty'
-run Sinatra::Application
+run API
