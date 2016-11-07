@@ -64,7 +64,7 @@ GEM
     minitest (5.9.1)
     mongo (2.3.1)
       bson (~> 4.1)
-    mongoid (6.0.2)
+    mongoid (6.0.0)
       activemodel (~> 5.0)
       mongo (~> 2.3)
     nio4r (1.2.1)
