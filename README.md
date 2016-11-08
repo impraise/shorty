@@ -4,12 +4,14 @@ A Shorty implementation in Ruby on Rails 5.0 in API mode with MongoDB as backend
 
 ## Installation
 
-* Make sure MongoDB is installed and running. I've tested on lastest stable but should be fine with earlier versions.
-* `git clone git@github.com:hartator/shorty.git`
-* `cd shorty && bundle install`
+Make sure MongoDB is installed and running. I've tested on lastest stable but should be fine with earlier versions.
+
+    git clone git@github.com:hartator/shorty.git
+    cd shorty && bundle install
 
 ## Run Tests
-`bundle exec rspec spec`
+
+    bundle exec rspec spec
 
 ## Files where the logic is located
 
