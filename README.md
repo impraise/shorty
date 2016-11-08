@@ -1,24 +1,24 @@
-# README
+# Julien's Shorty Implementation
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+A Shorty implementation in Ruby on Rails 5.0 in API mode with MongoDB as backend and RSpec for test.
 
-Things you may want to cover:
+## Installation
 
-* Ruby version
+* Make sure MongoDB is installed and running. I've tested on lastest stable but should be fine with earlier versions.
+* `git clone git@github.com:hartator/shorty.git`
+* `cd shorty && bundle install`
 
-* System dependencies
+## Run Tests
+`bundle exec rspec spec`
 
-* Configuration
+## Files where the logic is located
 
-* Database creation
+The `Url` model holds the logic responsible of storing and validating shortcode data:
 
-* Database initialization
+* Model -> https://github.com/hartator/shorty/blob/master/app/models/url.rb
+* Tests -> https://github.com/hartator/shorty/blob/master/spec/models/url_spec.rb
 
-* How to run the test suite
+The `UrlController` holds the API endpoints:
 
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+* Model -> https://github.com/hartator/shorty/blob/master/app/controllers/url_controller.rb
+* Tests -> https://github.com/hartator/shorty/blob/master/spec/controllers/url_controller_spec.rb
