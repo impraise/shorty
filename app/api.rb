@@ -38,10 +38,12 @@ class API < Sinatra::Application
   get '/:shortcode/stats' do
     shortcode = shortcode_or_404
 
-    {
+    response = {
       'startDate' => shortcode.created_at.iso8601,
       'lastSeenDate' => shortcode.updated_at.iso8601,
       'redirectCount' => shortcode.redirect_count
-    }.to_json
+    }
+    response.delete('lastSeenDate') if shortcode.redirect_count == 0
+    response.to_json
   end
 end
