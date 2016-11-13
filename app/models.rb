@@ -4,39 +4,37 @@ class Shortcode
   include DataMapper::Resource
 
   RANDOM_SHORTCODE_LENGTH = 6
+  RANDOM_SHORTCODE_FORMAT = /^[0-9a-zA-Z_]{6}$/
+  REQUIRED_SHORTCODE_FORMAT = /^[0-9a-zA-Z_]{4,}$/
 
-  has 1, :redirect_summary
-
-  property :id,  String, required: true, key: true, unique: true, default: ->(r,p)  { Shortcode.random_shortcode }
+  property :id, Serial
+  property :shortcode,  String, required: true, key: true, unique: true, default: ->(r,p)  { Shortcode.random_shortcode }
   property :url, String, required: true, length: 2000
-  timestamps :created_at
+  property :redirect_count, Integer, required: true, default: 0
+  timestamps :at
 
-  validates_uniqueness_of :id, message: "The the desired shortcode is already in use. Shortcodes are case-sensitive."
-  validates_format_of :id, with: /^[0-9a-zA-Z_]{4,}$/, message: "The shortcode fails to meet the following regexp: ^[0-9a-zA-Z_]{4,}$."
+  validates_uniqueness_of :shortcode, message: "The the desired shortcode is already in use. Shortcodes are case-sensitive."
+  validates_format_of :shortcode, with: REQUIRED_SHORTCODE_FORMAT, message: "The shortcode fails to meet the following regexp: #{REQUIRED_SHORTCODE_FORMAT.to_s}."
   validates_format_of :url, as: :url, message: "The URL is invalid."
 
   def self.random_shortcode
     begin
       random_shortcode = SecureRandom.urlsafe_base64(RANDOM_SHORTCODE_LENGTH).gsub(/\W/, '_')[0...RANDOM_SHORTCODE_LENGTH]
-      conforms = !(random_shortcode.match(/^[0-9a-zA-Z_]{6}$/).nil?)
-      available = Shortcode.get(random_shortcode).nil?
+      conforms = !(random_shortcode.match(RANDOM_SHORTCODE_FORMAT).nil?)
+      available = Shortcode.first(shortcode: random_shortcode).nil?
     end until conforms && available
 
     random_shortcode
   end
-end
 
-class RedirectSummary
-  include DataMapper::Resource
-
-  belongs_to :shortcode
-
-  property :id, Serial
-  property :redirect_count, Integer, required: true, default: 0
-  timestamps :updated_at
+  def conforms?
+    !!self.shortcode.match(REQUIRED_SHORTCODE_FORMAT)
+  end
 
   def increment!
     adjust!(redirect_count: +1)
+    # TODO: figure out why this is necessary
+    update(updated_at: DateTime.now)
   end
 end
 

@@ -17,27 +17,24 @@ describe 'Shortcode' do
     context 'existing shortcode'
     context 'shortcode space is full'
   end
-end
 
-describe 'RedirectSummary' do
   describe '#increment!' do
     let!(:shortcode) { Shortcode.create(url: 'http://www.impraise.com') }
-    let!(:summary) { RedirectSummary.create(shortcode: shortcode) }
 
-    subject { summary.increment! }
+    subject { shortcode.increment! }
 
     it 'should increment the redirect counter' do
       expect {
         subject
-      }.to change { summary.reload.redirect_count }.from(0).to(1)
+      }.to change { shortcode.reload.redirect_count }.from(0).to(1)
     end
 
     it 'should change updated_at' do
-      pending 'possible bug in dm-timestamps'
+      shortcode.update!(updated_at: DateTime.now - 100)
 
       expect {
         subject
-      }.to change { summary.reload.updated_at }
+      }.to change { shortcode.reload.updated_at }
     end
   end
 end

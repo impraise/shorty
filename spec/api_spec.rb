@@ -16,7 +16,7 @@ describe 'API' do
   end
 
   describe 'POST /shorten' do
-    before do
+    def do_request
       post '/shorten', params
     end
 
@@ -26,16 +26,18 @@ describe 'API' do
       end
 
       it 'should return 400 status' do
+        do_request
         expect(last_response.status).to eq(400)
       end
     end
 
     context 'desired shortcode is already in use' do
       before do
-        Shortcode.create(id: shortcode)
+        Shortcode.create(shortcode: shortcode, url: url)
       end
 
       it 'should return 409 status' do
+        do_request
         expect(last_response.status).to eq(409)
       end
     end
@@ -44,44 +46,50 @@ describe 'API' do
       let!(:shortcode) { 'bad :(' }
 
       it 'should return 422 status' do
+        do_request
         expect(last_response.status).to eq(422)
       end
     end
 
     it 'should return 201 status'do
+      do_request
       expect(last_response.status).to eq(201)
     end
 
     it 'should return the shortcode as JSON' do
+      do_request
       expect(json_response['shortcode']).to eq(shortcode)
     end
   end
 
   describe 'GET /:shortcode' do
-    before do
+    def do_request
       get "/#{shortcode}"
     end
 
     context 'shortcode is not found' do
       before do
-        expect(Shortcode.get(shortcode)).to be_nil
+        expect(Shortcode.first(shortcode: shortcode)).to be_nil
       end
 
       it 'should return 404 status' do
+        do_request
         expect(last_response.status).to eq(404)
       end
     end
 
     context 'shortcode exists' do
       before do
-        Shortcode.create(id: shortcode)
+        Shortcode.first_or_create(shortcode: shortcode, url: url)
       end
 
       it 'should return 302 status' do
+        do_request
         expect(last_response.status).to eq(302)
       end
 
       it 'should redirect to the shortcode URL' do
+        do_request
         expect(last_response).to be_redirect
         expect(last_response.location).to eq(url)
       end
@@ -89,34 +97,36 @@ describe 'API' do
   end
 
   describe 'GET /:shortcode/stats' do
-    before do
+    def do_request
       get "/#{shortcode}/stats"
     end
 
     context 'shortcode is not found' do
       before do
-        expect(Shortcode.get(shortcode)).to be_nil
+        expect(Shortcode.first(shortcode: shortcode)).to be_nil
       end
 
-      it 'should return 400 status' do
-        expect(last_response.status).to eq(400)
+      it 'should return 404 status' do
+        do_request
+        expect(last_response.status).to eq(404)
       end
     end
 
     context 'shortcode exists' do
       let!(:existing_shortcode) do
-        Shortcode.create(id: shortcode)
+        Shortcode.first_or_create(shortcode: shortcode, url: url)
       end
 
       context 'shortcode has not been requested' do
         let(:expected_json) do
           {
-            "startDate": existing_shortcode.created_at,
-            "redirectCount": 0
+            "startDate" => existing_shortcode.created_at.iso8601,
+            "redirectCount" => 0
           }
         end
 
         it 'should return the correct JSON' do
+          do_request
           expect(json_response).to eq(expected_json)
         end
       end
@@ -128,18 +138,20 @@ describe 'API' do
 
         let(:expected_json) do
           {
-            "startDate": existing_shortcode.created_at,
-            "lastSeenDate": existing_shortcode.redirect_summary.updated_at,
-            "redirectCount": 1
+            "startDate" => existing_shortcode.created_at.iso8601,
+            "lastSeenDate" => existing_shortcode.updated_at.iso8601,
+            "redirectCount" => 1
           }
         end
 
         it 'should return the correct JSON' do
+          do_request
           expect(json_response).to eq(expected_json)
         end
       end
 
       it 'should return 200 status' do
+        do_request
         expect(last_response.status).to eq(200)
       end
     end
