@@ -58,12 +58,34 @@ describe 'API' do
   end
 
   describe 'GET /:shortcode' do
-    context 'shortcode is not found' do
-      it 'should return 404 status'
+    before do
+      get "/#{shortcode}"
     end
 
-    it 'should return 302 status'
-    it 'should redirect to the shortcode URL'
+    context 'shortcode is not found' do
+      before do
+        expect(Shortcode.get(shortcode)).to be_nil
+      end
+
+      it 'should return 404 status' do
+        expect(last_response.status).to eq(404)
+      end
+    end
+
+    context 'shortcode exists' do
+      before do
+        Shortcode.create(id: shortcode)
+      end
+
+      it 'should return 302 status' do
+        expect(last_response.status).to eq(302)
+      end
+
+      it 'should redirect to the shortcode URL' do
+        expect(last_response).to be_redirect
+        expect(last_response.location).to eq(url)
+      end
+    end
   end
 
   describe 'GET /:shortcode/stats' do
