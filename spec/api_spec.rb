@@ -8,24 +8,36 @@ describe 'API' do
   end
 
   describe 'POST /shorten' do
-    context 'url is not present'
-    context 'shortcode is not present'
-    context 'desired shortcode is already in use'
-    context 'shortcode fails to meet the regexp'
+    context 'url param is not present' do
+      it 'should return 400 status'
+    end
+
+    context 'desired shortcode is already in use' do
+      it 'should return 409 status'
+    end
+
+    context 'shortcode fails to meet the regexp' do
+      it 'should return 422 status'
+    end
 
     it 'should return 201 status'
     it 'should return the shortcode as JSON'
   end
 
   describe 'GET /:shortcode' do
-    context 'shortcode is not found'
+    context 'shortcode is not found' do
+      it 'should return 404 status'
+    end
 
     it 'should return 302 status'
     it 'should redirect to the shortcode URL'
   end
 
   describe 'GET /:shortcode/stats' do
-    context 'shortcode is not found'
+    context 'shortcode is not found' do
+      it 'should return 400 status'
+    end
+
     context 'shortcode has not been requested'
 
     it 'should return 200 status'

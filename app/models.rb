@@ -7,7 +7,7 @@ class Shortcode
 
   has 1, :redirect_summary
 
-  property :id,  String, required: true, key: true, unique: true, default: -> { Shortcode.random_shortcode }
+  property :id,  String, required: true, key: true, unique: true, default: ->(r,p)  { Shortcode.random_shortcode }
   property :url, String, required: true, length: 2000
   timestamps :created_at
 
@@ -17,9 +17,10 @@ class Shortcode
 
   def self.random_shortcode
     begin
-      random_shortcode = SecureRandom.urlsafe_base64(RANDOM_SHORTCODE_LENGTH).sub(/\W/, '_')
-      existing = Shortcode.get(random_shortcode)
-    end until existing.nil?
+      random_shortcode = SecureRandom.urlsafe_base64(RANDOM_SHORTCODE_LENGTH).gsub(/\W/, '_')[0...RANDOM_SHORTCODE_LENGTH]
+      conforms = !(random_shortcode.match(/^[0-9a-zA-Z_]{6}$/).nil?)
+      available = Shortcode.get(random_shortcode).nil?
+    end until conforms && available
 
     random_shortcode
   end
