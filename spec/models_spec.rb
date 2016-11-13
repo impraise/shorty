@@ -18,6 +18,28 @@ describe 'Shortcode' do
     context 'shortcode space is full'
   end
 
+  describe '#conforms?' do
+    let!(:instance) { Shortcode.new(shortcode: shortcode, url: 'http://www.impraise.com') }
+
+    subject { instance.conforms? }
+
+    context 'matches format' do
+      let!(:shortcode) { 'asdf1234' }
+
+      it 'should return true' do
+        expect(subject).to eq(true)
+      end
+    end
+
+    context 'does not match format' do
+      let!(:shortcode) { 'bad :(' }
+
+      it 'should return false' do
+        expect(subject).to eq(false)
+      end
+    end
+  end
+
   describe '#increment!' do
     let!(:shortcode) { Shortcode.create(url: 'http://www.impraise.com') }
 

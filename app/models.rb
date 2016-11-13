@@ -33,7 +33,7 @@ class Shortcode
 
   def increment!
     adjust!(redirect_count: +1)
-    # TODO: figure out why this is necessary
+    # this is necessary due to the way dm-adjust constructs queries
     update(updated_at: DateTime.now)
   end
 end
