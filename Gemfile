@@ -1,7 +1,6 @@
 source 'https://rubygems.org'
 
 gem 'sinatra',                  '~> 1.4.7'
-gem 'sinatra-contrib',          '~> 1.4.7'
 gem 'dm-adjust',                '~> 1.2.0'
 gem 'dm-core',                  '~> 1.2.1'
 gem 'dm-migrations',            '~> 1.2.0'

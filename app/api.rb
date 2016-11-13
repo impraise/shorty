@@ -1,5 +1,3 @@
-require 'sinatra/json'
-
 class API < Sinatra::Application
   before do
     content_type 'application/json'
@@ -25,9 +23,10 @@ class API < Sinatra::Application
     shortcode.save
 
     status 201
-    json({
+
+    {
       'shortcode': shortcode.shortcode
-    })
+    }.to_json
   end
 
   get '/:shortcode' do
@@ -38,10 +37,11 @@ class API < Sinatra::Application
 
   get '/:shortcode/stats' do
     shortcode = shortcode_or_404
-    json({
+
+    {
       'startDate' => shortcode.created_at.iso8601,
       'lastSeenDate' => shortcode.updated_at.iso8601,
       'redirectCount' => shortcode.redirect_count
-    })
+    }.to_json
   end
 end
