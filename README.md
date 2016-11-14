@@ -78,7 +78,7 @@ A random shortcode is generated if none is requested, the generated short code h
 
 Error | Description
 ----- | ------------
-400   | ```url``` is not present
+400   | ```url``` is not present or is invalid.
 409   | The the desired shortcode is already in use. **Shortcodes are case-sensitive**.
 422   | The shortcode fails to meet the following regexp: ```^[0-9a-zA-Z_]{4,}$```.
 

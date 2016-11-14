@@ -18,12 +18,14 @@ class API < Sinatra::Application
       'url' => params['url']
     )
 
-    halt 422 unless shortcode.conforms?
-
-    shortcode.save
-
-    status 201
-    { 'shortcode' => shortcode.shortcode }.to_json
+    if shortcode.save
+      status 201
+      { 'shortcode' => shortcode.shortcode }.to_json
+    else
+      halt 400 unless shortcode.errors[:url].empty?
+      halt 422 unless shortcode.errors[:shortcode].empty?
+      halt 500
+    end
   end
 
   get '/:shortcode' do

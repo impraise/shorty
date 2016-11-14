@@ -27,10 +27,6 @@ class Shortcode
     random_shortcode
   end
 
-  def conforms?
-    !!self.shortcode.match(REQUIRED_SHORTCODE_FORMAT)
-  end
-
   def increment!
     adjust!(redirect_count: +1)
     # this is necessary due to the way dm-adjust constructs queries

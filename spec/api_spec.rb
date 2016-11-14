@@ -31,6 +31,15 @@ describe 'API' do
       end
     end
 
+    context 'url param is invalid' do
+      let!(:url) { 'invalid_url' }
+
+      it 'should return 400 status' do
+        do_request
+        expect(last_response.status).to eq(400)
+      end
+    end
+
     context 'desired shortcode is already in use' do
       before do
         Shortcode.create(shortcode: shortcode, url: url)
