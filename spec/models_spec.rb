@@ -1,6 +1,8 @@
 describe 'Shortcode' do
+  let(:url) { 'http://www.impraise.com' }
+
   context 'default values' do
-    subject { Shortcode.create(url: "http://www.impraise.com") }
+    subject { Shortcode.create(url: url) }
 
     it 'should assign shortcode' do
       expect(subject.shortcode).to_not eq(nil)
@@ -30,7 +32,7 @@ describe 'Shortcode' do
       let(:shortcode) { 'existing' }
 
       before do
-        Shortcode.create(shortcode: shortcode, url: 'http://www.impraise.com')
+        Shortcode.create(shortcode: shortcode, url: url)
         expect(Shortcode).to receive(:gen_random_shortcode).and_return(shortcode).once
         expect(Shortcode).to receive(:gen_random_shortcode).and_call_original
       end
@@ -45,7 +47,7 @@ describe 'Shortcode' do
       let(:shortcode) { 'XXXXXX' }
 
       before do
-        Shortcode.create(shortcode: shortcode, url: 'http://www.impraise.com')
+        Shortcode.create(shortcode: shortcode, url: url)
       end
 
       it 'should return nil' do
@@ -61,7 +63,7 @@ describe 'Shortcode' do
   end
 
   describe '#increment!' do
-    let!(:shortcode) { Shortcode.create(url: 'http://www.impraise.com') }
+    let!(:shortcode) { Shortcode.create(url: url) }
 
     subject { shortcode.increment! }
 
