@@ -32,7 +32,7 @@ bundle exec rspec
 ## Running
 
 ```
-env RACK_ENV=production rackup
+bundle exec rackup
 ```
 
 The application is now available at [localhost:9292](http://localhost:9292).
