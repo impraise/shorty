@@ -60,9 +60,30 @@ describe 'API' do
       end
     end
 
+    context 'random shortcode generation fails' do
+      let!(:params) do
+        { "url" => url }
+      end
+
+      before do
+        expect(Shortcode).to receive(:random_shortcode).and_return(nil)
+      end
+
+      it 'should return 409 status' do
+        do_request
+        expect(last_response.status).to eq(409)
+      end
+    end
+
     it 'should return 201 status'do
       do_request
       expect(last_response.status).to eq(201)
+    end
+
+    it 'should create a Shortcode' do
+      expect {
+        do_request
+      }.to change { Shortcode.count }.from(0).to(1)
     end
 
     it 'should return the shortcode as JSON' do

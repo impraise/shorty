@@ -4,6 +4,10 @@ class API < Sinatra::Application
   end
 
   helpers do
+    def shortcode_taken?
+      params['shortcode'] && Shortcode.first(shortcode: params['shortcode'])
+    end
+
     def shortcode_or_404
       Shortcode.first(shortcode: params['shortcode']) || halt(404)
     end
@@ -11,18 +15,18 @@ class API < Sinatra::Application
 
   post '/shorten' do
     halt 400 unless params['url']
-    halt 409 if Shortcode.first(shortcode: params['shortcode'])
+    halt 409 if shortcode_taken?
 
-    shortcode = Shortcode.new(
-      'shortcode' => params['shortcode'],
-      'url' => params['url']
-    )
+    params.keep_if{|k,v| ['shortcode', 'url'].include?(k) }
+
+    shortcode = Shortcode.new(params)
 
     if shortcode.save
       status 201
       { 'shortcode' => shortcode.shortcode }.to_json
     else
       halt 400 unless shortcode.errors[:url].empty?
+      halt 409 unless shortcode.shortcode   # random generation failed
       halt 422 unless shortcode.errors[:shortcode].empty?
       halt 500
     end

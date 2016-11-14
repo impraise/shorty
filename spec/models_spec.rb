@@ -1,4 +1,16 @@
 describe 'Shortcode' do
+  context 'default values' do
+    subject { Shortcode.create(url: "http://www.impraise.com") }
+
+    it 'should assign shortcode' do
+      expect(subject.shortcode).to_not eq(nil)
+    end
+
+    it 'should assign redirect_count' do
+      expect(subject.redirect_count).to eq(0)
+    end
+  end
+
   describe '.random_shortcode' do
     subject { Shortcode.random_shortcode }
 
@@ -15,11 +27,36 @@ describe 'Shortcode' do
     end
 
     context 'existing shortcode is randomly selected' do
-      pending
+      let(:shortcode) { 'existing' }
+
+      before do
+        Shortcode.create(shortcode: shortcode, url: 'http://www.impraise.com')
+        expect(Shortcode).to receive(:gen_random_shortcode).and_return(shortcode).once
+        expect(Shortcode).to receive(:gen_random_shortcode).and_call_original
+      end
+
+      it 'should assign another' do
+        expect(subject).to_not eq(shortcode)
+        expect(subject).to_not eq(nil)
+      end
     end
 
-    context 'shortcode keyspace is full' do
-      pending
+    context 'shortcode keyspace is too full' do
+      let(:shortcode) { 'XXXXXX' }
+
+      before do
+        Shortcode.create(shortcode: shortcode, url: 'http://www.impraise.com')
+      end
+
+      it 'should return nil' do
+        expect(Shortcode).to receive(:gen_random_shortcode).and_return(shortcode).at_least(:once)
+        expect(subject).to eq(nil)
+      end
+
+      it 'should run a fixed number of iterations' do
+        expect(Shortcode).to receive(:gen_random_shortcode).and_return(shortcode).exactly(Shortcode::MAX_RANDOM_SHORTCODE_ITERATIONS).times
+        subject
+      end
     end
   end
 
