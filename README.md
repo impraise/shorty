@@ -32,10 +32,10 @@ bundle exec rspec
 ## Running
 
 ```
-env RACK_ENV=production bundle exec ruby shorty.rb
+env RACK_ENV=production rackup
 ```
 
-The application is now available at [localhost:4567](http://localhost:4567).
+The application is now available at [localhost:9292](http://localhost:9292).
 
 -------------------------------------------------------------------------
 
