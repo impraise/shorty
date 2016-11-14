@@ -12,7 +12,7 @@ describe 'API' do
   let(:shortcode) { 'asdf1234' }
   let(:url) { 'http://www.impraise.com' }
   let(:params) do
-    { "shortcode": shortcode, "url": url }
+    { "shortcode" => shortcode, "url" => url }
   end
 
   describe 'POST /shorten' do
@@ -22,7 +22,7 @@ describe 'API' do
 
     context 'url param is not present' do
       let!(:params) do
-        { "shortcode": shortcode }
+        { "shortcode" => shortcode }
       end
 
       it 'should return 400 status' do

@@ -23,10 +23,7 @@ class API < Sinatra::Application
     shortcode.save
 
     status 201
-
-    {
-      'shortcode': shortcode.shortcode
-    }.to_json
+    { 'shortcode' => shortcode.shortcode }.to_json
   end
 
   get '/:shortcode' do

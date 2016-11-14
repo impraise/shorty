@@ -1,35 +1,47 @@
-Shorty Challenge
-================
+Shorty
+======
 
-The trendy modern question for developer inteviews seems to be, "how to create an url shortner". Not wanting to fall too far from the cool kids, we have a challenge for you!
+A micro service to shorten urls.
 
-## The Challenge
+-------------------------------------------------------------------------
 
-The challenge, if you choose to accept it, is to create a micro service to shorten urls, in the style that TinyURL and bit.ly made popular.
+## Dependencies
 
-## Rules
+* Ruby (~> 2.0)
+* bundler
+* SQLite
 
-1. The service must expose HTTP endpoints according to the definition below.
-2. The service must be self contained, you can use any language and technology you like, but it must be possible to set it up from a fresh install of Ubuntu Server 14.04, by following the steps you write in the README.
-3. It must be well tested, it must also be possible to run the entire test suit with a single command from the directory of your repository.
-4. The service must be versioned using git and submitted by making a Pull Request against this repository, git history **should** be meaningful.
-5. You don't have to use a datastore, you can have all data in memory, but we'd be more impressed if you do use one.
+```
+sudo apt-get install ruby2.0 bundler libsqlite3-dev
+```
 
-## Tips
+## Setup
 
-* Less is more, small is beautiful, you know the drill — stick to the requirements.
-* Use the right tool for the job, rails is highly discouraged.
-* Don't try to make the microservice play well with others, the system is all yours.
-* No need to take care of domains, that's for a reverse proxy to handle.
-* Unit tests > Integration tests, but be careful with untested parts of the system.
+```
+git clone https://github.com/jramos/shorty.git
+cd shorty
+bundle install
+```
 
-**Good Luck!** — not that you need any ;)
+## Testing
+
+```
+bundle exec rspec
+```
+
+## Running
+
+```
+env RACK_ENV=production bundle exec ruby shorty.rb
+```
+
+The application is now available at [localhost:4567](http://localhost:4567).
 
 -------------------------------------------------------------------------
 
 ## API Documentation
 
-**All responses must be encoded in JSON and have the appropriate Content-Type header**
+**All responses will be encoded in JSON and have the appropriate Content-Type header**
 
 
 ### POST /shorten
