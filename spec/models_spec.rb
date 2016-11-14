@@ -14,8 +14,13 @@ describe 'Shortcode' do
       expect(!!subject.match(/^[0-9a-zA-Z_]{6}$/)).to eq(true)
     end
 
-    context 'existing shortcode'
-    context 'shortcode space is full'
+    context 'existing shortcode is randomly selected' do
+      pending
+    end
+
+    context 'shortcode keyspace is full' do
+      pending
+    end
   end
 
   describe '#increment!' do
