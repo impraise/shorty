@@ -20,6 +20,15 @@ describe 'API' do
       post '/shorten', params
     end
 
+    context 'no parameters are present' do
+      let!(:params) { nil }
+
+      it 'should return 400 status' do
+        do_request
+        expect(last_response.status).to eq(400)
+      end
+    end
+
     context 'url param is not present' do
       let!(:params) do
         { "shortcode" => shortcode }
@@ -40,55 +49,69 @@ describe 'API' do
       end
     end
 
-    context 'desired shortcode is already in use' do
-      before do
-        Shortcode.create(shortcode: shortcode, url: url)
+    shared_examples 'a successful POST request' do
+      it 'should return 201 status'do
+        do_request
+        expect(last_response.status).to eq(201)
       end
 
-      it 'should return 409 status' do
+      it 'should create a Shortcode' do
+        expect {
+          do_request
+        }.to change { Shortcode.count }.from(0).to(1)
+      end
+
+      it 'should return the shortcode as JSON' do
         do_request
-        expect(last_response.status).to eq(409)
+        expect(json_response['shortcode']).to_not eq(nil)
       end
     end
 
-    context 'shortcode fails to meet the documented regexp' do
-      let!(:shortcode) { 'bad :(' }
-
-      it 'should return 422 status' do
-        do_request
-        expect(last_response.status).to eq(422)
-      end
-    end
-
-    context 'random shortcode generation fails' do
+    context 'shortcode param is not present' do
       let!(:params) do
         { "url" => url }
       end
 
-      before do
-        expect(Shortcode).to receive(:random_shortcode).and_return(nil)
+      context 'random shortcode generation fails' do
+        before do
+          expect(Shortcode).to receive(:random_shortcode).and_return(nil)
+        end
+
+        it 'should return 409 status' do
+          do_request
+          expect(last_response.status).to eq(409)
+        end
       end
 
-      it 'should return 409 status' do
-        do_request
-        expect(last_response.status).to eq(409)
+      it_should_behave_like 'a successful POST request'
+    end
+
+    context 'shortcode param is present' do
+      let(:params) do
+        { "shortcode" => shortcode, "url" => url }
       end
-    end
 
-    it 'should return 201 status'do
-      do_request
-      expect(last_response.status).to eq(201)
-    end
+      context 'shortcode fails to meet the documented regexp' do
+        let!(:shortcode) { 'bad :(' }
 
-    it 'should create a Shortcode' do
-      expect {
-        do_request
-      }.to change { Shortcode.count }.from(0).to(1)
-    end
+        it 'should return 422 status' do
+          do_request
+          expect(last_response.status).to eq(422)
+        end
+      end
 
-    it 'should return the shortcode as JSON' do
-      do_request
-      expect(json_response['shortcode']).to eq(shortcode)
+      context 'desired shortcode is already in use' do
+        before do
+          Shortcode.create(shortcode: shortcode, url: url)
+        end
+
+        it 'should return 409 status' do
+          do_request
+          expect(last_response.status).to eq(409)
+        end
+      end
+
+      it_should_behave_like 'a successful POST request'
     end
   end
 
@@ -110,7 +133,7 @@ describe 'API' do
 
     context 'shortcode exists' do
       before do
-        Shortcode.first_or_create(shortcode: shortcode, url: url)
+        Shortcode.create(shortcode: shortcode, url: url)
       end
 
       it 'should return 302 status' do
@@ -144,7 +167,7 @@ describe 'API' do
 
     context 'shortcode exists' do
       let!(:existing_shortcode) do
-        Shortcode.first_or_create(shortcode: shortcode, url: url)
+        Shortcode.create(shortcode: shortcode, url: url)
       end
 
       context 'shortcode has not been requested' do
