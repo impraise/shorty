@@ -1,5 +1,6 @@
 require 'grape'
 require 'mongo'
+require 'pry'
 require_relative 'app/shortcoder_service.rb'
 
 class Shortener < Grape::API
@@ -43,6 +44,7 @@ class Shortener < Grape::API
   # GET /:shortcode
   get '/:shortcode' do
     response = shortcoder.get_url_by(params[:shortcode])
+
     if response == '404'
       send_error(404)
     else
