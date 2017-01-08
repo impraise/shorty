@@ -1,0 +1,5 @@
+# Don't check in credentials
+config/env.yml
+
+# Skip coverage files
+coverage/*

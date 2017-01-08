@@ -1,29 +1,23 @@
 Shorty Challenge
 ================
 
-The trendy modern question for developer inteviews seems to be, "how to create an url shortner". Not wanting to fall too far from the cool kids, we have a challenge for you!
+## To setup an app on local Ubuntu 14.04 machine You should do next steps:
 
-## The Challenge
+**1. Set up Ruby:**
+* `git clone git@github.com:volodymyr-h/shorty.git`
+* `cd shorty/lib/app_setup`
+* `source ubuntu.sh`
+* then type `yes`
 
-The challenge, if you choose to accept it, is to create a micro service to shorten urls, in the style that TinyURL and bit.ly made popular.
+   Script above will install Ruby 2.2.3 with some cool dependencies (bundler/mongo etc.)
 
-## Rules
+**2. Prepare an App:**
+* `cd ../../`
+* `bundle` to install gems
+* `rspec` to make sure everything is working just fine
 
-1. The service must expose HTTP endpoints according to the definition below.
-2. The service must be self contained, you can use any language and technology you like, but it must be possible to set it up from a fresh install of Ubuntu Server 14.04, by following the steps you write in the README.
-3. It must be well tested, it must also be possible to run the entire test suit with a single command from the directory of your repository.
-4. The service must be versioned using git and submitted by making a Pull Request against this repository, git history **should** be meaningful.
-5. You don't have to use a datastore, you can have all data in memory, but we'd be more impressed if you do use one.
-
-## Tips
-
-* Less is more, small is beautiful, you know the drill — stick to the requirements.
-* Use the right tool for the job, rails is highly discouraged.
-* Don't try to make the microservice play well with others, the system is all yours.
-* No need to take care of domains, that's for a reverse proxy to handle.
-* Unit tests > Integration tests, but be careful with untested parts of the system.
-
-**Good Luck!** — not that you need any ;)
+**3. Run the app:**
+* Then `rackup` to start an application and it becomes available at `http://0.0.0.0:9292`
 
 -------------------------------------------------------------------------
 
