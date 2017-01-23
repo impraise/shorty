@@ -1,0 +1,13 @@
+source 'https://rubygems.org'
+ruby '2.3.3'
+
+gem 'sinatra'
+gem 'sinatra-contrib'
+gem 'puma'
+gem 'data_mapper'
+gem 'dm-sqlite-adapter'
+
+group :test do
+  gem "rspec"
+  gem "rack-test"
+end

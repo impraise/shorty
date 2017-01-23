@@ -1,0 +1,7 @@
+.git*
+datastore/*.sqlite3
+datastore/*.sqlite3-journal
+log/*
+tmp/*
+Dockerfile
+README.md
