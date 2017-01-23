@@ -18,4 +18,16 @@ class ShortUrlService
       short_url
     end
   end
+  # rescue ShortenException::ShortUrlNotFoundException => e
+  def self.get(shortcode)
+    short_url = ShortUrl.get(shortcode)
+    if short_url
+      short_url.increase_redirect_count!
+      short_url.save
+      short_url
+    else
+      raise ShortenException::ShortUrlNotFoundException.new("The shortcode cannot be found in the system")
+    end
+  end
+
 end

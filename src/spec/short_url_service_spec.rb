@@ -79,4 +79,30 @@ RSpec.describe ShortUrlService do
       end
     end
   end
+
+  describe "#get" do
+    let(:shortcode) { nil }
+    context "with inexistent ShortUrl" do
+      it 'should raise ShortenException::ShortUrlNotFoundException with message "The shortcode cannot be found in the system"' do
+        expect {
+          ShortUrlService.get(shortcode)
+        }.to raise_error(ShortenException::ShortUrlNotFoundException).with_message('The shortcode cannot be found in the system')
+      end
+    end
+    context "with existent ShortUrl" do
+      let(:url) { 'http://sample.com' }
+      let(:shortcode) { 'newshorturl01' }
+      before :each do
+        @short_url = ShortUrl.create(url:url, shortcode: shortcode)
+      end
+      it 'should return the ShortUrl object' do
+        expect(ShortUrlService.get(shortcode)).to eq(@short_url)
+      end
+      it 'should receive call of increase_redirect_count!' do
+        allow(ShortUrl).to receive(:get) { @short_url }
+        expect(@short_url).to receive(:increase_redirect_count!)
+        ShortUrlService.get(shortcode)
+      end
+    end
+  end
 end

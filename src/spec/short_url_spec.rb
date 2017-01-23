@@ -86,4 +86,15 @@ RSpec.describe ShortUrl do
       }.to change(short_url,:shortcode).from(nil).to("vv22xB")
     end
   end
+  context "#increase_redirect_count!" do
+    it 'should increase redirect_count on each call' do
+      short_url = ShortUrl.new
+      expect{
+        short_url.increase_redirect_count!
+      }.to change(short_url,:redirect_count).from(0).to(1)
+      expect{
+        short_url.increase_redirect_count!
+      }.to change(short_url, :redirect_count).from(1).to(2)
+    end
+  end
 end
