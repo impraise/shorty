@@ -3,6 +3,8 @@ ruby '2.3.3'
 
 gem 'sinatra'
 gem 'puma'
+gem 'data_mapper'
+gem 'dm-sqlite-adapter'
 
 group :test do
   gem "rspec"
