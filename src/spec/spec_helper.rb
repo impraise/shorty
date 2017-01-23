@@ -105,6 +105,7 @@ RSpec.configure do |config|
   Kernel.srand config.seed
 =end
   DataMapper.finalize
+  ShortUrl.auto_migrate!
   def app
     ImpraiseShortyApp
   end
