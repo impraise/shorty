@@ -3,7 +3,7 @@ class ShortUrl
   property :shortcode,String, :key => true
   property :url, String, :required => true
   property :created_at, DateTime
-  property :last_redirect_at, Time
+  property :last_redirect_at, DateTime
   property :redirect_count, Integer, default: 0
 
   validates_uniqueness_of :shortcode
@@ -18,5 +18,6 @@ class ShortUrl
 
   def increase_redirect_count!
     self.redirect_count = redirect_count + 1
+    self.last_redirect_at = DateTime.now
   end
 end

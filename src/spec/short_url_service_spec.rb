@@ -99,6 +99,7 @@ RSpec.describe ShortUrlService do
         expect(ShortUrlService.get(shortcode)).to eq(@short_url)
       end
       it 'should receive call of increase_redirect_count!' do
+        redirect_date = Time.now
         allow(ShortUrl).to receive(:get) { @short_url }
         expect(@short_url).to receive(:increase_redirect_count!)
         ShortUrlService.get(shortcode)

@@ -96,5 +96,11 @@ RSpec.describe ShortUrl do
         short_url.increase_redirect_count!
       }.to change(short_url, :redirect_count).from(1).to(2)
     end
+    it 'should set last_redirect_at' do
+      short_url = ShortUrl.new
+      short_url.increase_redirect_count!
+      expect(short_url.last_redirect_at).to_not be_nil
+      expect(short_url.last_redirect_at).to be_a(DateTime)
+    end
   end
 end
