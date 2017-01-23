@@ -7,8 +7,10 @@ require 'bundler/setup'
 Bundler.require(:default) # load all the default gems
 Bundler.require(Sinatra::Base.environment)
 
-require './app/shortcode_generator.rb'
-require './app/short_url.rb'
+require './app/shorten_exception'
+require './app/shortcode_generator'
+require './app/short_url'
+require './app/short_url_service'
 
 DataMapper.finalize
 
