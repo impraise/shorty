@@ -7,6 +7,7 @@ require 'bundler/setup'
 Bundler.require(:default) # load all the default gems
 Bundler.require(Sinatra::Base.environment)
 
+require './app/shortcode_generator.rb'
 
 class ImpraiseShortyApp < Sinatra::Base
   configure :development do
