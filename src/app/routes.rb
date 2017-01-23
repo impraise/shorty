@@ -24,10 +24,21 @@ class Routes < Sinatra::Base
   # Content-Type: "application/json"
   get "/:shortcode" do
     begin
-      @short_url = ShortUrlService.get(params[:shortcode])
+      @short_url = ShortUrlService.get_with_increment(params[:shortcode])
       headers 'Location' => @short_url.url
       body ''
       status 302
+    rescue ShortenException::ShortUrlNotFoundException => e
+      halt(404, e.message)
+    end
+  end
+
+  # GET /:shortcode/stats
+  # Content-Type: "application/json"
+  get "/:shortcode/stats" do
+    begin
+      @short_url = ShortUrlService.get_as_json(params[:shortcode])
+      json(@short_url)
     rescue ShortenException::ShortUrlNotFoundException => e
       halt(404, e.message)
     end

@@ -82,7 +82,7 @@ RSpec.describe Routes do
     end
   end
 
-  describe "GET /:shorten" do
+  describe "GET /:shortcode" do
     context "with non existent ShortUrl" do
       it 'should respond body with "" and status 404' do
         get "/asdas"
@@ -102,6 +102,49 @@ RSpec.describe Routes do
         expect(last_response.body).to eq('')
         expect(last_response.status).to eq(302)
         expect(last_response.header).to include(header_with_location)
+      end
+    end
+  end
+  describe "GET /:shortcode/stats" do
+    context "with non existent ShortUrl" do
+      it 'should respond body with "" and status 404' do
+        get "/asdas/stats"
+        expect(last_response.body).to eq("The shortcode cannot be found in the system")
+        expect(last_response.status).to eq(404)
+      end
+    end
+    context "with existent ShortUrl" do
+      let(:url) { 'http://existent.com'}
+      let(:shortcode) {'shortcodetest0102'}
+      context "Short url is never been visited" do
+        before :each do
+          ShortUrl.create(url: url, shortcode: shortcode)
+        end
+        it 'should return JSON data without lastSeenDate' do
+          get "/#{shortcode}/stats"
+          @short_url = ShortUrl.get(shortcode)
+          expect(last_response.body).to eq({
+            startDate: @short_url.created_at.to_time.utc.iso8601,
+            redirectCount: @short_url.redirect_count
+          }.to_json)
+          expect(last_response.status).to eq(200)
+        end
+      end
+      context "Short Url has received a visit" do
+      let(:shortcode) {'shortcodetest0102visited'}
+        before :each do
+          ShortUrl.create(url: url, shortcode: shortcode,redirect_count: 1,last_redirect_at: Time.now)
+        end
+        it 'should return JSON data with lastSeenDate' do
+          get "/#{shortcode}/stats"
+          @short_url = ShortUrl.get(shortcode)
+          expect(last_response.body).to eq({
+            startDate: @short_url.created_at.to_time.utc.iso8601,
+            redirectCount: @short_url.redirect_count,
+            lastSeenDate: @short_url.last_redirect_at.to_time.utc.iso8601
+          }.to_json)
+          expect(last_response.status).to eq(200)
+        end
       end
     end
   end

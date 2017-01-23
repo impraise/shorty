@@ -19,7 +19,7 @@ class ShortUrlService
     end
   end
   # rescue ShortenException::ShortUrlNotFoundException => e
-  def self.get(shortcode)
+  def self.get_with_increment(shortcode)
     short_url = ShortUrl.get(shortcode)
     if short_url
       short_url.increase_redirect_count!
@@ -28,6 +28,23 @@ class ShortUrlService
     else
       raise ShortenException::ShortUrlNotFoundException.new("The shortcode cannot be found in the system")
     end
+  end
+
+  def self.get_as_json(shortcode)
+    short_url = ShortUrl.get(shortcode)
+    if short_url
+      short_url_as_json = {
+        startDate: short_url.created_at.to_time.utc.iso8601,
+        redirectCount: short_url.redirect_count
+      }
+      if short_url.redirect_count > 0
+        short_url_as_json[:lastSeenDate]= short_url.last_redirect_at.to_time.utc.iso8601
+      end
+      short_url_as_json
+    else
+      raise ShortenException::ShortUrlNotFoundException.new("The shortcode cannot be found in the system")
+    end
+
   end
 
 end
