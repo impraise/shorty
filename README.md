@@ -8,7 +8,7 @@ For installation process we use Docker container.
 
 Install docker on [Ubuntu](https://docs.docker.com/engine/installation/linux/ubuntu/)
 
-### Create an volume
+### Create a volume
 ```
 docker volume create --name vol-shorty
 ```
@@ -89,6 +89,7 @@ Attribute      | Description
 
 ```
 HTTP/1.1 302 Found
+Content-Type: "application/json"
 Location: http://www.example.com
 ```
 
