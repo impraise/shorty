@@ -11,6 +11,7 @@ require './app/shorten_exception'
 require './app/shortcode_generator'
 require './app/short_url'
 require './app/short_url_service'
+require './app/routes'
 
 DataMapper.finalize
 
@@ -24,4 +25,5 @@ class ImpraiseShortyApp < Sinatra::Base
   configure :test do
     DataMapper.setup(:default, 'sqlite3::memory:')
   end
+  use Routes
 end
