@@ -15,3 +15,16 @@ RUN apt-get update \
 
 
 RUN echo `ruby -v`
+RUN mkdir /shorty
+ADD ./src/ /shorty
+
+WORKDIR /shorty
+
+RUN gem install bundler
+RUN bundle install
+
+EXPOSE 3000
+
+ENTRYPOINT ["bundle", "exec"]
+
+CMD ["/usr/bin/env", "puma", "-p", "3000"]
