@@ -8,6 +8,10 @@ For installation process we use Docker container.
 
 Install docker on [Ubuntu](https://docs.docker.com/engine/installation/linux/ubuntu/)
 
+### Create an volume
+```
+docker volume create --name vol-shorty
+```
 ### Build
 ```
 docker build -t shorty_app .
@@ -16,7 +20,7 @@ docker build -t shorty_app .
 ### Run
 
 ```
-docker run -p 3000:3000 -i shorty_app
+docker run -p 3000:3000 -v vol-shorty:/shorty -i shorty_app
 ```
 
 ### Test
