@@ -1,0 +1,8 @@
+development:
+  adapter: postgresql
+  encoding: unicode
+  database: shrorty
+  pool: 5
+  username: postgres
+  password:
+  host: db

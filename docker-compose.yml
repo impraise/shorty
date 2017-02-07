@@ -1,5 +1,7 @@
 version: '2'
 services:
+  db:
+     image: postgres
   web:
     build: .
     command: bundle exec rackup -p 3000 config.ru
@@ -7,3 +9,5 @@ services:
       - .:/shorty
     ports:
       - "3000:3000"
+    depends_on:
+      - db
