@@ -37,11 +37,11 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  activerecord
-  pg
-  rake
+  activerecord (~> 5.0.1)
+  pg (~> 0.19.0)
+  rake (~> 12.0.0)
   sinatra (~> 1.4.7)
-  sinatra-activerecord
+  sinatra-activerecord (~> 2.0.11)
 
 BUNDLED WITH
    1.14.3
