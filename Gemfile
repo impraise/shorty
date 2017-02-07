@@ -8,3 +8,5 @@ gem "rake", "~> 12.0.0"
 gem "sinatra-activerecord", "~> 2.0.11"
 
 gem "rubocop", "~> 0.47.1"
+
+gem "rspec", "~> 3.5.0"
