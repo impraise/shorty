@@ -20,5 +20,16 @@ describe EncodedLink do
         expect(link.errors["url"]).to include("can't be blank")
       end
     end
+
+    context "when an EncodedLink already exists" do
+      let(:existing_link) { create(:encoded_link) }
+
+      it "does not allow creating another with the same shortcode" do
+        new_link = build(:encoded_link, shortcode: existing_link.shortcode)
+
+        expect(new_link).not_to be_valid
+        expect(new_link.errors["shortcode"]).to include("has already been taken")
+      end
+    end
   end
 end
