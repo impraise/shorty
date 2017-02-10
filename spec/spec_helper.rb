@@ -3,6 +3,7 @@ require "factory_girl"
 require "active_record"
 require "yaml"
 require "database_cleaner"
+require "rack/test"
 require "./lib/app.rb"
 
 # Setup database connection
@@ -13,6 +14,7 @@ ActiveRecord::Base.establish_connection(configuration[environment])
 
 RSpec.configure do |config|
   config.include FactoryGirl::Syntax::Methods
+  config.include Rack::Test::Methods
 
   config.before(:suite) do
     FactoryGirl.find_definitions
