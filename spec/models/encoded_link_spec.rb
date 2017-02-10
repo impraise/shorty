@@ -31,5 +31,33 @@ describe EncodedLink do
         expect(new_link.errors["shortcode"]).to include("has already been taken")
       end
     end
+
+    describe "shortcode format" do
+      context "when the shortcode has invalid characters" do
+        it "is invalid" do
+          link = build(:encoded_link, shortcode: "123/56")
+
+          expect(link).not_to be_valid
+          expect(link.errors["shortcode"]).to include("is invalid")
+        end
+      end
+
+      context "when the shortcode has invalid length" do
+        it "is invalid" do
+          link = build(:encoded_link, shortcode: "1234567")
+
+          expect(link).not_to be_valid
+          expect(link.errors["shortcode"]).to include("is invalid")
+        end
+      end
+
+      context "when the shortcode matches the regex" do
+        it "is valid" do
+          link = build(:encoded_link, shortcode: "a2345z")
+
+          expect(link).to be_valid
+        end
+      end
+    end
   end
 end

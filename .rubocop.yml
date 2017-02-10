@@ -5,6 +5,10 @@ AllCops:
 Style/ClassAndModuleChildren:
   Enabled: False
 
+Metrics/BlockLength:
+  Exclude:
+    - "spec/models/*.rb"
+
 Metrics/LineLength:
   Max: 120
 
