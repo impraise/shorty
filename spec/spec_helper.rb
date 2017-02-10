@@ -2,6 +2,7 @@ require "rspec"
 require "factory_girl"
 require "active_record"
 require "yaml"
+require "database_cleaner"
 require "./lib/app.rb"
 
 # Setup database connection
@@ -15,5 +16,15 @@ RSpec.configure do |config|
 
   config.before(:suite) do
     FactoryGirl.find_definitions
+    DatabaseCleaner.strategy = :truncation
+    DatabaseCleaner.clean_with(:truncation)
+  end
+
+  config.before(:each) do
+    DatabaseCleaner.start
+  end
+
+  config.after(:each) do
+    DatabaseCleaner.clean
   end
 end
