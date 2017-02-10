@@ -3,15 +3,6 @@ require "./lib/models/encoded_link.rb"
 
 describe EncodedLink do
   describe "validations" do
-    context "when there is no shortcode" do
-      it "is not valid" do
-        link = build(:encoded_link, shortcode: nil)
-
-        expect(link).not_to be_valid
-        expect(link.errors["shortcode"]).to include("can't be blank")
-      end
-    end
-
     context "when there is no url" do
       it "is not valid" do
         link = build(:encoded_link, url: nil)
@@ -57,6 +48,24 @@ describe EncodedLink do
 
           expect(link).to be_valid
         end
+      end
+    end
+  end
+
+  describe "shortcode" do
+    context "when the object already has a shortcode" do
+      it "does not replace the existing shortcode" do
+        encoded_link = build(:encoded_link, shortcode: "123456")
+        encoded_link.save!
+        expect(encoded_link.reload.shortcode).to eq("123456")
+      end
+    end
+
+    context "when the object has no shortcode" do
+      it "fills it with a generated shortcode" do
+        encoded_link = build(:encoded_link, shortcode: nil)
+        encoded_link.save!
+        expect(encoded_link.reload.shortcode).not_to be_nil
       end
     end
   end
