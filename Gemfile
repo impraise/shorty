@@ -9,4 +9,5 @@ gem "sinatra-activerecord", "~> 2.0.11"
 
 gem "rubocop", "~> 0.47.1"
 
+gem "factory_girl", "~> 4.8.0"
 gem "rspec", "~> 3.5.0"
