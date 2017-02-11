@@ -69,4 +69,31 @@ describe EncodedLink do
       end
     end
   end
+
+  describe "#stats" do
+    context "when no access_links exist" do
+      it "returns the created_at and a redirect_count of 0" do
+        encoded_link = create(:encoded_link)
+        result = encoded_link.stats
+
+        expect(result[:startDate]).to eq(encoded_link.created_at)
+        expect(result[:redirectCount]).to eq(0)
+      end
+    end
+
+    context "when accesses_links exist" do
+      it "returns the created_at, number of accesses_links, and highest created_at of access_links" do
+        encoded_link = create(:encoded_link)
+
+        Timecop.freeze(Date.new(2017, 1, 1)) { LinkAccess.create!(encoded_link: encoded_link) }
+        Timecop.freeze(Date.new(2017, 2, 2)) { LinkAccess.create!(encoded_link: encoded_link) }
+
+        result = encoded_link.stats
+
+        expect(result[:startDate]).to eq(encoded_link.created_at)
+        expect(result[:redirectCount]).to eq(2)
+        expect(result[:lastSeenDate]).to eq(Date.new(2017, 2, 2).to_datetime)
+      end
+    end
+  end
 end

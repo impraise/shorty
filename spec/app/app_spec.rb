@@ -93,4 +93,23 @@ describe "the sinatra app" do
       end
     end
   end
+
+  describe "GET /:shortcode/stats" do
+    context "when the shortcode doesn't correspond to any encoded link" do
+      it "returns 404" do
+        get "/foobar"
+        expect(last_response.status).to eq(404)
+      end
+    end
+
+    context "when the shortcode corresponds to an encoded link" do
+      let(:encoded_link) { create(:encoded_link) }
+
+      it "returns json with the shortcode stats" do
+        get "/#{encoded_link.shortcode}/stats"
+        expect(last_response.status).to eq(200)
+        expect(last_response.body).to eq(encoded_link.stats.to_json)
+      end
+    end
+  end
 end

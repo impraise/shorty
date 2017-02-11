@@ -4,6 +4,7 @@ require "active_record"
 require "yaml"
 require "database_cleaner"
 require "rack/test"
+require "timecop"
 require "./lib/app.rb"
 
 # Setup database connection

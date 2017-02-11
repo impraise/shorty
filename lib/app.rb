@@ -29,3 +29,11 @@ get "/:shortcode" do
   LinkAccess.create!(encoded_link: result)
   redirect result.url, 302
 end
+
+get "/:shortcode/stats" do
+  result = EncodedLink.where(shortcode: params["shortcode"]).first
+  return 404 unless result
+
+  content_type :json
+  result.stats.to_json
+end
