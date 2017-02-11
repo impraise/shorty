@@ -1,36 +1,98 @@
-Shorty Challenge
+Shorty
 ================
 
-The trendy modern question for developer inteviews seems to be, "how to create an url shortner". Not wanting to fall too far from the cool kids, we have a challenge for you!
+Shorty is a simple URL shortening API using [Sinatra](http://www.sinatrarb.com/).
 
-## The Challenge
+## Installing docker compose
 
-The challenge, if you choose to accept it, is to create a micro service to shorten urls, in the style that TinyURL and bit.ly made popular.
+This application uses [docker compose](https://docs.docker.com/compose/) to keep setup simple.
+You can find the installation instructions [here](https://docs.docker.com/compose/install/).
 
-## Rules
+How to install docker on a fresh install of Ubuntu Server 14.04:
 
-1. The service must expose HTTP endpoints according to the definition below.
-2. The service must be self contained, you can use any language and technology you like, but it must be possible to set it up from a fresh install of Ubuntu Server 14.04, by following the steps you write in the README.
-3. It must be well tested, it must also be possible to run the entire test suit with a single command from the directory of your repository.
-4. The service must be versioned using git and submitted by making a Pull Request against this repository, git history **should** be meaningful.
-5. You don't have to use a datastore, you can have all data in memory, but we'd be more impressed if you do use one.
+```
+sudo apt-get update
+sudo apt-get install -y --no-install-recommends \
+    linux-image-extra-$(uname -r) \
+    linux-image-extra-virtual
 
-## Tips
+curl -fsSL https://apt.dockerproject.org/gpg | sudo apt-key add -
+sudo add-apt-repository \
+       "deb https://apt.dockerproject.org/repo/ \
+       ubuntu-$(lsb_release -cs) \
+       main"
 
-* Less is more, small is beautiful, you know the drill — stick to the requirements.
-* Use the right tool for the job, rails is highly discouraged.
-* Don't try to make the microservice play well with others, the system is all yours.
-* No need to take care of domains, that's for a reverse proxy to handle.
-* Unit tests > Integration tests, but be careful with untested parts of the system.
+sudo apt-get update
+sudo apt-get -y install docker-engine
+```
 
-**Good Luck!** — not that you need any ;)
+How to install docker compose:
+
+```
+curl -L https://github.com/docker/compose/releases/download/1.11.1/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+chmod +x /usr/local/bin/docker-compose
+```
+
+## Running the application
+
+Start by cloning the application:
+
+```
+  git clone git@github.com:JSFernandes/shorty.git
+  cd shorty
+```
+
+On first time setup or when the `Dockerfile`/`Gemfile` has changed, run:
+
+```
+  docker-compose build
+```
+
+Initialize the database:
+
+```
+  docker-compose run web bundle exec rake db:create
+```
+
+Run the database migrations:
+
+```
+  docker-compose run web bundle exec rake db:migrate
+```
+
+You can now run the application with the following command:
+
+```
+docker-compose up
+```
+
+## Testing
+
+This application uses [RSpec](http://rspec.info/) for testing.
+You can run the test suite with the following command:
+
+```
+docker-compose run web bundle exec rspec
+```
+
+## Code style
+
+This application uses [Rubocop](https://github.com/bbatsov/rubocop) to enforce the code style.
+You can run it with the following command:
+
+```
+docker-compose run web bundle exec rubocop
+```
+
+## Known caveats
+
+* URLs are not validatedd on POST to `/shorten`
+* Ruby 2.4.0 launches deprecation warnings due to some of the included gems
+* `docker-compose.yml` and `config/database.yml` should be using environment variables in order to be used in production
 
 -------------------------------------------------------------------------
 
 ## API Documentation
-
-**All responses must be encoded in JSON and have the appropriate Content-Type header**
-
 
 ### POST /shorten
 
@@ -132,5 +194,3 @@ lastSeenDate      | date of the last time the a redirect was issued, not present
 Error | Description
 ----- | ------------
 404   | The ```shortcode``` cannot be found in the system
-
-

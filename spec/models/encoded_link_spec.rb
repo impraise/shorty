@@ -1,0 +1,99 @@
+require "spec_helper"
+require "./lib/models/encoded_link.rb"
+
+describe EncodedLink do
+  describe "validations" do
+    context "when there is no url" do
+      it "is not valid" do
+        link = build(:encoded_link, url: nil)
+
+        expect(link).not_to be_valid
+        expect(link.errors["url"]).to include("can't be blank")
+      end
+    end
+
+    context "when an EncodedLink already exists" do
+      let(:existing_link) { create(:encoded_link) }
+
+      it "does not allow creating another with the same shortcode" do
+        new_link = build(:encoded_link, shortcode: existing_link.shortcode)
+
+        expect(new_link).not_to be_valid
+        expect(new_link.errors["shortcode"]).to include("has already been taken")
+      end
+    end
+
+    describe "shortcode format" do
+      context "when the shortcode has invalid characters" do
+        it "is invalid" do
+          link = build(:encoded_link, shortcode: "123/56")
+
+          expect(link).not_to be_valid
+          expect(link.errors["shortcode"]).to include("is invalid")
+        end
+      end
+
+      context "when the shortcode has invalid length" do
+        it "is invalid" do
+          link = build(:encoded_link, shortcode: "1234567")
+
+          expect(link).not_to be_valid
+          expect(link.errors["shortcode"]).to include("is invalid")
+        end
+      end
+
+      context "when the shortcode matches the regex" do
+        it "is valid" do
+          link = build(:encoded_link, shortcode: "a2345z")
+
+          expect(link).to be_valid
+        end
+      end
+    end
+  end
+
+  describe "shortcode" do
+    context "when the object already has a shortcode" do
+      it "does not replace the existing shortcode" do
+        encoded_link = build(:encoded_link, shortcode: "123456")
+        encoded_link.save!
+        expect(encoded_link.reload.shortcode).to eq("123456")
+      end
+    end
+
+    context "when the object has no shortcode" do
+      it "fills it with a generated shortcode" do
+        encoded_link = build(:encoded_link, shortcode: nil)
+        encoded_link.save!
+        expect(encoded_link.reload.shortcode).not_to be_nil
+      end
+    end
+  end
+
+  describe "#stats" do
+    context "when no access_links exist" do
+      it "returns the created_at and a redirect_count of 0" do
+        encoded_link = create(:encoded_link)
+        result = encoded_link.stats
+
+        expect(result[:startDate]).to eq(encoded_link.created_at)
+        expect(result[:redirectCount]).to eq(0)
+      end
+    end
+
+    context "when accesses_links exist" do
+      it "returns the created_at, number of accesses_links, and highest created_at of access_links" do
+        encoded_link = create(:encoded_link)
+
+        Timecop.freeze(Date.new(2017, 1, 1)) { LinkAccess.create!(encoded_link: encoded_link) }
+        Timecop.freeze(Date.new(2017, 2, 2)) { LinkAccess.create!(encoded_link: encoded_link) }
+
+        result = encoded_link.stats
+
+        expect(result[:startDate]).to eq(encoded_link.created_at)
+        expect(result[:redirectCount]).to eq(2)
+        expect(result[:lastSeenDate]).to eq(Date.new(2017, 2, 2).to_datetime)
+      end
+    end
+  end
+end

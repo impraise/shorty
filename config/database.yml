@@ -1,0 +1,17 @@
+development:
+  adapter: postgresql
+  encoding: unicode
+  database: shrorty
+  pool: 5
+  username: postgres
+  password:
+  host: db
+
+test:
+  adapter: postgresql
+  encoding: unicode
+  database: shrorty_test
+  pool: 5
+  username: postgres
+  password:
+  host: db
