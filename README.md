@@ -1,29 +1,81 @@
-Shorty Challenge
+Shorty
 ================
 
-The trendy modern question for developer inteviews seems to be, "how to create an url shortner". Not wanting to fall too far from the cool kids, we have a challenge for you!
+Simple URL shortener microservice powered by Sinatra and PostgreSQL.
 
-## The Challenge
+## Install on Ubuntu 14.04
 
-The challenge, if you choose to accept it, is to create a micro service to shorten urls, in the style that TinyURL and bit.ly made popular.
+First install git:
+```bash
+sudo apt-get install --assume-yes git
+```
 
-## Rules
+First clone the repository:
+```bash
+git clone https://github.com/tegon/shorty.git
+```
 
-1. The service must expose HTTP endpoints according to the definition below.
-2. The service must be self contained, you can use any language and technology you like, but it must be possible to set it up from a fresh install of Ubuntu Server 14.04, by following the steps you write in the README.
-3. It must be well tested, it must also be possible to run the entire test suit with a single command from the directory of your repository.
-4. The service must be versioned using git and submitted by making a Pull Request against this repository, git history **should** be meaningful.
-5. You don't have to use a datastore, you can have all data in memory, but we'd be more impressed if you do use one.
+Install `rvm` and `ruby 2.4.0`:
+```bash
+gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
+\curl -sSL https://get.rvm.io | bash
+source ~/.rvm/scripts/rvm
+rvm install ruby-2.4.0
+```
 
-## Tips
+Install `postgresql`:
+```bash
+sudo apt-get update
+sudo apt-get install --assume-yes postgresql postgresql-contrib
+```
 
-* Less is more, small is beautiful, you know the drill — stick to the requirements.
-* Use the right tool for the job, rails is highly discouraged.
-* Don't try to make the microservice play well with others, the system is all yours.
-* No need to take care of domains, that's for a reverse proxy to handle.
-* Unit tests > Integration tests, but be careful with untested parts of the system.
+Crete a user and set a password:
+```bash
+sudo -u postgres createuser --superuser $USER
+sudo -u postgres psql
+\password $USER # Change $USER to current user (e.g. ubuntu)
+```
 
-**Good Luck!** — not that you need any ;)
+Update the `.env` file with the new credentials:
+```bash
+vim .env
+DATABASE_USERNAME=ubuntu
+DATABASE_PASSWORD=password
+```
+
+Install required packages to build our gems:
+```bash
+sudo apt-get install --assume-yes libpq-dev build-essential
+```
+
+Inside the application directory, install the dependencies running:
+```bash
+cd shorty
+gem install bundler
+bundle install
+```
+
+Create the database and run the migrations:
+```bash
+rake db:create db:migrate
+```
+
+The first time you run the tests, you need to setup the database:
+```bash
+RACK_ENV=test rake db:setup
+```
+
+You can run the tests using:
+```bash
+rake test
+```
+
+Start the application running:
+```bash
+puma config.ru
+```
+
+You can access the application now at: [http://localhost:9292](http://localhost:9292)
 
 -------------------------------------------------------------------------
 
@@ -132,5 +184,3 @@ lastSeenDate      | date of the last time the a redirect was issued, not present
 Error | Description
 ----- | ------------
 404   | The ```shortcode``` cannot be found in the system
-
-
