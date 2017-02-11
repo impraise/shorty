@@ -21,3 +21,9 @@ post "/shorten" do
     { shortcode: encoded_link.shortcode }.to_json
   end
 end
+
+get "/:shortcode" do
+  result = EncodedLink.where(shortcode: params["shortcode"]).first
+  return 404 unless result
+  redirect result.url, 302
+end

@@ -66,4 +66,23 @@ describe "the sinatra app" do
       end
     end
   end
+
+  describe "GET /:shortcode" do
+    context "when the shortcode doesn't correspond to any encoded link" do
+      it "returns 404" do
+        get "/foobar"
+        expect(last_response.status).to eq(404)
+      end
+    end
+
+    context "when the shortcode corresponds to the encoded link" do
+      let(:encoded_link) { create(:encoded_link) }
+      it "returns 302 with the corresponding url" do
+        get "/#{encoded_link.shortcode}"
+        expect(last_response.status).to eq(302)
+        follow_redirect!
+        expect(last_request.url).to eq(encoded_link.url)
+      end
+    end
+  end
 end
