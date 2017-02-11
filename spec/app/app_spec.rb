@@ -37,7 +37,7 @@ describe "the sinatra app" do
       it "returns 201 and JSON" do
         post_as_json("/shorten", url: "shorty.com")
         expect(last_response.status).to eq(201)
-        expect(JSON.parse(last_response.body)["shortcode"]).not_to be_nil
+        expect(JSON.parse(last_response.body)["shortcode"]).to eq(EncodedLink.last.shortcode)
       end
     end
 
@@ -62,6 +62,7 @@ describe "the sinatra app" do
           post_as_json("/shorten", url: "shorty.com", shortcode: "123456")
           expect(last_response.status).to eq(201)
           expect(JSON.parse(last_response.body)["shortcode"]).to eq("123456")
+          expect(EncodedLink.last.shortcode).to eq("123456")
         end
       end
     end
