@@ -1,7 +1,7 @@
 version: '2'
 services:
   db:
-     image: postgres
+    image: postgres
   web:
     build: .
     command: bundle exec rackup -p 3000 -o 0.0.0.0 config.ru
