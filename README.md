@@ -70,6 +70,7 @@ docker-compose run web bundle exec rubocop
 
 * URLs are not validatedd on POST to `/shorten`
 * Ruby 2.4.0 launches deprecation warnings due to some of the included gems
+* `docker-compose.yml` and `config/database.yml` should be using environment variables in order to be used in production
 
 -------------------------------------------------------------------------
 
