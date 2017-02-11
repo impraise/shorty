@@ -42,7 +42,25 @@ Start by cloning the application:
   cd shorty
 ```
 
-You can run the application with the following command:
+On first time setup or when the `Dockerfile`/`Gemfile` has changed, run:
+
+```
+  docker-compose build
+```
+
+Initialize the database:
+
+```
+  docker-compose run web bundle exec rake db:create
+```
+
+Run the database migrations:
+
+```
+  docker-compose run web bundle exec rake db:migrate
+```
+
+You can now run the application with the following command:
 
 ```
 docker-compose up
