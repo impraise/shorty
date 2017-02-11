@@ -25,5 +25,7 @@ end
 get "/:shortcode" do
   result = EncodedLink.where(shortcode: params["shortcode"]).first
   return 404 unless result
+
+  LinkAccess.create!(encoded_link: result)
   redirect result.url, 302
 end

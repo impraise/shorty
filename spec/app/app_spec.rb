@@ -77,11 +77,18 @@ describe "the sinatra app" do
 
     context "when the shortcode corresponds to the encoded link" do
       let(:encoded_link) { create(:encoded_link) }
+
       it "returns 302 with the corresponding url" do
         get "/#{encoded_link.shortcode}"
         expect(last_response.status).to eq(302)
         follow_redirect!
         expect(last_request.url).to eq(encoded_link.url)
+      end
+
+      it "creates a LinkAccess" do
+        expect(encoded_link.link_accesses.count).to eq(0)
+        get "/#{encoded_link.shortcode}"
+        expect(encoded_link.link_accesses.count).to eq(1)
       end
     end
   end
