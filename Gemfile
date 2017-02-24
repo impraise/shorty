@@ -10,4 +10,6 @@ gem 'json'
 
 group :development, :test do
   gem 'pry'
+  gem 'byebug'
+  gem 'rspec'
 end
