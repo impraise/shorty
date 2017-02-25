@@ -11,6 +11,7 @@ gem 'json'
 gem 'data_mapper'
 gem 'dm-migrations'
 gem 'dm-types'
+gem 'dm-transactions'
 
 group :development, :test do
   gem "sqlite3"
@@ -19,4 +20,5 @@ group :development, :test do
   gem 'byebug'
   gem 'rspec'
   gem 'rack-test'
+  gem 'database_cleaner'
 end
