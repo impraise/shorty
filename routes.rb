@@ -18,6 +18,13 @@ class Shorty < Sinatra::Application
     end
   end
 
+  get '/:shortcode' do
+    shortcode = UrlShortcode.first(shortcode: params[:shortcode]) || halt(404, json({"error": "The shortcode cannot be found in the system"}))
+    shortcode.update_redirect_count
+
+    redirect "http://google.com", 302
+  end
+
   private
 
   def validate_request(data)

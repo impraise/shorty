@@ -88,4 +88,36 @@ RSpec.describe Shorty do
 
     end
   end
+
+  describe "GET /:shortcode" do
+    context "when no existing shortcode" do
+      it 'returns status 404' do
+        get "/google"
+
+        expect(last_response.status).to eq(404)
+      end
+    end
+
+    context "when there is existing shortcode" do
+      let(:url_shortcode) { UrlShortcode.create(url: "http://google.com", shortcode: "Go0gLe_") }
+
+      it "increments the redirect count and update last visited at date" do
+        expect(url_shortcode.redirect_count).to eq(0)
+
+        get "/#{url_shortcode.shortcode}"
+
+        url_shortcode.reload
+        expect(url_shortcode.redirect_count).to eq(1)
+        expect(url_shortcode.last_visited_at).to_not be_nil
+      end
+
+      it 'should return a header with Location and status 302' do
+        get "/#{url_shortcode.shortcode}"
+
+        expect(last_response.status).to eq(302)
+        expect(last_response.header["Location"]).to include(url_shortcode.url)
+      end
+   end
+  end
+
 end
