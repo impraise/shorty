@@ -17,7 +17,7 @@ class Shorty < Sinatra::Application
 
   configure :development do
     DataMapper::Logger.new(STDOUT, :debug)
-    DataMapper::setup(:default, "sqlite3:db/#{ENV['RACK_ENV']}.sqlite")
+    DataMapper::setup(:default, "sqlite3:db/#{ENV['RACK_ENV']}.sqlite3")
 
     register Sinatra::Reloader
   end
