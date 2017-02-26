@@ -20,4 +20,20 @@ class UrlShortcode
     self.update(redirect_count: self.redirect_count + 1, last_visited_at: DateTime.now)
   end
 
+  def stats
+    Hash.new.tap do |h|
+      h[:startDate] = self.start_date
+      h[:redirectCount] = self.redirect_count
+      h[:lastSeenDate] = self.last_visited_date if self.redirect_count > 0
+    end
+  end
+
+  def start_date
+    self.created_at.to_time.utc.iso8601(3)
+  end
+
+  def last_visited_date
+    self.last_visited_at.to_time.utc.iso8601(3) if self.last_visited_at
+  end
+
 end

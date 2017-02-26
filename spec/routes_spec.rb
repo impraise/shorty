@@ -120,4 +120,46 @@ RSpec.describe Shorty do
    end
   end
 
+  describe "GET /:shortcode/stats" do
+    context "when no shortcode found" do
+      it 'returns status 404' do
+        get "/google/stats"
+
+        expect(last_response.status).to eq(404)
+      end
+    end
+
+    context "when new shortcode is created and never visited" do
+      let(:url_shortcode) { UrlShortcode.create(url: "http://google.com", shortcode: "Go0gLe_") }
+
+      it 'returns json response with shortcode stats wthout lastSeenDate' do
+        url_shortcode.reload
+
+        get "/#{url_shortcode.shortcode}/stats"
+
+        expect(last_response.status).to eq(200)
+        expect(last_response.body).to eq({
+          startDate: url_shortcode.start_date,
+          redirectCount: url_shortcode.redirect_count,
+        }.to_json)
+      end
+    end
+
+    context "when shotcode exists and has been visited before" do
+      let(:url_shortcode) { UrlShortcode.create(url: "http://google.com", shortcode: "Go0gLe_") }
+
+      it 'returns json response with shortcode stats with lastSeenDate' do
+        5.times { url_shortcode.update_redirect_count; url_shortcode.reload }
+
+        get "/#{url_shortcode.shortcode}/stats"
+
+        expect(last_response.status).to eq(200)
+        expect(last_response.body).to eq({
+          startDate: url_shortcode.start_date,
+          redirectCount: url_shortcode.redirect_count,
+          lastSeenDate: url_shortcode.last_visited_date
+        }.to_json)
+      end
+    end
+  end
 end

@@ -87,4 +87,66 @@ RSpec.describe UrlShortcode do
       }.to change { shortcode.last_visited_at }
     end
   end
+
+  describe "#stats" do
+    context "when new shortcode is created and never visited" do
+      let(:url_shortcode) { UrlShortcode.create(url: "http://google.com") }
+
+      it "should return stats hash without lastSeenDate" do
+        expected = {
+          startDate: url_shortcode.start_date,
+          redirectCount: url_shortcode.redirect_count
+        }
+
+        expect(url_shortcode.stats).to eq(expected)
+        expect(url_shortcode.stats).to_not have_key(:lastSeenDate)
+      end
+    end
+
+    context "when shortcode exists and has already been visited" do
+      let(:url_shortcode) { UrlShortcode.create(url: "http://google.com") }
+
+      it "should return stats hash with lastSeenDate" do
+        url_shortcode.update_redirect_count
+
+        expected = {
+          startDate: url_shortcode.start_date,
+          redirectCount: url_shortcode.redirect_count,
+          lastSeenDate: url_shortcode.last_visited_date
+        }
+
+        expect(url_shortcode.stats).to eq(expected)
+        expect(url_shortcode.stats).to have_key(:lastSeenDate)
+      end
+    end
+  end
+
+  describe "#start_date" do
+    let(:url_shortcode) { UrlShortcode.create(url: "http://google.com") }
+
+    it "returns shortcode creation date conforming to 'iso8601' format" do
+      expect(url_shortcode.start_date).to eq(url_shortcode.created_at.to_time.utc.iso8601(3))
+    end
+  end
+
+  describe "#last_visited_date" do
+    let(:url_shortcode) { UrlShortcode.create(url: "http://google.com") }
+
+    context "when redirect count is 0" do
+      it "does not return short code last visit date" do
+        expect(url_shortcode.last_visited_date).to be_nil
+      end
+    end
+
+    context "when redirect count is more than 0" do
+      before do
+        5.times { url_shortcode.reload; url_shortcode.update_redirect_count }
+      end
+
+      it "returns shortcode last visit date conforming to 'iso8601' format" do
+        expect(url_shortcode.last_visited_date).to eq(url_shortcode.last_visited_at.to_time.utc.iso8601(3))
+      end
+    end
+  end
+
 end
