@@ -3,7 +3,7 @@ require "securerandom"
 class UrlShortcodeGenerator
 
   def self.generate_shortcode
-    SecureRandom.urlsafe_base64(6)[0..5].tr('=', '0')
+    SecureRandom.urlsafe_base64(6)[0..5].tr('=-', '0_')
   end
 
 end
