@@ -71,20 +71,18 @@ RSpec.describe UrlShortcode do
   end
 
   describe "#update_redirect_count" do
-    let(:shortcode) { UrlShortcode.create(url: "http://google.com") }
+    let(:url_shortcode) { UrlShortcode.create(url: "http://google.com") }
 
     it 'should increment the redirect counter' do
       expect {
-        shortcode.update_redirect_count
-      }.to change { shortcode.redirect_count }.from(0).to(1)
+        url_shortcode.update_redirect_count
+      }.to change { url_shortcode.reload.redirect_count }.from(0).to(1)
     end
 
     it 'should change updated_at' do
-      shortcode.update(last_visited_at: DateTime.now)
-
       expect {
-        shortcode.update_redirect_count
-      }.to change { shortcode.last_visited_at }
+        url_shortcode.update_redirect_count
+      }.to change { url_shortcode.reload.last_visited_at }
     end
   end
 
