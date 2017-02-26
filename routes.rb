@@ -34,15 +34,19 @@ class Shorty < Sinatra::Application
   private
 
   def validate_request(data)
-    status = 400 and raise ShortyException::MissingParameterError.new("'url' is not present") unless data.key?('url')
-    status = 422 and raise ShortyException::FormatException.new("The shortcode fails to meet the following regexp: ^[0-9a-zA-Z_]{4,}$.") if data.key?('shortcode') && !(/^[0-9a-zA-Z_]{4,}$/ =~ data["shortcode"])
-    status = 409 and raise ShortyException::RecordNotUnique.new("The the desired shortcode is already in use. Shortcodes are case-sensitive.") if UrlShortcode.all(shortcode: data["shortcode"]).count > 0
-  rescue ShortyException::MissingParameterError, ShortyException::FormatException, ShortyException::RecordNotUnique => e
-    halt(status, json({"error": e.message}))
+    raise ShortyException::MissingParameterError unless data.key?('url')
+    raise ShortyException::FormatException       if data.key?('shortcode') && !(/^[0-9a-zA-Z_]{4,}$/ =~ data["shortcode"])
+    raise ShortyException::RecordNotUnique.new() if UrlShortcode.all(shortcode: data["shortcode"]).count > 0
+  rescue ShortyException::MissingParameterError
+    halt(400, json({"error": "'url' is not present"}))
+  rescue ShortyException::FormatException
+    halt(422, json({"error": "The shortcode fails to meet the following regexp: ^[0-9a-zA-Z_]{4,}$." }))
+  rescue ShortyException::RecordNotUnique
+    halt(409, json({"error": "The the desired shortcode is already in use. Shortcodes are case-sensitive."}))
   end
 
   def shortcode_or_404
-    shortcode = UrlShortcode.first(shortcode: params[:shortcode]) || halt(404, json({"error": "The shortcode cannot be found in the system"}))
+    UrlShortcode.first(shortcode: params[:shortcode]) || halt(404, json({"error": "The shortcode cannot be found in the system"}))
   end
 
 end
