@@ -1,29 +1,73 @@
 Shorty Challenge
 ================
 
-The trendy modern question for developer inteviews seems to be, "how to create an url shortner". Not wanting to fall too far from the cool kids, we have a challenge for you!
+Shorty is a simple URL shortening service.
 
-## The Challenge
+## Dependencies
+  * Ruby - 2.3.1
+  * SQLite
+  * Sinatra
+  * Puma
+  * Datamapper
+  * Rspec
+  * rbenv/ruby-build
 
-The challenge, if you choose to accept it, is to create a micro service to shorten urls, in the style that TinyURL and bit.ly made popular.
+## Setup
 
-## Rules
+1. Install required packages to install/build ruby and gems:
 
-1. The service must expose HTTP endpoints according to the definition below.
-2. The service must be self contained, you can use any language and technology you like, but it must be possible to set it up from a fresh install of Ubuntu Server 14.04, by following the steps you write in the README.
-3. It must be well tested, it must also be possible to run the entire test suit with a single command from the directory of your repository.
-4. The service must be versioned using git and submitted by making a Pull Request against this repository, git history **should** be meaningful.
-5. You don't have to use a datastore, you can have all data in memory, but we'd be more impressed if you do use one.
+	```
+	sudo apt-get update
+	sudo apt-get install -y git-core wget curl zlib1g-dev build-essential libssl-dev libreadline-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev libcurl4-openssl-dev python-software-properties libffi-dev
+	```
 
-## Tips
+2. Install rbenv:
 
-* Less is more, small is beautiful, you know the drill — stick to the requirements.
-* Use the right tool for the job, rails is highly discouraged.
-* Don't try to make the microservice play well with others, the system is all yours.
-* No need to take care of domains, that's for a reverse proxy to handle.
-* Unit tests > Integration tests, but be careful with untested parts of the system.
+	```
+	git clone git://github.com/sstephenson/rbenv.git .rbenv
+	echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bash_profile
+	echo 'eval "$(rbenv init -)"' >> ~/.bash_profile
 
-**Good Luck!** — not that you need any ;)
+	git clone git://github.com/sstephenson/ruby-build.git ~/.rbenv/plugins/ruby-build
+	echo 'export PATH="$HOME/.rbenv/plugins/ruby-build/bin:$PATH"' >> ~/.bash_profile
+	source ~/.bash_profile
+	```
+
+3. Install ruby and bundler:
+
+	```
+	rbenv install -v 2.3.1
+	rbenv global 2.3.1
+	gem install bundler
+	```
+
+4. Clone the project:
+
+	```
+	git clone git://github.com/hindenbug/shorty.git
+	```
+
+5. From the application directory, install the dependencies:
+
+	```
+	cd shorty
+	bundle install
+	```
+
+6. Run the tests using:
+
+	```
+	bundle exec rspec spec
+	```
+
+7. Start the application running:
+
+	```
+	bundle exec rackup
+	```
+
+Application is now running on [http://localhost:9292]
+
 
 -------------------------------------------------------------------------
 

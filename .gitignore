@@ -1,0 +1,9 @@
+/.bundle
+/log
+/log/*
+/tmp/*
+!/log/.keep
+!/tmp/.keep
+.byebug_history
+/db/*.sqlite3
+/db/*.sqlite3-journal
