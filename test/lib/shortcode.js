@@ -11,16 +11,4 @@ describe('module to generate shortcode', function() {
 
   });
 
-  it('correctly identifies an invalid shortcode', function() {
-
-    assert.isNotOk(shortcodeLib.isValid('ab'));
-
-  });
-
-  it('correctly identifies a valid shortcode', function() {
-
-    assert.isOk(shortcodeLib.isValid('c2_1AB'));
-
-  });
-
 });

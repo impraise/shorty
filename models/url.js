@@ -5,7 +5,15 @@ var Schema = mongoose.Schema;
 
 var urlSchema = new Schema({
   url: {type: String, required: true},
-  shortcode: String,
+  shortcode: {
+    type: String, 
+    validate: {
+      validator: function(v) {
+        return /^[0-9a-zA-Z_]{4,}$/.test(v);
+      },
+      message: 'Invalid shortcode'
+    }
+  },
   lastSeenDate: Date,
   redirectCount: {type: Number, default: 0}
 }, {
