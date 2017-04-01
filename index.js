@@ -21,4 +21,6 @@ else{
   mongoose.connect(process.env.DB_URL || 'mongodb://localhost/shortydb');
 }
 
+app.use('/shorten', require('./routes/shorten'));
+
 module.exports = app;
