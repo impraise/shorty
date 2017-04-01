@@ -6,7 +6,7 @@ var expect = chai.expect, assert = chai.assert;
 var mongoose = require('../../config/mongoose');
 var db = mongoose.createConnection(process.env.TEST_DB_URL || 'mongodb://localhost/test');
 
-describe('URL model', function() {
+describe('Url Model', function() {
 
   before(function() {
     db.dropDatabase();

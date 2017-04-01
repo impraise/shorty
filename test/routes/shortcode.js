@@ -9,7 +9,7 @@ chai.use(chaiHttp);
 var mongoose = require('../../config/mongoose');
 var db = mongoose.createConnection(process.env.TEST_DB_URL || 'mongodb://localhost/test');
 
-describe('url shortening api', function() {
+describe('URL accessing api', function() {
 
   describe('getting a short url', function() {
 
