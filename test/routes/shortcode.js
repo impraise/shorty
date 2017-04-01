@@ -84,33 +84,33 @@ describe('url shortening api', function() {
 
   describe('updating the stats for a short url', function() {
 
-    before(function() {
+    before(function(done) {
       db.dropDatabase();
+      UrlService.create('https://www.apple.com', 'abcdef').then(function(item) {
+        expect(item.redirectCount).to.equal(0);
+        expect(item.lastSeenDate).to.not.exist;
+        done();
+      })
     });
 
     after(function() {
       db.dropDatabase();
     });
 
-    it('should update the redirect count on each redirect', function(done) {      
+    it('should update the redirect count and last seen date on first redirect', function(done) {      
 
-      UrlService.create('https://www.apple.com', 'abcdef').then(function(item) {
-
-        expect(item.redirectCount).to.equal(0);
-
-        if (item) {
-          chai.request(app)
-          .get('/abcdef')
-          .end(function(err, res) {
-            UrlService.get('abcdef').then(function(item) {
-              expect(item.redirectCount).to.equal(1);
-              done();
-            })                               
-          });
-        }
+      chai.request(app)
+      .get('/abcdef')
+      .end(function(err, res) {
+        UrlService.get('abcdef').then(function(item) {
+          expect(item.redirectCount).to.be.above(0);
+          expect(item.lastSeenDate).to.exist;
+          done();
+        })                               
       });
 
     });
+
   });
 
 });
