@@ -2,6 +2,7 @@
   "name": "shorty",
   "version": "1.0.0",
   "description": "URL Shortener",
+  "repository":"https://github.com/impraise/shorty",
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
