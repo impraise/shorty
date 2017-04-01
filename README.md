@@ -3,7 +3,10 @@ Shorty Challenge
 
 ### Prerequisites
 
-Install below before going through the Setup
+* Node.js - 6.10.1, npm - 3.10.10 (LTS latest)
+* MongoDB - 3.4.3 (Latest)
+
+Install below before going through the Setup:
 
 * [Node.js + NPM](https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions)
 * [MongoDB](https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/#install-mongodb-community-edition)
@@ -15,6 +18,8 @@ $ cd path/to/shorty
 $ npm install
 $ mkdir data && mongod --dbpath=./data --fork --logpath mongo-log.log # This will make MongoDB run in the background and keep all the data contained to the data directory in our service.
 ````
+
+NOTE: For the `mongod` command, if you get this error: "ERROR: child process failed, exited with error number 48", simply stop mongodb: `sudo service mongod stop` and run the command again. 
 
 ### Run
 
