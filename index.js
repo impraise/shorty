@@ -22,5 +22,6 @@ else{
 }
 
 app.use('/shorten', require('./routes/shorten'));
+app.use('/', require('./routes/shortcode'));
 
 module.exports = app;
