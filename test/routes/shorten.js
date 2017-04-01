@@ -24,11 +24,23 @@ describe('URL shortening api', function() {
 
     describe('should not create', function() {
 
+      it('if a proper content type is not provided', function(done) {
+
+        chai.request(app)
+        .post('/shorten')
+        .set('Content-Type', 'text/html')
+        .send('test')
+        .end(function(err, res) {
+          expect(res).to.have.status(400);
+          done();                               
+        });
+
+      });
+
       it('if url is not provided', function(done) {      
 
         chai.request(app)
         .post('/shorten')
-        .set('Content-Type', 'application/json')
         .send({})
         .end(function(err, res) {
           expect(res).to.have.status(400);
@@ -44,7 +56,6 @@ describe('URL shortening api', function() {
           if(item){
             chai.request(app)
             .post('/shorten')
-            .set('Content-Type', 'application/json')
             .send({
               url: 'https://www.apple.com',
               shortcode: 'iW5nF0'
@@ -63,7 +74,6 @@ describe('URL shortening api', function() {
 
         chai.request(app)
         .post('/shorten')
-        .set('Content-Type', 'application/json')
         .send({
           url: 'https://www.apple.com',
           shortcode: '12'
@@ -83,7 +93,6 @@ describe('URL shortening api', function() {
 
         chai.request(app)
         .post('/shorten')
-        .set('Content-Type', 'application/json')
         .send({
           url: 'https://www.apple.com'
         })
@@ -101,7 +110,6 @@ describe('URL shortening api', function() {
 
         chai.request(app)
         .post('/shorten')
-        .set('Content-Type', 'application/json')
         .send({
           url: 'https://www.apple.com',
           shortcode: '4R_34y'
