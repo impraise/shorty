@@ -21,6 +21,7 @@ router.get('/:shortcode/stats', function(req, res) {
 
   UrlService.get(req.params.shortcode).then(function(item) {
     if (item) {
+      res.status(200);
       res.json({
         startDate: item.startDate,
         lastSeenDate: item.lastSeenDate,
