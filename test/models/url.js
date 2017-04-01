@@ -62,6 +62,28 @@ describe('Url Model', function() {
 
     });
 
+    it('does not save if url is blank', function(done) {
+
+      new Url({url: ''})
+      .save()
+      .catch(function(err) {
+        expect(err.errors.url.kind).to.equal('required');
+        done();
+      });
+
+    });
+
+    it('does not store a blank shortcode', function(done) {
+
+      new Url({url: 'https://www.apple.com', shortcode: ''})
+      .save()
+      .catch(function(err) {
+        expect(err.errors.shortcode.message).to.equal('Invalid shortcode');
+        done();
+      });
+
+    });
+
   });
 
 });
