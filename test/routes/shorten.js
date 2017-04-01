@@ -7,7 +7,7 @@ var expect = chai.expect, assert = chai.assert;
 
 chai.use(chaiHttp);
 
-var mongoose = require('mongoose');
+var mongoose = require('../../config/mongoose');
 var db = mongoose.createConnection(process.env.TEST_DB_URL || 'mongodb://localhost/test');
 
 describe('url shortening api', function() {

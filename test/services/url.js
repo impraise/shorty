@@ -3,7 +3,7 @@ var UrlService = require('../../services/url');
 
 var expect = chai.expect, assert = chai.assert;
 
-var mongoose = require('mongoose');
+var mongoose = require('../../config/mongoose');
 var db = mongoose.createConnection(process.env.TEST_DB_URL || 'mongodb://localhost/test');
 
 describe('URL service', function() {
