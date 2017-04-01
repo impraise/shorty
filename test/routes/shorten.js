@@ -28,6 +28,7 @@ describe('url shortening api', function() {
 
         chai.request(app)
         .post('/shorten')
+        .set('Content-Type', 'application/json')
         .send({})
         .end(function(err, res) {
           expect(res).to.have.status(400);
@@ -43,6 +44,7 @@ describe('url shortening api', function() {
           if(item){
             chai.request(app)
             .post('/shorten')
+            .set('Content-Type', 'application/json')
             .send({
               url: 'https://www.apple.com',
               shortcode: 'iW5nF0'
@@ -61,6 +63,7 @@ describe('url shortening api', function() {
 
         chai.request(app)
         .post('/shorten')
+        .set('Content-Type', 'application/json')
         .send({
           url: 'https://www.apple.com',
           shortcode: '12'
@@ -80,11 +83,13 @@ describe('url shortening api', function() {
 
         chai.request(app)
         .post('/shorten')
+        .set('Content-Type', 'application/json')
         .send({
           url: 'https://www.apple.com'
         })
         .end(function(err, res) {
           expect(res).to.have.status(201);
+          expect(res).to.be.json;
           expect(res.body.shortcode).to.exist;
           expect(res.body.shortcode).to.match(shortcodeLib.randomShortcodeRegex);
           done();                               
@@ -96,12 +101,14 @@ describe('url shortening api', function() {
 
         chai.request(app)
         .post('/shorten')
+        .set('Content-Type', 'application/json')
         .send({
           url: 'https://www.apple.com',
           shortcode: '4R_34y'
         })
         .end(function(err, res) {
           expect(res).to.have.status(201);
+          expect(res).to.be.json;
           expect(res.body.shortcode).to.exist;
           expect(res.body.shortcode).to.equal('4R_34y');
           done();                               

@@ -70,6 +70,7 @@ describe('url shortening api', function() {
           .get('/abcdef/stats')
           .end(function(err, res) {
             expect(res).to.have.status(200);
+            expect(res).to.be.json;
             expect(res.body.startDate).to.exist;
             expect(res.body.redirectCount).to.equal(0);
             done();                               
@@ -101,7 +102,6 @@ describe('url shortening api', function() {
           chai.request(app)
           .get('/abcdef')
           .end(function(err, res) {
-            expect(res).to.have.status(200);
             UrlService.get('abcdef').then(function(item) {
               expect(item.redirectCount).to.equal(1);
               done();
