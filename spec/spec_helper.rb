@@ -1,10 +1,16 @@
 require 'rspec'
-
-# Dir['../api/*.rb'].each {|file| require file }
-require_relative '../api/example.rb'
+require_relative '../api/shortener.rb'
 
 RSpec.configure do |config|
-  # config.include RSpec::Rails::RequestExampleGroup, :type => :request, :example_group => {
-  #   :file_path => /spec\/api/
-  # }
+  config.before :each do
+    Redis.new.flushall
+  end
+end
+
+def app
+  Api::Shortener
+end
+
+def json
+  JSON.parse(last_response.body)
 end

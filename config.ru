@@ -1,4 +1,4 @@
 require 'rack'
-require './api/example.rb'
+require './api/shortener'
 
-run Api::Example
+run Api::Shortener

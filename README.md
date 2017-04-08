@@ -67,7 +67,7 @@ A random shortcode is generated if none is requested, the generated short code h
 Error | Description
 ----- | ------------
 400   | ```url``` is not present
-409   | The the desired shortcode is already in use. **Shortcodes are case-sensitive**.
+409   | The desired shortcode is already in use. **Shortcodes are case-sensitive**.
 422   | The shortcode fails to meet the following regexp: ```^[0-9a-zA-Z_]{4,}$```.
 
 
@@ -132,5 +132,3 @@ lastSeenDate      | date of the last time the a redirect was issued, not present
 Error | Description
 ----- | ------------
 404   | The ```shortcode``` cannot be found in the system
-
-
