@@ -75,12 +75,12 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  faker
-  grape
-  rack-test
-  redis
-  redis-namespace
-  rspec
+  faker (~> 1.4.3)
+  grape (~> 0.19.1)
+  rack-test (~> 0.6.3)
+  redis (~> 3.3.3)
+  redis-namespace (~> 1.5.3)
+  rspec (~> 3.5.0)
 
 BUNDLED WITH
    1.14.5
