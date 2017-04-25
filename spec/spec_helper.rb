@@ -1,6 +1,6 @@
 require 'rspec'
+require "rspec/json_expectations"
 require 'rack/test'
-require 'airborne'
 require './app/shorty'
 
 module RSpecMixin

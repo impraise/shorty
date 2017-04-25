@@ -10,7 +10,7 @@ group :development, :test do
   gem 'reek'
   gem 'rubocop'
 
-  gem 'airborne'
   gem 'rack-test'
   gem 'rspec'
+  gem 'rspec-json_expectations'
 end
