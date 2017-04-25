@@ -9,6 +9,7 @@ class ShortyController < Sinatra::Base
   class MalformedUrl < StandardError; end
   class DuplicateShortcode < StandardError; end
   class MalformedShortcode < StandardError; end
+  class ShortcodeNotFound < StandardError; end
 
   configure do
     set show_exceptions: false
@@ -39,8 +40,17 @@ class ShortyController < Sinatra::Base
   end
 
   get '/:shortcode' do
-    status 302
-    json stub: true
+    storage = InMemoryStorage.instance
+
+    shortcode = params[:shortcode]
+
+    record = storage.find(shortcode)
+
+    raise ShortcodeNotFound unless record
+
+    storage.use(shortcode)
+
+    [302, { 'Location' => record[:url] }, '']
   end
 
   get '/:shortcode/stats' do
@@ -49,15 +59,15 @@ class ShortyController < Sinatra::Base
   end
 
   error JSON::ParserError do
-    [400, 'Malformed JSON']
+    [400, 'Malformed JSON.']
   end
 
   error MalformedUrl do
-    [400, 'url is malformed']
+    [400, 'url is malformed.']
   end
 
   error UndefinedUrl do
-    [400, 'url is not present']
+    [400, 'url is not present.']
   end
 
   error DuplicateShortcode do
@@ -66,6 +76,10 @@ class ShortyController < Sinatra::Base
 
   error MalformedShortcode do
     [422, 'The shortcode fails to meet the following regexp: ^[0-9a-zA-Z_]{4,}$.']
+  end
+
+  error ShortcodeNotFound do
+    [404, 'The shortcode cannot be found in the system.']
   end
 
   def request_params
