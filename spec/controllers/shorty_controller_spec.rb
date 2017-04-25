@@ -16,7 +16,7 @@ RSpec.describe ShortyController, type: :request do
 
         it { expect(last_response.status).to eq 201 }
         it { expect(last_response.header['Content-Type']).to eq 'application/json' }
-        it { expect(last_response.body).to include_json(shortcode: /^[0-9a-zA-Z_]{6}$/) }
+        it { expect(json_response['shortcode']).to match(/^[0-9a-zA-Z_]{6}$/) }
       end
 
       context 'with predefined shortcode' do
@@ -30,7 +30,7 @@ RSpec.describe ShortyController, type: :request do
 
         it { expect(last_response.status).to eq 201 }
         it { expect(last_response.header['Content-Type']).to eq 'application/json' }
-        it { expect(last_response.body).to include_json(shortcode: 'ExampleLink') }
+        it { expect(json_response['shortcode']).to eq 'ExampleLink' }
       end
     end
 
@@ -97,7 +97,7 @@ RSpec.describe ShortyController, type: :request do
 
         before do
           post '/shorten', params.to_json
-          shortcode = JSON.parse(last_response.body)['shortcode']
+          shortcode = json_response['shortcode']
           get "/#{shortcode}"
         end
 
@@ -130,6 +130,44 @@ RSpec.describe ShortyController, type: :request do
     end
   end
 
-  xdescribe 'GET /:shortcode/stats' do
+  describe 'GET /:shortcode/stats' do
+    let(:params) do
+      { url: 'https://example.com', shortcode: 'ExampleLink' }
+    end
+
+    context 'returns stats for existing link' do
+      before do
+        post '/shorten', params.to_json
+        get "/#{params[:shortcode]}/stats"
+      end
+
+      it { expect(last_response.status).to eq 200 }
+      it { expect(last_response.header['Content-Type']).to eq 'application/json' }
+      it { expect(json_response).to have_key('redirectCount') }
+      it { expect(json_response).to have_key('startDate') }
+      it { expect(json_response).to have_key('lastSeenDate') }
+      it { expect(json_response['redirectCount']).to eq 0 }
+    end
+
+    context 'increments counter with each use' do
+      before do
+        post '/shorten', params.to_json
+        3.times { get "/#{params[:shortcode]}" }
+        get "/#{params[:shortcode]}/stats"
+      end
+
+      it { expect(last_response.status).to eq 200 }
+      it { expect(last_response.header['Content-Type']).to eq 'application/json' }
+      it { expect(json_response['redirectCount']).to eq 3 }
+    end
+
+    context 'fails if shortcode not found' do
+      before do
+        get "/NoCode/stats"
+      end
+
+      it { expect(last_response.status).to eq 404 }
+      it { expect(last_response.body).to eq 'The shortcode cannot be found in the system.' }
+    end
   end
 end

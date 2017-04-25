@@ -54,8 +54,16 @@ class ShortyController < Sinatra::Base
   end
 
   get '/:shortcode/stats' do
+    storage = InMemoryStorage.instance
+
+    shortcode = params[:shortcode]
+
+    record = storage.find(shortcode)
+
+    raise ShortcodeNotFound unless record
+
     status 200
-    json stub: true
+    json record
   end
 
   error JSON::ParserError do
