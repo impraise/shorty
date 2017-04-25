@@ -75,7 +75,7 @@ RSpec.describe ShortyController, type: :request do
 
     context 'fails if shortcode is already taken' do
       let(:params) do
-        { url: 'https://example.com', shortcode: 'Ex1' }
+        { url: 'https://example.com', shortcode: 'ExampleLink' }
       end
 
       before do

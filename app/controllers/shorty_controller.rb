@@ -1,10 +1,12 @@
 require 'sinatra/base'
 require 'sinatra/json'
 require 'json'
+require 'uri'
 
 # = ShortyController
 class ShortyController < Sinatra::Base
   class UndefinedUrl < StandardError; end
+  class MalformedUrl < StandardError; end
   class DuplicateShortcode < StandardError; end
   class MalformedShortcode < StandardError; end
 
@@ -14,18 +16,23 @@ class ShortyController < Sinatra::Base
   end
 
   post '/shorten' do
+    storage = InMemoryStorage.instance
+
     url = request_params['url']
 
     raise UndefinedUrl unless url
+    raise MalformedUrl unless url =~ /^#{URI.regexp}$/
 
     shortcode = request_params['shortcode']
 
     if shortcode
-      raise MalformedShortcode unless /^[0-9a-zA-Z_]{4,}$/.match shortcode
-      # Check if shortcode exists
+      raise DuplicateShortcode if storage.exists? shortcode
+      raise MalformedShortcode unless shortcode =~ /^[0-9a-zA-Z_]{4,}$/
     else
       shortcode = 'ABCde9'
     end
+
+    storage.store(shortcode, url)
 
     status 201
     json shortcode: shortcode
@@ -43,6 +50,10 @@ class ShortyController < Sinatra::Base
 
   error JSON::ParserError do
     [400, 'Malformed JSON']
+  end
+
+  error MalformedUrl do
+    [400, 'url is malformed']
   end
 
   error UndefinedUrl do
