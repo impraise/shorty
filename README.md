@@ -3,7 +3,13 @@ Shorty
 
 [![Code Climate](https://codeclimate.com/github/focusshifter/shorty/badges/gpa.svg)](https://codeclimate.com/github/focusshifter/shorty) [![Test Coverage](https://codeclimate.com/github/focusshifter/shorty/badges/coverage.svg)](https://codeclimate.com/github/focusshifter/shorty/coverage)
 
-Another variation of Shorty The URL Shortener. This version uses Sinatra and (optionally) Redis.
+Another variation of Shorty The URL Shortener. This version is a simple Rack application.
+
+### Why does this exist?
+This fork is a result of a self-appointed challenge. Rules are simple:
+- Get rid of Sinatra.
+- Do not touch anything in the specs except the helper.
+- Do it in an hour or less.
 
 ### Installation
 
