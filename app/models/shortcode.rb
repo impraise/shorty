@@ -58,6 +58,8 @@ class Shortcode
 
   def use
     storage.use(shortcode)
+
+    reload
   end
 
   private

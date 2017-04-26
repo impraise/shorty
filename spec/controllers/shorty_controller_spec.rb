@@ -73,6 +73,15 @@ RSpec.describe ShortyController, type: :request do
       it { expect(last_response.body).to eq 'The shortcode fails to meet the following regexp: ^[0-9a-zA-Z_]{4,}$.' }
     end
 
+    context 'fails if fed garbage instead of json' do
+      before do
+        post '/shorten', 'garbage, not json', headers
+      end
+
+      it { expect(last_response.status).to eq 400 }
+      it { expect(last_response.body).to eq 'Malformed JSON.' }
+    end
+
     context 'fails if shortcode is already taken' do
       let(:params) do
         { url: 'https://example.com', shortcode: 'ExampleLink' }

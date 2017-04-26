@@ -1,6 +1,12 @@
+require 'simplecov'
 require 'rspec'
 require 'rspec/json_expectations'
 require 'rack/test'
+
+ENV['RACK_ENV'] = 'test'
+
+SimpleCov.start
+
 require './app/config'
 
 # = RSpecMixin
@@ -21,7 +27,6 @@ module JsonHelpers
   end
 end
 
-Shorty.config[:env] = 'test'
 Shorty.config[:storage_adapter] = 'InMemoryAdapter'
 
 RSpec.configure do |config|
