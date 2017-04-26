@@ -48,7 +48,7 @@ class RedisAdapter
       shortcode: shortcode,
       url: url,
       redirectCount: 0,
-      startDate: Time.now.utc.iso8601,
+      startDate: Time.now.utc.iso8601.to_s,
       lastSeenDate: nil
     }
 
@@ -62,7 +62,7 @@ class RedisAdapter
     return false unless exists? shortcode
 
     @redis.hincrby(shortcode, :redirectCount, 1)
-    @redis.hset(shortcode, :lastSeenDate, Time.now.utc.iso8601)
+    @redis.hset(shortcode, :lastSeenDate, Time.now.utc.iso8601.to_s)
   end
 
   def exists?(shortcode)
