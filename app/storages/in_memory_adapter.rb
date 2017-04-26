@@ -1,4 +1,4 @@
-# = InMemoryStorage
+# = InMemoryAdapter
 class InMemoryAdapter
   def initialize
     @records = {}

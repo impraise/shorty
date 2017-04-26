@@ -6,6 +6,8 @@ gem 'puma'
 gem 'sinatra'
 gem 'sinatra-contrib'
 
+gem 'redis', '~>3.2'
+
 group :development, :test do
   gem 'reek'
   gem 'rubocop'

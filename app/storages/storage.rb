@@ -1,4 +1,5 @@
 require './app/storages/in_memory_adapter'
+require './app/storages/redis_adapter'
 
 # = Storage
 #
