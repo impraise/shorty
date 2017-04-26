@@ -3,6 +3,8 @@ require 'rspec/json_expectations'
 require 'rack/test'
 require './app/config'
 
+# = RSpecMixin
+# Sinatra-related RSpec mixin
 module RSpecMixin
   include Rack::Test::Methods
 
@@ -11,6 +13,8 @@ module RSpecMixin
   end
 end
 
+# = JsonHelpers
+# Include this little helper to avoid using JSON.parse all around the specs
 module JsonHelpers
   def json_response
     JSON.parse(last_response.body)

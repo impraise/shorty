@@ -66,6 +66,7 @@ class Shortcode
     @record = storage.find(shortcode)
   end
 
+  # :reek:UtilityFunction
   def storage
     Storage.instance
   end
@@ -84,9 +85,10 @@ class Shortcode
     end
   end
 
-  def number_to_base62(number)
+  # :reek:UncommunicativeMethodName
+  # :reek:UtilityFunction
+  def number_to_base62(number, buffer = '')
     return '0' if number.zero?
-    buffer = ''
 
     while number > 0
       buffer << ALPHABET[number.modulo(ALPHABET_SIZE)]
