@@ -1,136 +1,62 @@
-Shorty Challenge
+Shorty
 ================
 
-The trendy modern question for developer inteviews seems to be, "how to create an url shortner". Not wanting to fall too far from the cool kids, we have a challenge for you!
+[![Code Climate](https://codeclimate.com/github/focusshifter/shorty/badges/gpa.svg)](https://codeclimate.com/github/focusshifter/shorty) [![Test Coverage](https://codeclimate.com/github/focusshifter/shorty/badges/coverage.svg)](https://codeclimate.com/github/focusshifter/shorty/coverage)
 
-## The Challenge
+### Installation
 
-The challenge, if you choose to accept it, is to create a micro service to shorten urls, in the style that TinyURL and bit.ly made popular.
-
-## Rules
-
-1. The service must expose HTTP endpoints according to the definition below.
-2. The service must be self contained, you can use any language and technology you like, but it must be possible to set it up from a fresh install of Ubuntu Server 14.04, by following the steps you write in the README.
-3. It must be well tested, it must also be possible to run the entire test suit with a single command from the directory of your repository.
-4. The service must be versioned using git and submitted by making a Pull Request against this repository, git history **should** be meaningful.
-5. You don't have to use a datastore, you can have all data in memory, but we'd be more impressed if you do use one.
-
-## Tips
-
-* Less is more, small is beautiful, you know the drill — stick to the requirements.
-* Use the right tool for the job, rails is highly discouraged.
-* Don't try to make the microservice play well with others, the system is all yours.
-* No need to take care of domains, that's for a reverse proxy to handle.
-* Unit tests > Integration tests, but be careful with untested parts of the system.
-
-**Good Luck!** — not that you need any ;)
-
--------------------------------------------------------------------------
-
-## API Documentation
-
-**All responses must be encoded in JSON and have the appropriate Content-Type header**
-
-
-### POST /shorten
-
+Install RVM and Ruby.
 ```
-POST /shorten
-Content-Type: "application/json"
-
-{
-  "url": "http://example.com",
-  "shortcode": "example"
-}
+gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
+\curl -sSL https://get.rvm.io | bash -s stable
+rvm install ruby
+gem install bundler
 ```
 
-Attribute | Description
---------- | -----------
-**url**   | url to shorten
-shortcode | preferential shortcode
-
-##### Returns:
-
+Install Git and clone the repository.
 ```
-201 Created
-Content-Type: "application/json"
-
-{
-  "shortcode": :shortcode
-}
+sudo apt-get -y install git
+git clone https://github.com/focusshifter/shorty
+cd shorty
+bundle install
 ```
 
-A random shortcode is generated if none is requested, the generated short code has exactly 6 alpahnumeric characters and passes the following regexp: ```^[0-9a-zA-Z_]{6}$```.
+### Install Redis (optional)
 
-##### Errors:
-
-Error | Description
------ | ------------
-400   | ```url``` is not present
-409   | The the desired shortcode is already in use. **Shortcodes are case-sensitive**.
-422   | The shortcode fails to meet the following regexp: ```^[0-9a-zA-Z_]{4,}$```.
-
-
-### GET /:shortcode
-
+This step is required if you want to use Redis storage adapter (and have any persistence at all).
 ```
-GET /:shortcode
-Content-Type: "application/json"
+sudo apt-get -y install redis-server
+sudo service redis-server start
 ```
 
-Attribute      | Description
--------------- | -----------
-**shortcode**  | url encoded shortcode
-
-##### Returns
-
-**302** response with the location header pointing to the shortened URL
+### Run application
 
 ```
-HTTP/1.1 302 Found
-Location: http://www.example.com
+rackup -p <PORT_NUMBER>
 ```
 
-##### Errors
-
-Error | Description
------ | ------------
-404   | The ```shortcode``` cannot be found in the system
-
-### GET /:shortcode/stats
+### Run specs
 
 ```
-GET /:shortcode/stats
-Content-Type: "application/json"
+rspec
 ```
 
-Attribute      | Description
--------------- | -----------
-**shortcode**  | url encoded shortcode
-
-##### Returns
+### Check for code smells manually
 
 ```
-200 OK
-Content-Type: "application/json"
-
-{
-  "startDate": "2012-04-23T18:25:43.511Z",
-  "lastSeenDate": "2012-04-23T18:25:43.511Z",
-  "redirectCount": 1
-}
+rubocop
+reek
 ```
 
-Attribute         | Description
---------------    | -----------
-**startDate**     | date when the url was encoded, conformant to [ISO8601](http://en.wikipedia.org/wiki/ISO_8601)
-**redirectCount** | number of times the endpoint ```GET /shortcode``` was called
-lastSeenDate      | date of the last time the a redirect was issued, not present if ```redirectCount == 0```
+### Check coverage
 
-##### Errors
+Check `./coverage` for the coverage report after running `rspec`.
 
-Error | Description
------ | ------------
-404   | The ```shortcode``` cannot be found in the system
+### Using different storage adapters
 
+You can select the adapter by setting the `SHORTY_STORAGE_ADAPTER` environment variable. Default adapter provides simple in-memory hash-based storage, allowed values are `InMemoryAdapter` and `RedisAdapter`.
 
+```
+export SHORTY_STORAGE_ADAPTER=RedisAdapter
+export SHORTY_STORAGE_ADAPTER=InMemoryAdapter
+```

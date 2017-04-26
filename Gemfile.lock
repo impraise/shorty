@@ -9,6 +9,8 @@ GEM
     backports (3.7.0)
     codeclimate-engine-rb (0.4.0)
       virtus (~> 1.0)
+    codeclimate-test-reporter (1.0.7)
+      simplecov
     coercible (1.0.0)
       descendants_tracker (~> 0.0.1)
     descendants_tracker (0.0.4)
@@ -86,6 +88,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  codeclimate-test-reporter (~> 1.0.0)
   puma
   rack-test
   redis (~> 3.2)
