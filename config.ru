@@ -1,3 +1,3 @@
 require './app/config'
 
-run ShortyController
+run Shorty

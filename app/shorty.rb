@@ -6,6 +6,25 @@ class Shorty
 
   class << self
     attr_reader :config
+
+    def call(env)
+      request = Rack::Request.new(env)
+
+      controller = ShortyController.new(request)
+
+      case request.path
+      when '/shorten'
+        controller.shorten
+      when %r(^\/([0-9a-zA-Z_]{4,})\/stats$)
+        controller.stats Regexp.last_match(1).to_s
+      when %r(^\/([0-9a-zA-Z_]{4,})$)
+        controller.go Regexp.last_match(1).to_s
+      else
+        raise ShortcodeNotFound
+      end
+    rescue StandardError => ex
+      controller.error(ex)
+    end
   end
 end
 

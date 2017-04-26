@@ -1,62 +1,61 @@
-require 'sinatra/base'
-require 'sinatra/json'
 require 'json'
 require 'uri'
 
 # = ShortyController
-class ShortyController < Sinatra::Base
-  configure do
-    set show_exceptions: false
-    set dump_errors: false
+class ShortyController
+  def initialize(request)
+    @request = request
   end
 
-  post '/shorten' do
-    record = Shortcode.create(request_params['url'], request_params['shortcode'])
+  def shorten
+    record = Shortcode.create(json_params['url'], json_params['shortcode'])
 
-    status 201
-    json shortcode: record.shortcode
+    response(201, { shortcode: record.shortcode }.to_json)
   end
 
-  get '/:shortcode' do
-    record = Shortcode.find(params[:shortcode])
+  def go(shortcode)
+    record = Shortcode.find(shortcode)
 
     record.use
 
-    [302, { 'Location' => record.url }, '']
+    response(302, '', 'Location' => record.url)
   end
 
-  get '/:shortcode/stats' do
-    record = Shortcode.find(params[:shortcode])
+  def stats(shortcode)
+    record = Shortcode.find(shortcode)
 
-    status 200
-    json record.stats
+    response(200, record.stats.to_json)
   end
 
-  error JSON::ParserError do
-    [400, 'Malformed JSON.']
+  def error(error)
+    case error
+    when JSON::ParserError
+      response(400, 'Malformed JSON.')
+    when MalformedUrl
+      response(400, 'url is malformed.')
+    when UndefinedUrl
+      response(400, 'url is not present.')
+    when DuplicateShortcode
+      response(409, 'The desired shortcode is already in use. Shortcodes are case-sensitive.')
+    when MalformedShortcode
+      response(422, 'The shortcode fails to meet the following regexp: ^[0-9a-zA-Z_]{4,}$.')
+    when ShortcodeNotFound
+      response(404, 'The shortcode cannot be found in the system.')
+    else
+      response(500, 'Something went wrong')
+    end
   end
 
-  error MalformedUrl do
-    [400, 'url is malformed.']
+  def response(code, message, headers = {})
+    headers['Content-Type'] = 'application/json'
+    Rack::Response.new(message, code, headers)
   end
 
-  error UndefinedUrl do
-    [400, 'url is not present.']
+  def params
+    @request.params
   end
 
-  error DuplicateShortcode do
-    [409, 'The desired shortcode is already in use. Shortcodes are case-sensitive.']
-  end
-
-  error MalformedShortcode do
-    [422, 'The shortcode fails to meet the following regexp: ^[0-9a-zA-Z_]{4,}$.']
-  end
-
-  error ShortcodeNotFound do
-    [404, 'The shortcode cannot be found in the system.']
-  end
-
-  def request_params
-    @json_params ||= JSON.parse(request.body.read)
+  def json_params
+    @json_params ||= JSON.parse(@request.body.read)
   end
 end
