@@ -7,7 +7,7 @@ class Shortcode
   ALPHABET = ('0'..'9').to_a + ('a'..'z').to_a + ('A'..'Z').to_a
   ALPHABET_SIZE = ALPHABET.size
 
-  EXPOSED_STATS = %i[redirectCount startDate lastSeenDate].freeze
+  EXPOSED_STATS = %i(redirectCount startDate lastSeenDate).freeze
 
   class << self
     def find(shortcode)

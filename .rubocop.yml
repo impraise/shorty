@@ -4,3 +4,9 @@ Metrics/LineLength:
 Metrics/BlockLength:
   Exclude:
     - 'spec/**/*.rb'
+
+Style/PercentLiteralDelimiters:
+  PreferredDelimiters:
+    default: ()
+    '%w': ()
+    '%i': ()

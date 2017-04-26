@@ -3,7 +3,7 @@ require 'redis'
 # = RedisAdapter
 class RedisAdapter
   INTEGER_FIELDS = [:redirectCount].freeze
-  DBS = %w[development test production].freeze
+  DBS = %w(development test production).freeze
 
   # = SymRedis
   #

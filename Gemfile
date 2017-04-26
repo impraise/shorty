@@ -16,6 +16,6 @@ group :development, :test do
   gem 'rspec'
   gem 'rspec-json_expectations'
 
-  gem "codeclimate-test-reporter", "~> 1.0.0", require: false
+  gem 'codeclimate-test-reporter', '~> 1.0.0', require: false
   gem 'simplecov', require: false
 end
