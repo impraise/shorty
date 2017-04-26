@@ -122,7 +122,7 @@ RSpec.describe ShortyController, type: :request do
 
     context 'fails if shortcode not found' do
       before do
-        get "/NoCode"
+        get '/NoCode'
       end
 
       it { expect(last_response.status).to eq 404 }
@@ -145,7 +145,6 @@ RSpec.describe ShortyController, type: :request do
       it { expect(last_response.header['Content-Type']).to eq 'application/json' }
       it { expect(json_response).to have_key('redirectCount') }
       it { expect(json_response).to have_key('startDate') }
-      it { expect(json_response).to have_key('lastSeenDate') }
       it { expect(json_response['redirectCount']).to eq 0 }
     end
 
@@ -158,12 +157,13 @@ RSpec.describe ShortyController, type: :request do
 
       it { expect(last_response.status).to eq 200 }
       it { expect(last_response.header['Content-Type']).to eq 'application/json' }
+      it { expect(json_response).to have_key('lastSeenDate') }
       it { expect(json_response['redirectCount']).to eq 3 }
     end
 
     context 'fails if shortcode not found' do
       before do
-        get "/NoCode/stats"
+        get '/NoCode/stats'
       end
 
       it { expect(last_response.status).to eq 404 }

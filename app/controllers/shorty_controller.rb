@@ -5,65 +5,31 @@ require 'uri'
 
 # = ShortyController
 class ShortyController < Sinatra::Base
-  class UndefinedUrl < StandardError; end
-  class MalformedUrl < StandardError; end
-  class DuplicateShortcode < StandardError; end
-  class MalformedShortcode < StandardError; end
-  class ShortcodeNotFound < StandardError; end
-
   configure do
     set show_exceptions: false
     set dump_errors: false
   end
 
   post '/shorten' do
-    storage = InMemoryStorage.instance
-
-    url = request_params['url']
-
-    raise UndefinedUrl unless url
-    raise MalformedUrl unless url =~ /^#{URI.regexp}$/
-
-    shortcode = request_params['shortcode']
-
-    if shortcode
-      raise DuplicateShortcode if storage.exists? shortcode
-      raise MalformedShortcode unless shortcode =~ /^[0-9a-zA-Z_]{4,}$/
-    else
-      shortcode = 'ABCde9'
-    end
-
-    storage.store(shortcode, url)
+    record = Shortcode.create(request_params['url'], request_params['shortcode'])
 
     status 201
-    json shortcode: shortcode
+    json shortcode: record.shortcode
   end
 
   get '/:shortcode' do
-    storage = InMemoryStorage.instance
+    record = Shortcode.find(params[:shortcode])
 
-    shortcode = params[:shortcode]
+    record.use
 
-    record = storage.find(shortcode)
-
-    raise ShortcodeNotFound unless record
-
-    storage.use(shortcode)
-
-    [302, { 'Location' => record[:url] }, '']
+    [302, { 'Location' => record.url }, '']
   end
 
   get '/:shortcode/stats' do
-    storage = InMemoryStorage.instance
-
-    shortcode = params[:shortcode]
-
-    record = storage.find(shortcode)
-
-    raise ShortcodeNotFound unless record
+    record = Shortcode.find(params[:shortcode])
 
     status 200
-    json record
+    json record.stats
   end
 
   error JSON::ParserError do

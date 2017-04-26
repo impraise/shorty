@@ -1,7 +1,7 @@
 require 'rspec'
 require 'rspec/json_expectations'
 require 'rack/test'
-require './app/shorty'
+require './app/config'
 
 module RSpecMixin
   include Rack::Test::Methods
@@ -17,13 +17,15 @@ module JsonHelpers
   end
 end
 
+Shorty.config[:storage_adapter] = 'InMemoryAdapter'
+
 RSpec.configure do |config|
   config.expose_dsl_globally = false
   config.include RSpecMixin, type: :request
   config.include JsonHelpers, type: :request
 
   config.around(:each) do |example|
-    InMemoryStorage.instance.reset
+    Storage.instance.reset
     example.run
   end
 end

@@ -1,3 +1,3 @@
-require './app/shorty'
+require './app/config'
 
 run ShortyController

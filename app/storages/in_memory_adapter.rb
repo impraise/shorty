@@ -1,9 +1,5 @@
 # = InMemoryStorage
-class InMemoryStorage
-  def self.instance
-    @instance ||= new
-  end
-
+class InMemoryAdapter
   def initialize
     @records = {}
   end
@@ -16,6 +12,7 @@ class InMemoryStorage
     return false if exists? shortcode
 
     @records[shortcode] = {
+      shortcode: shortcode,
       url: url,
       redirectCount: 0,
       startDate: Time.now.iso8601,
