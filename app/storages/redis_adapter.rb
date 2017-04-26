@@ -3,6 +3,7 @@ require 'redis'
 # = RedisAdapter
 class RedisAdapter
   INTEGER_FIELDS = [:redirectCount].freeze
+  DBS = ['dev', 'test', 'production'].freeze
 
   # = SymRedis
   #
@@ -26,7 +27,7 @@ class RedisAdapter
   end
 
   def initialize
-    @redis = SymRedis.new
+    @redis = SymRedis.new(db: DBS.find_index(Shorty.config[:env]))
   end
 
   def find(shortcode)

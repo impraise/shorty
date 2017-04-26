@@ -21,6 +21,7 @@ module JsonHelpers
   end
 end
 
+Shorty.config[:env] = 'test'
 Shorty.config[:storage_adapter] = 'InMemoryAdapter'
 
 RSpec.configure do |config|
