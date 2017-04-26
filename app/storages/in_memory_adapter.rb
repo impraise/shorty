@@ -15,7 +15,7 @@ class InMemoryAdapter
       shortcode: shortcode,
       url: url,
       redirectCount: 0,
-      startDate: Time.now.iso8601,
+      startDate: Time.now.utc.iso8601,
       lastSeenDate: nil
     }
   end
@@ -25,7 +25,7 @@ class InMemoryAdapter
     return false unless exists? shortcode
 
     @records[shortcode][:redirectCount] += 1
-    @records[shortcode][:lastSeenDate] = Time.now.iso8601
+    @records[shortcode][:lastSeenDate] = Time.now.utc.iso8601
   end
 
   def exists?(shortcode)
