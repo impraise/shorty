@@ -5,6 +5,21 @@
 # is restricted to this project.
 use Mix.Config
 
+defmodule ConfigHelper do
+  def url do
+    build_url(
+      System.get_env("MONGODB_DATABASE") || "shorty_dev",
+      System.get_env("MONGODB_HOST") || "localhost",
+      System.get_env("MONGODB_PORT") || 27017,
+      System.get_env("MONGODB_USERNAME"),
+      System.get_env("MONGODB_PASSWORD")
+    )
+  end
+
+  def build_url(database, host, port, nil, nil), do: "mongodb://#{host}:#{port}/#{database}"
+  def build_url(database, host, port, username, password), do: "mongodb://#{username}:#{password}@#{host}:#{port}/#{database}"
+end
+
 # General application configuration
 config :shorty,
   ecto_repos: [Shorty.Repo]
@@ -21,6 +36,12 @@ config :shorty, Shorty.Endpoint,
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",
   metadata: [:request_id]
+
+# Configure your database
+config :shorty, Shorty.Repo,
+  adapter: Mongo.Ecto,
+  url: ConfigHelper.url,
+  pool_size: 10
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
