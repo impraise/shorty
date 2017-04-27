@@ -1,29 +1,67 @@
-Shorty Challenge
+Shorty
 ================
 
-The trendy modern question for developer inteviews seems to be, "how to create an url shortner". Not wanting to fall too far from the cool kids, we have a challenge for you!
+[![Code Climate](https://codeclimate.com/github/focusshifter/shorty/badges/gpa.svg)](https://codeclimate.com/github/focusshifter/shorty) [![Test Coverage](https://codeclimate.com/github/focusshifter/shorty/badges/coverage.svg)](https://codeclimate.com/github/focusshifter/shorty/coverage)
 
-## The Challenge
+Another variation of Shorty The URL Shortener. This version uses Sinatra and (optionally) Redis.
 
-The challenge, if you choose to accept it, is to create a micro service to shorten urls, in the style that TinyURL and bit.ly made popular.
+### Installation
 
-## Rules
+Install RVM and Ruby.
+```
+gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
+\curl -sSL https://get.rvm.io | bash -s stable
+rvm install ruby
+gem install bundler
+```
 
-1. The service must expose HTTP endpoints according to the definition below.
-2. The service must be self contained, you can use any language and technology you like, but it must be possible to set it up from a fresh install of Ubuntu Server 14.04, by following the steps you write in the README.
-3. It must be well tested, it must also be possible to run the entire test suit with a single command from the directory of your repository.
-4. The service must be versioned using git and submitted by making a Pull Request against this repository, git history **should** be meaningful.
-5. You don't have to use a datastore, you can have all data in memory, but we'd be more impressed if you do use one.
+Install Git and clone the repository.
+```
+sudo apt-get -y install git
+git clone https://github.com/focusshifter/shorty
+cd shorty
+bundle install
+```
 
-## Tips
+### Install Redis (optional)
 
-* Less is more, small is beautiful, you know the drill — stick to the requirements.
-* Use the right tool for the job, rails is highly discouraged.
-* Don't try to make the microservice play well with others, the system is all yours.
-* No need to take care of domains, that's for a reverse proxy to handle.
-* Unit tests > Integration tests, but be careful with untested parts of the system.
+This step is required if you want to use Redis storage adapter (and have any persistence at all).
+```
+sudo apt-get -y install redis-server
+sudo service redis-server start
+```
 
-**Good Luck!** — not that you need any ;)
+### Run application
+
+```
+rackup -p <PORT_NUMBER>
+```
+
+### Run specs
+
+```
+rspec
+```
+
+### Check for code smells manually
+
+```
+rubocop
+reek
+```
+
+### Check coverage
+
+Check `./coverage` for the coverage report after running `rspec`.
+
+### Using different storage adapters
+
+You can select the adapter by setting the `SHORTY_STORAGE_ADAPTER` environment variable. Default adapter provides simple in-memory hash-based storage, allowed values are `InMemoryAdapter` and `RedisAdapter`.
+
+```
+export SHORTY_STORAGE_ADAPTER=RedisAdapter
+export SHORTY_STORAGE_ADAPTER=InMemoryAdapter
+```
 
 -------------------------------------------------------------------------
 
@@ -67,7 +105,7 @@ A random shortcode is generated if none is requested, the generated short code h
 Error | Description
 ----- | ------------
 400   | ```url``` is not present
-409   | The the desired shortcode is already in use. **Shortcodes are case-sensitive**.
+409   | The desired shortcode is already in use. Shortcodes are case-sensitive.
 422   | The shortcode fails to meet the following regexp: ```^[0-9a-zA-Z_]{4,}$```.
 
 
@@ -132,5 +170,3 @@ lastSeenDate      | date of the last time the a redirect was issued, not present
 Error | Description
 ----- | ------------
 404   | The ```shortcode``` cannot be found in the system
-
-
