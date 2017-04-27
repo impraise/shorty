@@ -24,7 +24,7 @@ gem install bundler
 Install Git and clone the repository.
 ```
 sudo apt-get -y install git
-git clone https://github.com/focusshifter/shorty
+git clone -b no-sinatra https://github.com/focusshifter/shorty
 cd shorty
 bundle install
 ```
