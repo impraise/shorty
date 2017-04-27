@@ -1,12 +1,7 @@
-require 'json'
 require 'uri'
 
 # = ShortyController
-class ShortyController
-  def initialize(request)
-    @request = request
-  end
-
+class ShortyController < AbstractController
   def shorten
     record = Shortcode.create(json_params['url'], json_params['shortcode'])
 
@@ -27,6 +22,10 @@ class ShortyController
     response(200, record.stats.to_json)
   end
 
+  def default
+    raise ShortcodeNotFound
+  end
+
   def error(error)
     case error
     when JSON::ParserError
@@ -44,18 +43,5 @@ class ShortyController
     else
       response(500, 'Something went wrong')
     end
-  end
-
-  def response(code, message, headers = {})
-    headers['Content-Type'] = 'application/json'
-    Rack::Response.new(message, code, headers)
-  end
-
-  def params
-    @request.params
-  end
-
-  def json_params
-    @json_params ||= JSON.parse(@request.body.read)
   end
 end
