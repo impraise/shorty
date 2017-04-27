@@ -3,8 +3,20 @@ defmodule Shorty.Interactors.CreateShortcode do
   alias Shorty.Code
 
   def call(%{shortcode: shortcode, url: url}) do
-    code = Code.new(shortcode, url) |> CodeRepo.save!
+    case CodeRepo.find_by_shortcode(shortcode) do
+      %Code{} -> {:error, :conflict}
+      _       -> create(shortcode, url)
+    end
+  end
 
-    {:ok, code}
+  defp create(shortcode, url) do
+    changeset = %Code{} |> Code.changeset(%{shortcode: shortcode, url: url})
+
+    if changeset.valid? do
+      code = changeset |> CodeRepo.save!
+      {:ok, code}
+    else
+      {:error, :unprocessable_entity}
+    end
   end
 end

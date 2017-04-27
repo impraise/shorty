@@ -14,12 +14,6 @@ defmodule Shorty.Code do
     struct
     |> cast(params, [:shortcode, :url, :hits])
     |> validate_required([:shortcode, :url])
-  end
-
-  def new(shortcode, url) do
-    %Shorty.Code{
-      url: url,
-      shortcode: shortcode,
-    }
+    |> validate_format(:shortcode, ~r/^[0-9a-zA-Z_]{6}$/)
   end
 end

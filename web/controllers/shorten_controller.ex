@@ -3,12 +3,18 @@ defmodule Shorty.ShortenController do
 
   alias Shorty.Interactors.CreateShortcode
 
+  def create(conn, %{"shortcode" => _, "url" => nil}), do: conn |> resp(:bad_request, "") |> halt
   def create(conn, %{"shortcode" => shortcode, "url" => url}) do
-    {:ok, code} = CreateShortcode.call(%{
-      shortcode: shortcode,
-      url: url,
-    })
+    result = CreateShortcode.call(%{shortcode: shortcode, url: url})
 
-    render conn, "create.json", code
+    case result do
+      {:ok, code} ->
+        render conn, "create.json", code
+
+      {:error, status_code} ->
+        conn
+        |> resp(status_code, "")
+        |> halt
+    end
   end
 end
