@@ -5,17 +5,28 @@ defmodule Shorty.ShortcodeController do
   alias Shorty.Interactors.GetCode
 
   def index(conn, %{"shortcode" => shortcode}) do
-	{:ok, code} = UpdateCodeHits.call(%{shortcode: shortcode})
-
-	conn
-	|> put_resp_header("location", code.url)
-	|> resp(:found, "")
-	|> halt
+    case UpdateCodeHits.call(%{shortcode: shortcode}) do
+      {:ok, code} ->
+        conn
+        |> put_resp_header("location", code.url)
+        |> resp(:found, "")
+        |> halt
+      {:error, _} ->
+        conn
+        |> resp(:not_found, "")
+        |> halt
+    end
   end
 
   def stats(conn, %{"shortcode" => shortcode}) do
-	{:ok, code} = GetCode.call(%{shortcode: shortcode})
+    case GetCode.call(%{shortcode: shortcode}) do
+      {:ok, code} ->
+        render conn, "stats.json", code
 
-    render conn, "stats.json", code
-  end
+      {:error, _} ->
+        conn
+        |> resp(:not_found, "")
+        |> halt
+      end
+    end
 end
