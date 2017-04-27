@@ -11,9 +11,9 @@ config :logger, level: :warn
 
 # Configure your database
 config :shorty, Shorty.Repo,
-  adapter: Ecto.Adapters.Postgres,
-  username: "postgres",
-  password: "postgres",
+  adapter: Mongo.Ecto,
+  #username: "postgres",
+  #password: "postgres",
   database: "shorty_test",
   hostname: "localhost",
-  pool: Ecto.Adapters.SQL.Sandbox
+  pool_size: 10
