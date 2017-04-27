@@ -40,6 +40,7 @@ defmodule Shorty.Mixfile do
      {:phoenix_ecto, "~> 3.0"},
      {:mongo_ecto, "~> 0.2.0"},
      {:phoenix_html, "~> 2.6"},
+     {:mock, "~> 0.2.1"},
      {:cowboy, "~> 1.0"}]
   end
 
