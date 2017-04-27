@@ -3,9 +3,12 @@ defmodule Shorty.ShortenController do
 
   alias Shorty.Interactors.CreateShortcode
 
+  def create(conn, %{"shortcode" => nil, "url" => nil}), do: conn |> resp(:bad_request, "") |> halt
   def create(conn, %{"shortcode" => _, "url" => nil}), do: conn |> resp(:bad_request, "") |> halt
+  def create(conn, %{"shortcode" => shortcode, "url" => url}), do: create_shortcode(conn, shortcode, url)
+  def create(conn, %{"url" => url}), do: create_shortcode(conn, nil, url)
 
-  def create(conn, %{"shortcode" => shortcode, "url" => url}) do
+  defp create_shortcode(conn, shortcode, url) do
     result = CreateShortcode.call(%{shortcode: shortcode, url: url})
 
     case result do

@@ -35,4 +35,15 @@ defmodule Shorty.Interactors.CreateShortcodeTest do
       assert {:ok, %Code{id: _, shortcode: "thesis"}} = CreateShortcode.call(params)
     end
   end
+
+  test "call returns a new random generated shortcode" do
+    changeset = Code.changeset(%Code{}, %{url: "https://test.pt"})
+
+    with_mock Shorty.Repositories.Code, [
+      find_by_shortcode: fn(_) -> nil end,
+      save!: fn(changeset) -> Map.merge(%Code{}, %{url: "https://test.pt"}) end
+    ] do
+      assert {:ok, %Code{id: _, shortcode: _}} = CreateShortcode.call(%{shortcode: nil, url: "https://test.pt"})
+    end
+  end
 end

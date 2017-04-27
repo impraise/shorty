@@ -17,8 +17,21 @@ defmodule Shorty.ShortenControllerTest do
     assert response.status == 201
   end
 
+  test "returns 201 Created when creating a new shortcode without specifying one" do
+    response = build_conn() |> post(@path, %{"url" => "https://google.com"})
+
+    assert response.status == 201
+  end
+
   test "returns 400 Bad Request when no URL is sent" do
     params = %{@params | "url" => nil}
+    response = build_conn() |> post(@path, params)
+
+    assert response.status == 400
+  end
+
+  test "returns 400 Bad Request when no URL and shortcode is sent" do
+    params = %{@params | "url" => nil, "shortcode" => nil}
     response = build_conn() |> post(@path, params)
 
     assert response.status == 400

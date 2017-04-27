@@ -13,7 +13,7 @@ defmodule Shorty.Code do
   def changeset(struct, params \\ %{}) do
     struct
     |> cast(params, [:shortcode, :url, :hits])
-    |> validate_required([:shortcode, :url])
+    |> validate_required([:url])
     |> validate_format(:shortcode, ~r/^[0-9a-zA-Z_]{6}$/)
   end
 end
