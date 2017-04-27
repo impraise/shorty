@@ -1,10 +1,6 @@
 defmodule Shorty.Repositories.Code do
   alias Shorty.Code
 
-  def find_by_id(id) do
-    Code |> Shorty.Repo.get(id)
-  end
-
   def find_by_shortcode(shortcode) do
     Code |> Shorty.Repo.get_by(shortcode: shortcode)
   end
