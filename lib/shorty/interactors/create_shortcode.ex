@@ -28,5 +28,6 @@ defmodule Shorty.Interactors.CreateShortcode do
     :crypto.strong_rand_bytes(6)
     |> Base.url_encode64
     |> binary_part(0, 6)
+    |> String.replace("-", "_")
   end
 end
