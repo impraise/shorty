@@ -33,6 +33,19 @@ defmodule Shorty.ShortcodeControllerTest do
     }
   end
 
+  test "/:shortcode/stats returns json with information about shortcode without lastSeen" do
+    code = Shorty.Repo.insert! %{@code | hits: 0}
+
+    response = build_conn() |> get("/#{@code.shortcode}/stats")
+    json_body = Parser.parse!(response.resp_body)
+
+    assert response.status == 200
+    assert json_body == %{
+      "startDate" => code.inserted_at |> Ecto.DateTime.to_iso8601,
+      "redirectCount" => code.hits
+    }
+  end
+
   test "/:shortcode returns 404 when shortcode does not exist" do
     response = build_conn() |> get("/somerandomstuff")
 
