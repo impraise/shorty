@@ -22,10 +22,17 @@ defmodule Shorty.CodeTest do
     refute changeset.valid?
   end
 
-  test "changeset with invalid shortcode" do
+  test "changeset with invalid shortcode (less than 4 chars)" do
     refute Code.changeset(%Code{}, %{@valid_attributes | shortcode: "123"}).valid?
-    refute Code.changeset(%Code{}, %{@valid_attributes | shortcode: "123456789"}).valid?
     refute Code.changeset(%Code{}, %{@valid_attributes | shortcode: "abc"}).valid?
-    refute Code.changeset(%Code{}, %{@valid_attributes | shortcode: "abcdefghi"}).valid?
+    refute Code.changeset(%Code{}, %{@valid_attributes | shortcode: "A_c"}).valid?
+    refute Code.changeset(%Code{}, %{@valid_attributes | shortcode: "___"}).valid?
+  end
+
+  test "changeset with several valid shortcodes (minimum of 4 chars)" do
+    assert Code.changeset(%Code{}, %{@valid_attributes | shortcode: "abcdefghi"}).valid?
+    assert Code.changeset(%Code{}, %{@valid_attributes | shortcode: "123456789"}).valid?
+    assert Code.changeset(%Code{}, %{@valid_attributes | shortcode: "ABCabc___"}).valid?
+    assert Code.changeset(%Code{}, %{@valid_attributes | shortcode: "Abc123___"}).valid?
   end
 end
