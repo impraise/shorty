@@ -5,21 +5,6 @@
 # is restricted to this project.
 use Mix.Config
 
-defmodule ConfigHelper do
-  def url do
-    build_url(
-      System.get_env("MONGODB_DATABASE") || "shorty_dev",
-      System.get_env("MONGODB_HOST") || "localhost",
-      System.get_env("MONGODB_PORT") || 27017,
-      System.get_env("MONGODB_USERNAME"),
-      System.get_env("MONGODB_PASSWORD")
-    )
-  end
-
-  def build_url(database, host, port, nil, nil), do: "mongodb://#{host}:#{port}/#{database}"
-  def build_url(database, host, port, username, password), do: "mongodb://#{username}:#{password}@#{host}:#{port}/#{database}"
-end
-
 # General application configuration
 config :shorty,
   ecto_repos: [Shorty.Repo]
@@ -39,8 +24,11 @@ config :logger, :console,
 
 # Configure your database
 config :shorty, Shorty.Repo,
-  adapter: Mongo.Ecto,
-  url: ConfigHelper.url,
+  adapter: Ecto.Adapters.Postgres,
+  database: System.get_env("PG_DATABASE") || "shorty_dev",
+  username: System.get_env("PG_USERNAME") || "postgres",
+  password: System.get_env("PG_PASSWORD"),
+  hostname: System.get_env("PG_HOSTNAME") || "localhost",
   pool_size: 10
 
 # Import environment specific config. This must remain at the bottom

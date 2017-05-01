@@ -1,6 +1,8 @@
 FROM elixir:1.4.2
 ENV REFRESHED_AT 2017-04-27
 
+RUN apt-get update && apt-get install --yes postgresql-client
+
 RUN /usr/local/bin/mix local.hex --force && \
     /usr/local/bin/mix local.rebar --force
 

@@ -3,43 +3,41 @@ dev: &BASE
   ports:
     - "4000:4000"
   links:
-    - mongo:mongo.dev
+    - postgres:postgres.dev
   environment:
     - MIX_ENV=dev
-    - MONGODB_HOST=mongo.dev
-    - MONGODB_PORT=27017
-    - MONGODB_DATABASE=shorty_dev
+    - PG_HOSTNAME=postgres.dev
+    - PG_DATABASE=shorty_dev
+    - PG_USERNAME=postgres
+    - PG_PORT=5432
   dns:
     - 8.8.8.8
     - 8.8.4.4
-  command: bash -c "mix phoenix.server 1>&1"
+  command: bash -c "mix ecto.setup && mix phoenix.server 1>&1"
 
 prod:
   <<: *BASE
   ports:
     - "5000:5000"
   links:
-    - mongo:mongo.prod
+    - postgres:postgres.prod
   environment:
     - MIX_ENV=prod
-    - MONGODB_HOST=mongo.prod
-    - MONGODB_DATABASE=shorty_prod
-  # Fix for  https://github.com/edevil/docker-erlang-bug#explanation
-  # See also https://github.com/elixir-lang/elixir/issues/3342
-  command: bash -c "mix compile && mix phoenix.server 1>&1"
+    - PG_HOSTNAME=postgres.prod
+    - PG_DATABASE=shorty_prod
+  command: bash -c "mix compile && mix ecto.setup && mix phoenix.server 1>&1"
 
 tests:
   <<: *BASE
   links:
-    - mongo:mongo.test
+    - postgres:postgres.test
   environment:
     - MIX_ENV=test
-    - MONGODB_HOST=mongo.test
-    - MONGODB_DATABASE=shorty_test
-  # Fix for  https://github.com/edevil/docker-erlang-bug#explanation
-  # See also https://github.com/elixir-lang/elixir/issues/3342
-  command: bash -c "mix test 1>&1"
+    - PG_HOSTNAME=postgres.test
+    - PG_DATABASE=shorty_test
+  command: bash -c "mix ecto.reset && mix test 1>&1"
 
-mongo:
-  image: mongo:3.4
-  command: --smallfiles
+postgres:
+  image: postgres:9.5
+  ports:
+    - "5432"

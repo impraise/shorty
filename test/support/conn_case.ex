@@ -33,10 +33,6 @@ defmodule Shorty.ConnCase do
   end
 
   setup tags do
-    unless tags[:async] do
-      Mongo.Ecto.truncate(Shorty.Repo, [])
-    end
-
-    :ok
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Shorty.Repo)
   end
 end

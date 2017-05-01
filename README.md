@@ -9,21 +9,22 @@ Elixir and Erlang can be installed using the following:
 $ brew install elixir
 ```
 
-The database used is MongoDB (3.4 was used) and the following environment
-variables need to be configured:
+The database used is Postgres and the following environment variables need
+to be configured:
 ```
-MONGODB_DATABASE (defaults to `shorty_dev`)
-MONGODB_HOST (defaults to `localhost`)
-MONGODB_PORT (defaults to 21017)
-MONGODB_USERNAME (optional)
-MONGODB_PASSWORD (optional)
+PG_DATABASE (defaults to `shorty_dev`)
+PG_HOSTNAME (defaults to `localhost`)
+PG_PORT (defaults to 5432)
+PG_USERNAME (defaults to `postgres`)
+PG_PASSWORD (optional)
 ```
 
 ## Running
-With Elixir installed and MongoDB running, we can install the dependencies
-using the follow command:
+With Elixir installed and Postgres running, we can install the
+dependencies and run the initial migrations using the follow command:
 ```
 $ mix deps.get
+$ mix ecto.setup
 ```
 There's no need to run `mix compile` after installing the dependencies
 because it will be called automatically when running the application (if

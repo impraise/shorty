@@ -8,12 +8,10 @@ config :shorty, Shorty.Endpoint,
 
 # Print only warnings and errors during test
 config :logger, level: :warn
-
+#
 # Configure your database
 config :shorty, Shorty.Repo,
-  adapter: Mongo.Ecto,
-  #username: "postgres",
-  #password: "postgres",
-  database: "shorty_test",
-  hostname: "localhost",
-  pool_size: 10
+  adapter: Ecto.Adapters.Postgres,
+  database: System.get_env("PG_DATABASE") || "shorty_test",
+  hostname: System.get_env("PG_HOSTNAME") || "localhost",
+  pool: Ecto.Adapters.SQL.Sandbox
