@@ -27,8 +27,8 @@ defmodule Shorty.ShortcodeControllerTest do
 
     assert response.status == 200
     assert json_body == %{
-      "lastSeenDate" => code.updated_at |> Ecto.DateTime.to_iso8601,
-      "startDate" => code.inserted_at |> Ecto.DateTime.to_iso8601,
+      "lastSeenDate" => code.updated_at |> Ecto.DateTime.cast! |> Ecto.DateTime.to_iso8601,
+      "startDate" => code.inserted_at |> Ecto.DateTime.cast! |> Ecto.DateTime.to_iso8601,
       "redirectCount" => code.hits
     }
   end
@@ -41,7 +41,7 @@ defmodule Shorty.ShortcodeControllerTest do
 
     assert response.status == 200
     assert json_body == %{
-      "startDate" => code.inserted_at |> Ecto.DateTime.to_iso8601,
+      "startDate" => code.inserted_at |> Ecto.DateTime.cast! |> Ecto.DateTime.to_iso8601,
       "redirectCount" => code.hits
     }
   end

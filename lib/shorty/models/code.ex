@@ -1,7 +1,6 @@
 defmodule Shorty.Code do
   use Shorty.Web, :model
 
-  @primary_key {:id, :binary_id, autogenerate: true}
   schema "codes" do
     field :shortcode, :string
     field :url, :string

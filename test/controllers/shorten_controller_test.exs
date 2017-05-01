@@ -7,7 +7,7 @@ defmodule Shorty.ShortenControllerTest do
   @params %{"shortcode" => "123456", "url" => "https://google.com"}
 
   @code %Shorty.Code{
-    id: "507f1f77bcf86cd799439011",
+    id: 1,
     url: "https://google.com",
     shortcode: "123456",
     hits: 0,
