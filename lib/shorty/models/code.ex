@@ -16,4 +16,11 @@ defmodule Shorty.Code do
     |> validate_required([:url])
     |> validate_format(:shortcode, ~r/^[0-9a-zA-Z_]{4,}$/)
   end
+
+  def generate_random_shortcode do
+    :crypto.strong_rand_bytes(6)
+    |> Base.url_encode64
+    |> binary_part(0, 6)
+    |> String.replace("-", "_")
+  end
 end

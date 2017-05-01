@@ -35,4 +35,8 @@ defmodule Shorty.CodeTest do
     assert Code.changeset(%Code{}, %{@valid_attributes | shortcode: "ABCabc___"}).valid?
     assert Code.changeset(%Code{}, %{@valid_attributes | shortcode: "Abc123___"}).valid?
   end
+
+  test "generate_random_shortcode/0 returns a valid random shortcode" do
+    assert ~r/^[0-9a-zA-Z_]{4,}$/ |> Regex.match?(Code.generate_random_shortcode())
+  end
 end
