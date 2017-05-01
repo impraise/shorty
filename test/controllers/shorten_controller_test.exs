@@ -1,6 +1,8 @@
 defmodule Shorty.ShortenControllerTest do
   use Shorty.ConnCase
 
+  alias Poison.Parser
+
   @path "/shorten"
   @params %{"shortcode" => "123456", "url" => "https://google.com"}
 
@@ -13,14 +15,18 @@ defmodule Shorty.ShortenControllerTest do
 
   test "returns 201 Created when creating a new shortcode" do
     response = build_conn() |> post(@path, @params)
+    json_body = Parser.parse!(response.resp_body)
 
     assert response.status == 201
+    assert json_body == %{"shortcode" => "123456"}
   end
 
   test "returns 201 Created when creating a new shortcode without specifying one" do
     response = build_conn() |> post(@path, %{"url" => "https://google.com"})
+    json_body = Parser.parse!(response.resp_body)
 
     assert response.status == 201
+    assert %{"shortcode" => _} = json_body
   end
 
   test "returns 400 Bad Request when no URL is sent" do

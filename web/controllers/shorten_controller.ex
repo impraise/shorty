@@ -12,10 +12,8 @@ defmodule Shorty.ShortenController do
     result = CreateShortcode.call(%{shortcode: shortcode, url: url})
 
     case result do
-      {:ok, _} ->
-        conn
-        |> resp(:created, "")
-        |> halt
+      {:ok, code} ->
+        render conn |> resp(:created, ""), "create.json", code
 
       {:error, status_code} ->
         conn
