@@ -1,0 +1,38 @@
+AllCops:
+  DisplayCopNames: true
+
+Documentation:
+  Enabled: false
+
+Metrics/LineLength:
+  Exclude:
+    - 'spec/spec_helper.rb'
+    - 'web/shorty_api.rb'
+    - '**/*_spec.rb'
+    - 'lib/shorty/errors/codes.rb'
+
+Metrics/MethodLength:
+  Exclude:
+    - 'app/shorty.rb'
+    - 'web/helpers/error_handling_helper.rb'
+
+Metrics/ModuleLength:
+  Exclude:
+    - '**/*_spec.rb'
+
+Metrics/BlockLength:
+  Exclude:
+    - '**/*_spec.rb'
+
+Metrics/AbcSize:
+  Exclude:
+    - 'app/shorty.rb'
+
+Style/VariableName:
+  Exclude:
+    - 'web/responses/shorty_response.rb'
+    - web/responses/shorty_created_response.rb
+
+Security/Eval:
+  Exclude:
+    - 'lib/shorty/config.rb'

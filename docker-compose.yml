@@ -1,0 +1,51 @@
+version: '2'
+services:
+  common:
+    build:
+      context: .
+    image: shorty
+    dns:
+    - 8.8.8.8
+    - 8.8.4.4
+  mongo:
+    image: mongo:3.4
+
+  tests:
+    image: shorty
+    environment:
+      - MONGOID_TEST_HOST=mongo.test:27017
+      - RACK_ENV=test
+    links:
+    - mongo:mongo.test
+    depends_on:
+      - common
+    command: |
+      dockerize -wait tcp://mongo.test:27017 -timeout 60s
+      bash -c "bundle exec rubocop && bundle exec rspec spec --color"
+
+  dev:
+    image: shorty
+    environment:
+      - MONGOID_DEVELOPMENT_HOST=mongo.dev:27017
+      - RACK_ENV=development
+    links:
+    - mongo:mongo.dev
+    ports:
+      - 9292:9292
+    depends_on:
+    - common
+    command: bundle exec puma -b tcp://0.0.0.0:9292 config.ru
+
+  production:
+    image: shorty
+    environment:
+      - MONGOID_PRODUCTION_HOST=mongo.production:27017
+      - RACK_ENV=production
+    links:
+    - mongo:mongo.production
+    ports:
+      - 4000:4000
+    depends_on:
+      - common
+
+    command: bundle exec puma -b tcp://0.0.0.0:4000 config.ru

@@ -1,0 +1,16 @@
+development:
+  # Configure available database clients. (required)
+  clients:
+    # Define the default client. (required)
+    default:
+      uri:  <%= "mongodb://#{ENV['MONGOID_DEVELOPMENT_HOST'] || 'localhost:27017'}/shorty_db" %>
+
+test:
+  clients:
+    default:
+      uri:  <%= "mongodb://#{ENV['MONGOID_TEST_HOST'] || 'localhost:27017'}/shorty_db_tests" %>
+
+production:
+  clients:
+    default:
+      uri:  <%= "mongodb://#{ENV['MONGOID_PRODUCTION_HOST']}/shorty_db_production" %>
