@@ -10,7 +10,9 @@ defmodule Shorty.Mixfile do
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
      aliases: aliases(),
-     deps: deps()]
+     deps: deps(),
+     test_coverage: [tool: ExCoveralls]
+    ]
   end
 
   # Configuration for the OTP application.
@@ -40,8 +42,9 @@ defmodule Shorty.Mixfile do
      {:phoenix_ecto, "~> 3.0"},
      {:mongo_ecto, "~> 0.2.0"},
      {:phoenix_html, "~> 2.6"},
-     {:mock, "~> 0.2.1"},
-     {:cowboy, "~> 1.0"}]
+     {:cowboy, "~> 1.0"},
+     {:mock, "~> 0.2.1", only: :test},
+     {:excoveralls, "~> 0.6", only: :test}]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.
