@@ -1,0 +1,43 @@
+dev: &BASE
+  build: .
+  ports:
+    - "4000:4000"
+  links:
+    - postgres:postgres.dev
+  environment:
+    - MIX_ENV=dev
+    - PG_HOSTNAME=postgres.dev
+    - PG_DATABASE=shorty_dev
+    - PG_USERNAME=postgres
+    - PG_PORT=5432
+  dns:
+    - 8.8.8.8
+    - 8.8.4.4
+  command: bash -c "mix ecto.setup && mix phoenix.server 1>&1"
+
+prod:
+  <<: *BASE
+  ports:
+    - "5000:5000"
+  links:
+    - postgres:postgres.prod
+  environment:
+    - MIX_ENV=prod
+    - PG_HOSTNAME=postgres.prod
+    - PG_DATABASE=shorty_prod
+  command: bash -c "mix compile && mix ecto.setup && mix phoenix.server 1>&1"
+
+tests:
+  <<: *BASE
+  links:
+    - postgres:postgres.test
+  environment:
+    - MIX_ENV=test
+    - PG_HOSTNAME=postgres.test
+    - PG_DATABASE=shorty_test
+  command: bash -c "mix ecto.reset && mix test 1>&1"
+
+postgres:
+  image: postgres:9.5
+  ports:
+    - "5432"
