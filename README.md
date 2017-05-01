@@ -1,7 +1,13 @@
 # Shorty
 
 This project is a basic URL shortener built on top of Elixir, using the
-Phoenix Framework and MongoDB to store all the information.
+Phoenix Framework and Postgres to store all the information.
+
+**tl;dr**
+```
+$ docker-compose up dev (or prod)
+$ docker-compose run tests
+```
 
 ## Configuration
 Elixir and Erlang can be installed using the following:
