@@ -1,0 +1,1 @@
+class ShortenedUrl < Sequel::Model; end

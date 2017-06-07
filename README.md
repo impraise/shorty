@@ -1,6 +1,58 @@
 Shorty Challenge
 ================
 
+## System Dependencies
+
+  * Ruby 2.3.1
+  * Sqlite3
+
+## Project Dependencies
+
+  * Grape
+  * Sequel
+
+## Running the project
+
+### With Docker
+
+  * Clone the repository: `git clone git@github.com:pedrocalgaro/shorty.git`
+  * Create the container: `docker build -t shorty .`
+  * Run the container: `docker run --name shorty -d -p 9292:9292 shorty`
+  * Running tests: `docker exec -it shorty rspec`
+
+Ps. Since I am using Sqlite as a datastore, there is no need for creating a docker-compose here.
+
+### Without Docker
+
+  * Clone the repository: `git clone git@github.com:pedrocalgaro/shorty.git`
+  * Run bundle: `bundle`
+  * Run migrations: 
+    * Prod: `sequel -m db/migrations/ sqlite://db/shorty.production.sqlite3`
+    * Test: `sequel -m db/migrations/ sqlite://db/shorty.test.sqlite3`
+  * Start the server: `rackup`
+  * Running tests: `rspec`
+
+## Usage example
+
+Creating a shortcode:
+```
+curl -i -H "Content-Type: application/json" \
+        -X POST http://localhost:9292/shorten \
+        -d '{"url":"http://google.com", "shortcode": "google"}'
+```
+
+Get Shortcode
+```
+curl -X GET -i http://localhost:9292/google
+```
+
+Get Shortcode Status
+```
+curl -X GET -i http://localhost:9292/google/stats
+```
+
+
+---------------------
 The trendy modern question for developer inteviews seems to be, "how to create an url shortner". Not wanting to fall too far from the cool kids, we have a challenge for you!
 
 ## The Challenge
