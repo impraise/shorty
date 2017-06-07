@@ -12,7 +12,7 @@ module Shorty
         service = CreateShortenedUrlService.new(declared(params))
         shortened_url = service.perform
 
-        { shortcode: shortened_url.shortcode }
+        present shortened_url, with: Shorty::Entities::ShortenedUrlEntity
       end
     end
   end

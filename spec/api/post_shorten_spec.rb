@@ -11,6 +11,15 @@ describe Shorty::PostShorten do
         post '/shorten', body
         expect(last_response.status).to eq(201)
       end
+
+      it 'return shortcode on body' do
+        post '/shorten', body
+        parsed_body = JSON.parse(last_response.body)
+
+        expect(
+          parsed_body['shortcode']
+        ).to eq(body[:shortcode])
+      end
     end
 
     context 'with invalid shortcode' do
