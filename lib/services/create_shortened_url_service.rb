@@ -13,7 +13,6 @@ class CreateShortenedUrlService
     else
       generate_shortcode
     end
-    
     insert_shortened_url
   end
 
