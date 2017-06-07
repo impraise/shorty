@@ -7,7 +7,7 @@ module Shorty
         shortened_url = ShortenedUrl[shortcode: params[:shortcode]]
         raise Shorty::Errors::NotFoundShortcodeError.new unless shortened_url
         
-        present shortened_url, with: Shorty::Entities::ShortenedUrlEntity, stats: true
+        present shortened_url, with: Shorty::Entities::ShortenedUrlStats
       end
     end
   end
