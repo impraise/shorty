@@ -33,6 +33,7 @@ module Shorty
 
     mount Shorty::PostShorten
     mount Shorty::GetShortcode
+    mount Shorty::GetShortcodeStats
   end
 end
  
