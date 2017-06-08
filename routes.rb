@@ -17,5 +17,8 @@ get '/:shortcode' do
 end
 
 get '/:shortcode/stats' do
-
+  response = ShortyController::Stats.call(params[:shortcode])
+  status response.status
+  content_type response.content_type
+  response.body
 end
