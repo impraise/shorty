@@ -6,7 +6,14 @@ post '/shorten' do
 end
 
 get '/:shortcode' do
-
+  response = ShortyController::Show.call(params[:shortcode])
+  status response.status
+  content_type response.content_type
+  if response.status == 302
+    headers 'Location' => response.body
+  else
+    response.body
+  end
 end
 
 get '/:shortcode/stats' do
