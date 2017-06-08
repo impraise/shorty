@@ -67,5 +67,25 @@ RSpec.describe ShortyController::Create do
         expect(subject.body).to eq expected_response
       end
     end
+
+    context 'when shortcode has an invalid format' do
+      before do
+        allow(Shortener).to receive(:call).and_raise(Shortener::ShortcodeFormatInvalid)
+      end
+
+      let(:expected_response) { {error: "The shortcode fails to meet the following regexp: ^[0-9a-zA-Z_]{4,}$"}.to_json }
+
+      it 'returns status 422' do
+        expect(subject.status).to eq 422
+      end
+
+      it 'returns JSON content_type' do
+        expect(subject.content_type).to eq :json
+      end
+
+      it 'returns the expected response body' do
+        expect(subject.body).to eq expected_response
+      end
+    end
   end
 end

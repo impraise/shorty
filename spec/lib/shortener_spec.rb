@@ -36,6 +36,15 @@ RSpec.describe Shortener do
         end
       end
 
+      context 'and it has an invalid format' do
+        let(:shortcode_exists) { false }
+
+        it 'raises ShortcodeFormatInvalid' do
+          expect{described_class.call('url', 's')}
+            .to raise_error Shortener::ShortcodeFormatInvalid
+        end
+      end
+
       context 'and it do not exist on database' do
         let(:shortcode_exists) { false }
 

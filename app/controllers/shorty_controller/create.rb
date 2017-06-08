@@ -14,6 +14,11 @@ module ShortyController
         status: 409,
         body: {error: "The the desired shortcode is already in use. Shortcodes are case-sensitive."}.to_json
       )
+    rescue Shortener::ShortcodeFormatInvalid
+      json_response(
+        status: 422,
+        body: {error: "The shortcode fails to meet the following regexp: ^[0-9a-zA-Z_]{4,}$"}.to_json
+      )
     end
   end
 end
