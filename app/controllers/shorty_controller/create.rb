@@ -4,9 +4,16 @@ module ShortyController
       request.body.rewind
       params = JSON.parse(request.body.read)
 
-      shortcode = Shortener.call(*params.values_at(:url, :shortcode))
+      shortcode = Shortener.call(*params.values_at('url', 'shortcode'))
 
-      build_response(status: 200, body: {shortcode: shortcode}.to_json, content_type: :json)
+      json_response(status: 200, body: {shortcode: shortcode}.to_json)
+    rescue Shortener::UrlMissingError
+      json_response(status: 400, body: {error: "url is not present"}.to_json)
+    rescue Shortener::ShortcodeAlreadyInUse
+      json_response(
+        status: 409,
+        body: {error: "The the desired shortcode is already in use. Shortcodes are case-sensitive."}.to_json
+      )
     end
   end
 end
