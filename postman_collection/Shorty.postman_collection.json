@@ -1,0 +1,170 @@
+{
+	"variables": [],
+	"info": {
+		"name": "Shorty",
+		"_postman_id": "2ce87fb2-71ae-4f85-0147-23eab5619d51",
+		"description": "impraise url shortner assignement",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "v1/shorten",
+			"description": "",
+			"item": [
+				{
+					"name": "400 Missing url",
+					"request": {
+						"url": "http://localhost:4000/api/v1/shorten",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"shortcode\": \"12345+\"\n}"
+						},
+						"description": "A POST request to shorten with an invalid parameter, the url is missing, it should return 400"
+					},
+					"response": []
+				},
+				{
+					"name": "422 Invalid format for shortcode",
+					"request": {
+						"url": "http://localhost:4000/api/v1/shorten",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"url\": \"http://impraise.com\",\n\t\"shortcode\": \"12345+\"\n}"
+						},
+						"description": "A POST request to shorten with an invalid parameter, the shortcode format fails to meet the following regexp: ^[0-9a-zA-Z_]{4,}$.\n\nShould return 422"
+					},
+					"response": []
+				},
+				{
+					"name": "201 Created",
+					"request": {
+						"url": "http://localhost:4000/api/v1/shorten",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"url\": \"http://impraise.com\",\n\t\"shortcode\": \"123456\"\n}"
+						},
+						"description": "A POST request to shorten.\nShould return 201"
+					},
+					"response": []
+				},
+				{
+					"name": "409 Conflic",
+					"request": {
+						"url": "http://localhost:4000/api/v1/shorten",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"url\": \"http://impraise.com\",\n\t\"shortcode\": \"123456\"\n}"
+						},
+						"description": "A POST request to shorten. with an already used shortcode\nShould return 409"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "v1/:short_code",
+			"description": "",
+			"item": [
+				{
+					"name": "stats",
+					"description": "",
+					"item": [
+						{
+							"name": "200 Get",
+							"request": {
+								"url": "http://localhost:4000/api/v1/mp0Z_V/stats",
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"description": ""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"url\": \"http://impraise.com\"\n}"
+								},
+								"description": "A Get request that returns a short_code stats"
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "302 Get",
+					"request": {
+						"url": "http://localhost:4000/api/v1/mp0Z_V",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"url\": \"http://impraise.com\"\n}"
+						},
+						"description": "A Get request that causes a redirect"
+					},
+					"response": []
+				},
+				{
+					"name": "404 Get",
+					"request": {
+						"url": "http://localhost:4000/api/v1/mp0Z_x",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"url\": \"http://impraise.com\"\n}"
+						},
+						"description": "A Get request results in 404"
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

@@ -1,136 +1,85 @@
-Shorty Challenge
+Shorty
 ================
+A URL shortener
 
-The trendy modern question for developer inteviews seems to be, "how to create an url shortner". Not wanting to fall too far from the cool kids, we have a challenge for you!
+## Setup on a Linux box
 
-## The Challenge
+### TL;DR
+Using setup.sh for an easier life.
+Change the mode of the script to executable using: `chmod +x setup.sh` and run `./setup.sh`
 
-The challenge, if you choose to accept it, is to create a micro service to shorten urls, in the style that TinyURL and bit.ly made popular.
+### Dependencies
 
-## Rules
+#### Ruby
 
-1. The service must expose HTTP endpoints according to the definition below.
-2. The service must be self contained, you can use any language and technology you like, but it must be possible to set it up from a fresh install of Ubuntu Server 14.04, by following the steps you write in the README.
-3. It must be well tested, it must also be possible to run the entire test suit with a single command from the directory of your repository.
-4. The service must be versioned using git and submitted by making a Pull Request against this repository, git history **should** be meaningful.
-5. You don't have to use a datastore, you can have all data in memory, but we'd be more impressed if you do use one.
+Shorty uses Ruby version 2.3.1 and it has a `.ruby-version` file which is used by [rbenv](https://github.com/rbenv/rbenv).
 
-## Tips
+#### SQLite3
 
-* Less is more, small is beautiful, you know the drill — stick to the requirements.
-* Use the right tool for the job, rails is highly discouraged.
-* Don't try to make the microservice play well with others, the system is all yours.
-* No need to take care of domains, that's for a reverse proxy to handle.
-* Unit tests > Integration tests, but be careful with untested parts of the system.
+Shorty uses SQLite3 to store data. To install it use:
+`sudo apt-get install sqlite3`
 
-**Good Luck!** — not that you need any ;)
+### Install the Gems
+run `bundle install`
 
--------------------------------------------------------------------------
+### Start the server
+The webserver used is Puma, by default puma runs on port `9292` to run puma on a different port use: `puma -p $PORT_NUMBER`
 
-## API Documentation
+## Development
 
-**All responses must be encoded in JSON and have the appropriate Content-Type header**
+To kick start your development environment, shorty comes with a tmux session starter script (`shorty-dev.sh`) but before you can use it, you need to make sure you have `tmux` installed.
 
+Check if `tmux` is installed using: `which tmux`.
 
-### POST /shorten
+To install `tmux` use: `sudo apt-get install tmux`
 
-```
-POST /shorten
-Content-Type: "application/json"
+Change the mode of the script to executable using: `chmod +x shorty-dev.sh`.
+From within the root directory of this repository run `./shorty-dev.sh` to start you preset `tmux` session.
 
-{
-  "url": "http://example.com",
-  "shortcode": "example"
-}
-```
+## Testing
 
-Attribute | Description
---------- | -----------
-**url**   | url to shorten
-shortcode | preferential shortcode
+Shorty uses `rspec` for tests. To run all tests use the command `rspec` from within the root directory of this repository.
+On Shorty, `rspec` is configured by default to run in a test environment, so you don't have to worry about adding extra env variables.
 
-##### Returns:
+## Documentation
 
-```
-201 Created
-Content-Type: "application/json"
+Shorty is documented using [yard](https://yardoc.org/). If you used the preset `tmux` session, `yard` server should be running on port 8808 unless you have another process using the same port.
 
-{
-  "shortcode": :shortcode
-}
-```
+If you want to manually run it use `yard server`.
 
-A random shortcode is generated if none is requested, the generated short code has exactly 6 alpahnumeric characters and passes the following regexp: ```^[0-9a-zA-Z_]{6}$```.
+## Gems
 
-##### Errors:
-
-Error | Description
------ | ------------
-400   | ```url``` is not present
-409   | The the desired shortcode is already in use. **Shortcodes are case-sensitive**.
-422   | The shortcode fails to meet the following regexp: ```^[0-9a-zA-Z_]{4,}$```.
-
-
-### GET /:shortcode
-
-```
-GET /:shortcode
-Content-Type: "application/json"
-```
-
-Attribute      | Description
--------------- | -----------
-**shortcode**  | url encoded shortcode
-
-##### Returns
-
-**302** response with the location header pointing to the shortened URL
-
-```
-HTTP/1.1 302 Found
-Location: http://www.example.com
-```
-
-##### Errors
-
-Error | Description
------ | ------------
-404   | The ```shortcode``` cannot be found in the system
-
-### GET /:shortcode/stats
-
-```
-GET /:shortcode/stats
-Content-Type: "application/json"
-```
-
-Attribute      | Description
--------------- | -----------
-**shortcode**  | url encoded shortcode
-
-##### Returns
-
-```
-200 OK
-Content-Type: "application/json"
-
-{
-  "startDate": "2012-04-23T18:25:43.511Z",
-  "lastSeenDate": "2012-04-23T18:25:43.511Z",
-  "redirectCount": 1
-}
-```
-
-Attribute         | Description
---------------    | -----------
-**startDate**     | date when the url was encoded, conformant to [ISO8601](http://en.wikipedia.org/wiki/ISO_8601)
-**redirectCount** | number of times the endpoint ```GET /shortcode``` was called
-lastSeenDate      | date of the last time the a redirect was issued, not present if ```redirectCount == 0```
-
-##### Errors
-
-Error | Description
------ | ------------
-404   | The ```shortcode``` cannot be found in the system
-
-
+List of gems used by Shorty is listed below:
+1. Task and Process management
+1.1. foreman
+1.2. rake
+2. Web server
+2.1. puma
+3. API Framework
+3.1. grape
+3.2. grape-swagger
+3.3. grape_logging
+4. Database, ORM, and Serializers
+4.1. active_model_serializers
+4.2. activerecord
+4.3. otr-activerecord
+4.4. sqlite3
+5. Infra
+5.1. dotenv
+6. Testing
+6.1. database_cleaner
+6.2. rack-test
+6.3. rspec
+6.4. shoulda-matchers
+6.5. factory_bot
+6.6. faker
+7. Documentation
+7.1. yard
+8. Misc
+8.1. awesome_print
+8.2. hirb
+8.3. pry
+8.4. pry-byebug
+8.5. pry-coolline
+8.6. pry-doc
+8.7. pry-stack_explorer
