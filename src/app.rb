@@ -33,7 +33,7 @@ post '/shorten' do
   return url_not_present if url.nil?
   return shortcode_no_match_pattern if !shortcode.nil? && !shortcode.match(URL_PATTERN)
   return shortcode_in_use unless settings.recorded_urls[shortcode].nil?
-  shortcode = generate_shortcode unless shortcode
+  shortcode ||= generate_shortcode
   settings.recorded_urls[shortcode] = {url: url, startDate: Time.now, lastSeenDate: nil, redirectCount: 0}
   status 201
   {shortcode: shortcode}.to_json
