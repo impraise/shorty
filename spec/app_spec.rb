@@ -130,6 +130,18 @@ describe "Shorty Application" do
       expect(JSON.parse(last_response.body)["redirectCount"]).to eq(0)
     end
 
+    context "when accessing shortned url" do
+
+      subject do
+        get '/another'
+        get '/another/stats'
+      end
+
+      it "increases the redirectCount" do
+        expect{ subject }.to change{JSON.parse(last_response.body)["redirectCount"]}.by(1)
+      end
+    end
+
     context "with failure" do
       context "when shortcode not found" do
         subject { get '/sample2/stats' }
