@@ -4,6 +4,9 @@ git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
 
 gem "sinatra"
 gem "json"
+group :development do
+  gem 'pry-byebug'
+end
 
 group :test do
   gem "rspec"
