@@ -116,21 +116,18 @@ describe "Shorty Application" do
 
   describe "GET /:shortcode/stats" do
     before do
-      post '/shorten', {shortcode: 'sample', url: 'http://sample.com'}
+      post '/shorten', {shortcode: 'another', url: 'http://another.com'}
+      get '/another/stats'
     end
 
-    subject { get '/sample/stats' }
-
     it "returns 200" do
-      subject
       expect(last_response.status).to eq(200)
     end
 
     it "redirects to url acording to the shortcode" do
-      subject
       expect(JSON.parse(last_response.body)["startDate"]).to_not be_nil
       expect(JSON.parse(last_response.body)["lastSeenDate"]).to_not be_nil
-      expect(JSON.parse(last_response.body)["redirectCount"]).to eq(2)
+      expect(JSON.parse(last_response.body)["redirectCount"]).to eq(0)
     end
 
     context "with failure" do
