@@ -1,3 +1,38 @@
+Running the App
+===============
+
+## Installation and Running the App
+
+Install REDIS:
+
+```
+sudo apt-get install redis-server
+```
+
+Enter the project folder and run:
+
+```
+bundle
+```
+
+Run the application using the following command:
+
+```
+ruby src/app.rb
+```
+
+Go to your browswer and access:
+
+```
+http://localhost:4567
+```
+
+## To run tests
+
+```
+rspec
+```
+
 Shorty Challenge
 ================
 
