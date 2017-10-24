@@ -17,7 +17,7 @@ describe "Shorty Application" do
     end
   end
 
-  describe "POST /short" do
+  describe "POST /shorten" do
     before(:all) do
       post '/shorten', {shortcode: 'example', url: 'http://example.com'}
     end
