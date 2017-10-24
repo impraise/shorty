@@ -5,11 +5,6 @@ describe "Shorty Application" do
     Redis.new.flushall
   end
 
-  it "should allow accessing the root page" do
-    get '/'
-    expect(last_response).to be_ok
-  end
-
   describe "GET /:shortcode" do
     before do
       post '/shorten', {shortcode: 'sample', url: 'http://sample.com'}
