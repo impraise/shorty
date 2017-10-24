@@ -31,11 +31,6 @@ before do
   content_type :json, charset: 'utf-8'
 end
 
-get '/' do
-  content_type :html, charset: 'utf-8'
-  "<h1>TODO: Write an HTML response with the basic usage</h1>"
-end
-
 get '/:shortcode' do
   shortcode = params[:shortcode]
   record = Shorty.find(shortcode)
