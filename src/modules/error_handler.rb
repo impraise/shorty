@@ -1,5 +1,13 @@
+class URLNotFound < StandardError; end
+class ShortcodePatterError < StandardError; end
+class ShortcodeAlreadyInUse < StandardError; end
+class ShortcodeNotFound < StandardError; end
+
 module ErrorHandler
-  def url_not_present
+
+  URL_PATTERN = /^[0-9a-zA-Z_]{4,}$/
+
+  def url_not_found
     status 400
     {message: "'url' is not present"}.to_json
   end
