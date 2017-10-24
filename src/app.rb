@@ -2,6 +2,9 @@
 require 'sinatra'
 require 'json'
 require 'pry-byebug'
+require 'securerandom'
+
+URL_PATTERN = /^[0-9a-zA-Z_]{4,}$/
 
 set :bind, '0.0.0.0'
 set :recorded_urls, {}
@@ -22,6 +25,13 @@ end
 post '/shorten' do
   url = params[:url]
   shortcode = params[:shortcode]
+  shortcode = generate_shortcode unless shortcode
   settings.recorded_urls[shortcode] = url
   {shortcode: shortcode}.to_json
+end
+
+def generate_shortcode
+  shortcode = SecureRandom.hex(5)
+  return shortcode if settings.recorded_urls[shortcode].nil?
+  generate_shortcode
 end
