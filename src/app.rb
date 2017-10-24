@@ -2,13 +2,13 @@
 require 'sinatra'
 require 'json'
 require 'pry-byebug'
+
 require_relative 'modules/error_handler'
 require_relative 'modules/shorty'
 
 include ErrorHandler
 
 set :bind, '0.0.0.0'
-set :recorded_urls, {}
 set :show_exceptions, false
 
 error URLNotFound do
@@ -38,11 +38,10 @@ end
 
 get '/:shortcode' do
   shortcode = params[:shortcode]
-  raise ShortcodeNotFound if settings.recorded_urls[shortcode].nil?
-  record = settings.recorded_urls[shortcode]
-  record[:lastSeenDate] = Time.now
-  record[:redirectCount] += 1
-  redirect record[:url]
+  record = Shorty.find(shortcode)
+  raise ShortcodeNotFound if record.nil?
+  record.update_counter
+  redirect record.url
 end
 
 post '/shorten' do
@@ -50,18 +49,18 @@ post '/shorten' do
   shortcode = params[:shortcode]
   raise URLNotFound if url.nil?
   raise ShortcodePatterError if !shortcode.nil? && !shortcode.match(URL_PATTERN)
-  raise ShortcodeAlreadyInUse unless settings.recorded_urls[shortcode].nil?
-  record = Shorty.new(url, shortcode, settings.recorded_urls).process
-  settings.recorded_urls[record[:shortcode]] = record
+  raise ShortcodeAlreadyInUse unless Shorty.find(shortcode).nil?
+  record = Shorty.new({url: url, shortcode: shortcode})
+  record.save
   status 201
-  {shortcode: record[:shortcode]}.to_json
+  {shortcode: record.shortcode}.to_json
 end
 
 get '/:shortcode/stats' do
   shortcode = params[:shortcode]
-  raise ShortcodeNotFound if settings.recorded_urls[shortcode].nil?
-  record = settings.recorded_urls[shortcode]
-  { startDate: record[:startDate],
-    lastSeenDate: record[:startDate],
-    redirectCount: record[:redirectCount] }.to_json
+  record = Shorty.find(shortcode)
+  raise ShortcodeNotFound if record.nil?
+  { startDate: record.startDate,
+    lastSeenDate: record.startDate,
+    redirectCount: record.redirectCount }.to_json
 end

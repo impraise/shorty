@@ -1,6 +1,10 @@
 require File.expand_path '../spec_helper.rb', __FILE__
 
 describe "Shorty Application" do
+  before(:all) do
+    Redis.new.flushall
+  end
+
   it "should allow accessing the root page" do
     get '/'
     expect(last_response).to be_ok
