@@ -16,7 +16,7 @@ class Shorty
   end
 
   def update_counter
-    self.lastSeenDate = Time.now
+    self.lastSeenDate = Time.now.to_s
     self.redirectCount += 1
     set_attributes
     self.save

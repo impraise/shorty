@@ -130,7 +130,7 @@ describe "Shorty Application" do
 
     it "redirects to url acording to the shortcode" do
       expect(JSON.parse(last_response.body)["startDate"]).to_not be_nil
-      expect(JSON.parse(last_response.body)["lastSeenDate"]).to_not be_nil
+      expect(JSON.parse(last_response.body)["lastSeenDate"]).to be_nil
       expect(JSON.parse(last_response.body)["redirectCount"]).to eq(0)
     end
 
@@ -138,11 +138,16 @@ describe "Shorty Application" do
 
       subject do
         get '/another'
+        sleep 1 # Just to get the time change
         get '/another/stats'
       end
 
       it "increases the redirectCount" do
         expect{ subject }.to change{JSON.parse(last_response.body)["redirectCount"]}.by(1)
+      end
+
+      it "increases the redirectCount" do
+        expect{ subject }.to change{JSON.parse(last_response.body)["lastSeenDate"]}
       end
     end
 

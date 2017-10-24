@@ -61,6 +61,6 @@ get '/:shortcode/stats' do
   record = Shorty.find(shortcode)
   raise ShortcodeNotFound if record.nil?
   { startDate: record.startDate,
-    lastSeenDate: record.startDate,
+    lastSeenDate: record.lastSeenDate,
     redirectCount: record.redirectCount }.to_json
 end
