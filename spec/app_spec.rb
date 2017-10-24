@@ -113,4 +113,40 @@ describe "Shorty Application" do
       end
     end
   end
+
+  describe "GET /:shortcode/stats" do
+    before do
+      post '/shorten', {shortcode: 'sample', url: 'http://sample.com'}
+    end
+
+    subject { get '/sample/stats' }
+
+    it "returns 200" do
+      subject
+      expect(last_response.status).to eq(200)
+    end
+
+    it "redirects to url acording to the shortcode" do
+      subject
+      expect(JSON.parse(last_response.body)["startDate"]).to_not be_nil
+      expect(JSON.parse(last_response.body)["lastSeenDate"]).to_not be_nil
+      expect(JSON.parse(last_response.body)["redirectCount"]).to eq(2)
+    end
+
+    context "with failure" do
+      context "when shortcode not found" do
+        subject { get '/sample2/stats' }
+
+        it "returns status code 404" do
+          subject
+          expect(last_response.status).to eq(404)
+        end
+
+        it "returns message" do
+          subject
+          expect(JSON.parse(last_response.body)["message"]).to eq("The shortcode cannot be found in the system")
+        end
+      end
+    end
+  end
 end

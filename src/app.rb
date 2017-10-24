@@ -21,7 +21,10 @@ end
 get '/:shortcode' do
   shortcode = params[:shortcode]
   return shortcode_not_found if settings.recorded_urls[shortcode].nil?
-  redirect settings.recorded_urls[shortcode]
+  record = settings.recorded_urls[shortcode]
+  record[:lastSeenDate] = Time.now
+  record[:redirectCount] += 1
+  redirect record[:url]
 end
 
 post '/shorten' do
@@ -31,9 +34,18 @@ post '/shorten' do
   return shortcode_no_match_pattern if !shortcode.nil? && !shortcode.match(URL_PATTERN)
   return shortcode_in_use unless settings.recorded_urls[shortcode].nil?
   shortcode = generate_shortcode unless shortcode
-  settings.recorded_urls[shortcode] = url
+  settings.recorded_urls[shortcode] = {url: url, startDate: Time.now, lastSeenDate: nil, redirectCount: 0}
   status 201
   {shortcode: shortcode}.to_json
+end
+
+get '/:shortcode/stats' do
+  shortcode = params[:shortcode]
+  return shortcode_not_found if settings.recorded_urls[shortcode].nil?
+  record = settings.recorded_urls[shortcode]
+  { startDate: record[:startDate],
+    lastSeenDate: record[:startDate],
+    redirectCount: record[:redirectCount] }.to_json
 end
 
 def url_not_present
