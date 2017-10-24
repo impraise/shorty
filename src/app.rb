@@ -2,7 +2,6 @@
 require 'sinatra'
 require 'json'
 require 'pry-byebug'
-require 'securerandom'
 require_relative 'modules/error_handler'
 require_relative 'modules/shorty'
 
