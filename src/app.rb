@@ -19,7 +19,9 @@ get '/' do
 end
 
 get '/:shortcode' do
-  redirect settings.recorded_urls[params[:shortcode]]
+  shortcode = params[:shortcode]
+  return shortcode_not_found if settings.recorded_urls[shortcode].nil?
+  redirect settings.recorded_urls[shortcode]
 end
 
 post '/shorten' do
@@ -47,6 +49,11 @@ end
 def shortcode_in_use
   status 409
   {message: "The the desired shortcode is already in use. Shortcodes are case-sensitive."}.to_json
+end
+
+def shortcode_not_found
+  status 404
+  {message: "The shortcode cannot be found in the system"}.to_json
 end
 
 def generate_shortcode

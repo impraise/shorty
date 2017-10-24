@@ -11,9 +11,32 @@ describe "Shorty Application" do
       post '/shorten', {shortcode: 'sample', url: 'http://sample.com'}
     end
 
+    subject { get '/sample' }
+
+    it "returns 302" do
+      subject
+      expect(last_response.status).to eq(302)
+    end
+
     it "redirects to url acording to the shortcode" do
-      get '/sample'
+      subject
       expect(last_response.location).to eq('http://sample.com')
+    end
+
+    context "with failure" do
+      context "when shortcode not found" do
+        subject { get '/sample2' }
+
+        it "returns status code 404" do
+          subject
+          expect(last_response.status).to eq(404)
+        end
+
+        it "returns message" do
+          subject
+          expect(JSON.parse(last_response.body)["message"]).to eq("The shortcode cannot be found in the system")
+        end
+      end
     end
   end
 
