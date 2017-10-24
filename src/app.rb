@@ -25,9 +25,28 @@ end
 post '/shorten' do
   url = params[:url]
   shortcode = params[:shortcode]
+  return url_not_present if url.nil?
+  return shortcode_no_match_pattern if !shortcode.nil? && !shortcode.match(URL_PATTERN)
+  return shortcode_in_use unless settings.recorded_urls[shortcode].nil?
   shortcode = generate_shortcode unless shortcode
   settings.recorded_urls[shortcode] = url
+  status 201
   {shortcode: shortcode}.to_json
+end
+
+def url_not_present
+  status 400
+  {message: "'url' is not present"}.to_json
+end
+
+def shortcode_no_match_pattern
+  status 422
+  {message: "The shortcode fails to meet the following regexp: ^[0-9a-zA-Z_]{4,}$."}.to_json
+end
+
+def shortcode_in_use
+  status 409
+  {message: "The the desired shortcode is already in use. Shortcodes are case-sensitive."}.to_json
 end
 
 def generate_shortcode

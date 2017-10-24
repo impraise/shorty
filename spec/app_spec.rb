@@ -7,17 +7,87 @@ describe "Shorty Application" do
   end
 
   describe "GET /:shortcode" do
+    before do
+      post '/shorten', {shortcode: 'sample', url: 'http://sample.com'}
+    end
+
     it "redirects to url acording to the shortcode" do
-      post '/shorten', {shortcode: 'example', url: 'http://example.com'}
-      get '/example'
-      expect(last_response.location).to eq('http://example.com')
+      get '/sample'
+      expect(last_response.location).to eq('http://sample.com')
     end
   end
 
   describe "POST /short" do
+    before(:all) do
+      post '/shorten', {shortcode: 'example', url: 'http://example.com'}
+    end
+
+    it "returns 201" do
+      expect(last_response.status).to eq(201)
+    end
+
+    it "returns content-type application/json" do
+      expect(last_response.content_type).to eq("application/json;charset=utf-8")
+    end
+
     it "returns json with shortcode" do
-      post '/shorten', {shortcode: 'example', url: 'http://exaple.com'}
       expect(last_response.body).to eq({shortcode: 'example'}.to_json)
+    end
+
+    context "when no shortcode is provided" do
+      before(:all) do
+        post '/shorten', {url: 'http://example2.com'}
+      end
+
+      it "returns json with auto generated shortcode that is not null" do
+        expect(JSON.parse(last_response.body)['shortcode']).to_not be_nil
+      end
+
+      it "returns json with auto generated shortcode" do
+        expect(JSON.parse(last_response.body)['shortcode']).to match(/^[0-9a-zA-Z_]{4,}$/)
+      end
+    end
+
+    context "with failure" do
+      context "when url is not present" do
+        before(:all) { post '/shorten' }
+
+        it "returns status code 400" do
+          expect(last_response.status).to eq(400)
+        end
+
+        it "returns message" do
+          expect(JSON.parse(last_response.body)["message"]).to eq("'url' is not present")
+        end
+      end
+
+      context "when shortcode is already in use" do
+        before(:all) do
+          post '/shorten', {shortcode: 'example', url: 'http://another-example.com'}
+        end
+
+        it "returns status code 409" do
+          expect(last_response.status).to eq(409)
+        end
+
+        it "returns message" do
+          expect(JSON.parse(last_response.body)["message"]).to eq("The the desired shortcode is already in use. Shortcodes are case-sensitive.")
+        end
+      end
+
+      context "when shortcode fails to meet the pattern" do
+        before(:all) do
+          post '/shorten', {shortcode: '!@#$%', url: 'http://example.com'}
+        end
+
+        it "returns status code 422" do
+          expect(last_response.status).to eq(422)
+        end
+
+        it "returns message" do
+          expect(JSON.parse(last_response.body)["message"]).to eq("The shortcode fails to meet the following regexp: ^[0-9a-zA-Z_]{4,}$.")
+        end
+      end
     end
   end
 end
