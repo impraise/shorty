@@ -1,6 +1,8 @@
 Running the App
 ===============
 
+## Installation and Running the App
+
 Install REDIS:
 
 ```
