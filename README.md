@@ -25,6 +25,12 @@ Go to your browswer and access:
 http://localhost:4567
 ```
 
+## To run tests
+
+```
+rspec
+```
+
 Shorty Challenge
 ================
 
