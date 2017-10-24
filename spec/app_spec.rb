@@ -135,10 +135,8 @@ describe "Shorty Application" do
     end
 
     context "when accessing shortned url" do
-
       subject do
         get '/another'
-        sleep 1 # Just to get the time change
         get '/another/stats'
       end
 
@@ -146,7 +144,8 @@ describe "Shorty Application" do
         expect{ subject }.to change{JSON.parse(last_response.body)["redirectCount"]}.by(1)
       end
 
-      it "increases the redirectCount" do
+      it "updates lastSeenDate field" do
+        allow(Time).to receive(:now).and_return(Time.now + 5)
         expect{ subject }.to change{JSON.parse(last_response.body)["lastSeenDate"]}
       end
     end
