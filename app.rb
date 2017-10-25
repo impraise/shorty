@@ -2,7 +2,7 @@ require 'sinatra/base'
 require './config/config'
 require './app/presenters/shorten_presenter'
 require './app/data/repositories/repository'
-require './app/data/repositories/short_code_repository'
+require './app/data/repositories/short_me_repository'
 require './app/error_handler'
 
 class App < Sinatra::Base
@@ -10,5 +10,5 @@ class App < Sinatra::Base
     register Sinatra::ShortenPresenter
     register Sinatra::ErrorHandler
 
-    Repository::register(:shortcode, ShortCodeRepository.new)
+    Repository::register(:shortme, ShortMeRepository.new)
 end

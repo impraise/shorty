@@ -44,10 +44,10 @@ class ShortMeService
   end
 
   def update_counter(short_me_model)
-    Repository.for(:shortcode).set(short_me_model, :redirect_count, short_me_model.redirect_count + 1)
+    Repository.for(:shortme).set(short_me_model, :redirect_count, short_me_model.redirect_count + 1)
   end
 
   def update_last_seen_date(short_me_model)
-    Repository.for(:shortcode).set(short_me_model, :last_seen_date, Time.now.utc.iso8601)
+    Repository.for(:shortme).set(short_me_model, :last_seen_date, Time.now.utc.iso8601)
   end
 end
