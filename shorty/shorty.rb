@@ -36,36 +36,50 @@ class Shorty < Sequel::Model
       errors.add(:shortcode, 'The shortcode fails to meet the following regexp: ^[0-9a-zA-Z_]{6}$.')
     else
       if !shortcode_unique?(string)
-        errors.add(:shortcode, 'The the desired shortcode is already in use. Shortcodes are case-sensitive.')
+        errors.add(:shortcode, 'The desired shortcode is already in use. Shortcodes are case-sensitive.')
       end
     end
   end
 
-  def valid_url?(string)
-    uri = URI.parse(string)
+  def valid_url?(shortcode)
+    uri = URI.parse(shortcode)
     %w( http https ).include?(uri.scheme)
   end
 
-  def invalid_shortcode_format?(string)
-    (string =~ /\A\p{Alnum}{6}\z/) != 0
+  def invalid_shortcode_format?(shortcode)
+    (shortcode =~ /\A\p{Alnum}{6}\z/) != 0
   end
 
-  def shortcode_unique?(string)
-    id = self.class.decode(string)
+  def shortcode_unique?(shortcode)
+    shortcode_not_in_collisions(shortcode) &&
+    shortcode_not_in_shorties(shortcode)
+  end
 
-    Collision.where(shortcode: string).first.nil? &&
-    (self.id == id || Shorty[id].nil?)
+  def shortcode_not_in_collisions(shortcode)
+    collision = Collision.where(shortcode: shortcode).first
+    collision.nil? || collision.shorty_id == self.id
+  end
+
+  def shortcode_not_in_shorties(shortcode)
+    id = self.class.decode(shortcode)
+    self.id == id || Shorty[id].nil?
   end
 
   #Encoding/Decoding
   def self.decode(shortcode)
-    hashid.decode(shortcode)
+    if collision = Collision.where(shortcode: shortcode).first
+      collision.shorty_id
+    else
+      hashid.decode(shortcode).first
+    end
   end
 
   def encode(id)
     code = self.class.hashid.encode(id)
     if collision = Collision.where(shortcode: code).first
-      encode(collision.shorty_id)
+      shortcode = encode(collision.shorty_id)
+      add_to_collisions(shortcode, id)
+      shortcode
     else
       code
     end
