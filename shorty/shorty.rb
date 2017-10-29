@@ -28,8 +28,16 @@ class Shorty < Sequel::Model
     super
     errors.add(:url, 'can not be empty') if url.empty?
     errors.add(:url, 'invalid url') unless valid_url?(url)
-    if !self.shortcode.nil? && !valid_shortcode?(self.shortcode)
-      errors.add(:url, 'invalid short url')
+    validate_short_code(self.shortcode) if !self.shortcode.nil?
+  end
+
+  def validate_short_code(string)
+    if invalid_shortcode_format?(string)
+      errors.add(:shortcode, 'The shortcode fails to meet the following regexp: ^[0-9a-zA-Z_]{6}$.')
+    else
+      if !shortcode_unique?(string)
+        errors.add(:shortcode, 'The the desired shortcode is already in use. Shortcodes are case-sensitive.')
+      end
     end
   end
 
@@ -38,14 +46,15 @@ class Shorty < Sequel::Model
     %w( http https ).include?(uri.scheme)
   end
 
-  def valid_shortcode?(string)
-    if (string =~ /\A\p{Alnum}{6}\z/) == 0
-      id = self.class.decode(string)
-      Collision.where(shortcode: string).first.nil? &&
-      (self.id == id || Shorty[id].nil?)
-    else
-      false
-    end
+  def invalid_shortcode_format?(string)
+    (string =~ /\A\p{Alnum}{6}\z/) != 0
+  end
+
+  def shortcode_unique?(string)
+    id = self.class.decode(string)
+
+    Collision.where(shortcode: string).first.nil? &&
+    (self.id == id || Shorty[id].nil?)
   end
 
   #Encoding/Decoding
