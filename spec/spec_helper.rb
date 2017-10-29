@@ -1,0 +1,5 @@
+require 'sequel'
+ENVIRONMENT = 'test'
+require_relative '../database_setup'
+require_relative '../shorty/shorty'
+require_relative '../shorty/collision'
