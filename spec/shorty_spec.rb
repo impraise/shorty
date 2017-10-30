@@ -43,4 +43,18 @@ describe Shorty do
       end
     end
   end
+
+  #TODO create more tests, refactor
+
+  describe 'encode' do
+    context 'code already in collisions' do
+      it 'creates code from the id in collisions' do
+        current_id = Shorty.create(url: VALID_URL).id
+        shortcode = Shorty.hashid.encode(current_id+2)
+        collision_shorty = Shorty.create(url: VALID_URL, shortcode: shortcode)
+        shorty = Shorty.create(url: VALID_URL)
+        expect(shorty.shortcode).to eq Shorty.hashid.encode(collision_shorty.id)
+      end
+    end
+  end
 end
