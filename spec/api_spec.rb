@@ -17,24 +17,24 @@ describe 'ShortyApp' do
       it 'returns url is not present' do
         post '/shorten'
         expect(last_response.status).to eq 400
-        #TODO expect response to be url is not present
+        expect(last_response.body).to eq 'url is not present'
       end
     end
 
     context 'with invalid url' do
       it 'returns invalid url' do
-        params = {url: INVALID_URL}.to_json
-        post '/shorten', JSON.parse(params), { 'CONTENT_TYPE' => 'application/json' }
+        body = {url: INVALID_URL}
+        post '/shorten', body
         expect(last_response.status).to eq 400
-        #TODO expect response to be url is invalid
+        expect(last_response.body).to eq 'invalid url'
       end
     end
 
     context 'with valid url' do
       context 'without shortcode' do
         it 'returns a shortcode' do
-          params = {url: VALID_URL}.to_json
-          post '/shorten', JSON.parse(params), { 'CONTENT_TYPE' => 'application/json' }
+          body = {url: VALID_URL}
+          post '/shorten', body
           expect(last_response.status).to eq 201
           #TODO content-type must be application/json
           #TODO returns shortcode
@@ -43,10 +43,10 @@ describe 'ShortyApp' do
 
       context 'with invalid shortcode' do
         it 'returns an invalid shortcode message' do
-          params = {url: VALID_URL, shortcode: 'bad-_-'}.to_json
-          post '/shorten', JSON.parse(params), { 'CONTENT_TYPE' => 'application/json' }
+          body = {url: VALID_URL, shortcode: 'bad-_-'}
+          post '/shorten', body
           expect(last_response.status).to eq 422
-          #TODO expect response to be the invalid error
+          expect(last_response.body).to eq 'The shortcode fails to meet the following regexp: ^[0-9a-zA-Z_]{6}$.'
         end
       end
 
@@ -54,18 +54,18 @@ describe 'ShortyApp' do
         it 'returns a duplicated shortcode message' do
           shortcode = 'repeat'
           Shorty.create(url: VALID_URL, shortcode: shortcode)
-          params = {url: VALID_URL, shortcode: shortcode}.to_json
-          post '/shorten', JSON.parse(params), { 'CONTENT_TYPE' => 'application/json' }
+          body = {url: VALID_URL, shortcode: shortcode}
+          post '/shorten', body
           expect(last_response.status).to eq 409
-          #TODO expect response to be the duplicated error
+          expect(last_response.body).to eq 'The desired shortcode is already in use. Shortcodes are case-sensitive.'
         end
       end
 
       context 'with valid shortcode' do
         it 'returns the provided shortcode' do
           shortcode = 'Goood1'
-          params = {url: VALID_URL, shortcode: shortcode}.to_json
-          post '/shorten', JSON.parse(params), { 'CONTENT_TYPE' => 'application/json' }
+          body = {url: VALID_URL, shortcode: shortcode}
+          post '/shorten', body
           expect(last_response.status).to eq 201
           #TODO returns shortcode = shortcode
         end
@@ -79,9 +79,7 @@ describe 'ShortyApp' do
         Shorty.create(url: VALID_URL, shortcode: 'mysite')
         get '/mysite'
         expect(last_response.status).to eq 302
-        # follow_redirect!
-        # expect(last_request.path).to eq(VALID_URL)
-        #TODO check location?
+        expect(last_response.header["Location"]).to eq VALID_URL
       end
     end
 

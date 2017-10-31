@@ -15,7 +15,7 @@ describe Shorty do
 
       context 'with valid shortcode' do
         it 'creates a shorty' do
-          shorty = Shorty.new(url: VALID_URL, shortcode: 'abAB12')
+          shorty = Shorty.new(url: VALID_URL, shortcode: 'abAB1')
           expect(shorty).to be_valid
         end
       end

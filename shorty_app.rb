@@ -20,10 +20,6 @@ before do
 end
 
 helpers do
-  def base_url
-    @base_url ||= "#{request.env['rack.url_scheme']}://#{request.env['HTTP_HOST']}"
-  end
-
   def json_params
     begin
       JSON.parse(request.body.read)
@@ -37,12 +33,12 @@ helpers do
     Shorty[shorty_id]
   end
 
-  def halt_not_found
-    halt(404, 'The shortcode cannot be found in the system')
-  end
-
   def serialize(shorty)
     ShortySerializer.new(shorty).to_json
+  end
+
+  def halt_not_found
+    halt(404, 'The shortcode cannot be found in the system')
   end
 end
 
@@ -65,12 +61,20 @@ get '/:shortcode/stats' do |shortcode|
 end
 
 post '/shorten' do
-  binding.pry
   shorty = Shorty.new(json_params)
   if shorty.valid?
     shorty.save
     halt 201, { shortcode: shorty.shortcode }.to_json
   else
-    #TODO treat errors
+    errors = shorty.errors
+    if errors.key?(:missing_url)
+      halt(400, errors[:missing_url].first)
+    elsif errors.key?(:duplicated_shortcode)
+      halt(409, errors[:duplicated_shortcode].first)
+    elsif errors.key?(:invalid_shortcode)
+      halt(422, errors[:invalid_shortcode].first)
+    else
+      halt(400)
+    end
   end
 end

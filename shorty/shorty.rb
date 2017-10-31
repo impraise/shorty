@@ -13,7 +13,7 @@ class Shorty < Sequel::Model
   def before_create
     super
     self.redirect_count = 0
-    self.start_date = Time.now
+    self.start_date = Time.now.iso8601
   end
 
   def after_create
@@ -28,17 +28,17 @@ class Shorty < Sequel::Model
   #Validation
   def validate
     super
-    errors.add(:url, 'can not be empty') if url.empty?
-    errors.add(:url, 'invalid url') unless valid_url?(url)
+    errors.add(:missing_url, 'url is not present') if url.nil?
+    errors.add(:invalid_url, 'invalid url') unless url && valid_url?(url)
     validate_short_code(self.shortcode) if !self.shortcode.nil?
   end
 
   def validate_short_code(string)
     if invalid_shortcode_format?(string)
-      errors.add(:shortcode, 'The shortcode fails to meet the following regexp: ^[0-9a-zA-Z_]{6}$.')
+      errors.add(:invalid_shortcode, 'The shortcode fails to meet the following regexp: ^[0-9a-zA-Z_]{6}$.')
     else
       if !shortcode_unique?(string)
-        errors.add(:shortcode, 'The desired shortcode is already in use. Shortcodes are case-sensitive.')
+        errors.add(:duplicated_shortcode, 'The desired shortcode is already in use. Shortcodes are case-sensitive.')
       end
     end
   end
@@ -49,7 +49,7 @@ class Shorty < Sequel::Model
   end
 
   def invalid_shortcode_format?(shortcode)
-    (shortcode =~ /\A\p{Alnum}{6}\z/) != 0
+    (shortcode =~ /\A\p{Alnum}{4,}\z/) != 0
   end
 
   def shortcode_unique?(shortcode)
@@ -98,7 +98,7 @@ class Shorty < Sequel::Model
   # Getters
   def get_url
     self.redirect_count += 1
-    self.last_seen_date = Time.now
-    self.url if save
+    self.last_seen_date = Time.now.iso8601
+    self.url if save #TODO error handling?
   end
 end
