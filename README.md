@@ -12,5 +12,7 @@ Run `puma` to start the application in development mode.
 
 Run `puma -e production` to start the application in production mode. (No real difference from development mode)
 
+The application will be listening to http://localhost:9292
+
 ## Test
 Run `rspec` to run the full test case.
