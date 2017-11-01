@@ -1,7 +1,8 @@
 require 'spec_helper'
 require 'pry'
+require 'json'
 
-#TODO fix post json issue, refactor
+#TODO refactor
 
 describe 'ShortyApp' do
   include Rack::Test::Methods
@@ -13,9 +14,13 @@ describe 'ShortyApp' do
   end
 
   describe 'POST' do
+    before do
+      headers = {'CONTENT_TYPE' => 'application/json'}
+    end
+
     context 'without url' do
       it 'returns url is not present' do
-        post '/shorten'
+        post '/shorten', {}.to_json
         expect(last_response.status).to eq 400
         expect(last_response.body).to eq 'url is not present'
       end
@@ -23,8 +28,8 @@ describe 'ShortyApp' do
 
     context 'with invalid url' do
       it 'returns invalid url' do
-        body = {url: INVALID_URL}
-        post '/shorten', body
+        body = { url: INVALID_URL }
+        post '/shorten', body.to_json
         expect(last_response.status).to eq 400
         expect(last_response.body).to eq 'invalid url'
       end
@@ -32,19 +37,19 @@ describe 'ShortyApp' do
 
     context 'with valid url' do
       context 'without shortcode' do
-        it 'returns a shortcode' do
+        it 'returns a 6 characters long valid shortcode' do
           body = {url: VALID_URL}
-          post '/shorten', body
+          post '/shorten', body.to_json
           expect(last_response.status).to eq 201
-          #TODO content-type must be application/json
-          #TODO returns shortcode
+          expect(last_response.header["Content-type"]).to eq "application/json"
+          expect(JSON.parse(last_response.body)["shortcode"]).to match(/^[0-9a-zA-Z_]{6}$/)
         end
       end
 
       context 'with invalid shortcode' do
         it 'returns an invalid shortcode message' do
           body = {url: VALID_URL, shortcode: 'bad-_-'}
-          post '/shorten', body
+          post '/shorten', body.to_json
           expect(last_response.status).to eq 422
           expect(last_response.body).to eq 'The shortcode fails to meet the following regexp: ^[0-9a-zA-Z_]{6}$.'
         end
@@ -55,7 +60,7 @@ describe 'ShortyApp' do
           shortcode = 'repeat'
           Shorty.create(url: VALID_URL, shortcode: shortcode)
           body = {url: VALID_URL, shortcode: shortcode}
-          post '/shorten', body
+          post '/shorten', body.to_json
           expect(last_response.status).to eq 409
           expect(last_response.body).to eq 'The desired shortcode is already in use. Shortcodes are case-sensitive.'
         end
@@ -65,9 +70,10 @@ describe 'ShortyApp' do
         it 'returns the provided shortcode' do
           shortcode = 'Goood1'
           body = {url: VALID_URL, shortcode: shortcode}
-          post '/shorten', body
+          post '/shorten', body.to_json
           expect(last_response.status).to eq 201
-          #TODO returns shortcode = shortcode
+          expect(last_response.header["Content-type"]).to eq "application/json"
+          expect(JSON.parse(last_response.body)["shortcode"]).to eq shortcode
         end
       end
     end

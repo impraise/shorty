@@ -4,6 +4,7 @@ require 'pry'
 
 require_relative 'database_setup'
 require_relative 'shorty/collision'
+require_relative 'shorty/shortcoder'
 require_relative 'shorty/shorty'
 require_relative 'shorty/shorty_serializer'
 require 'sinatra'
@@ -29,7 +30,7 @@ helpers do
   end
 
   def get_shorty(shortcode)
-    shorty_id = Shorty.decode(shortcode)
+    shorty_id = Shortcoder.decode(shortcode)
     Shorty[shorty_id]
   end
 
@@ -73,6 +74,8 @@ post '/shorten' do
       halt(409, errors[:duplicated_shortcode].first)
     elsif errors.key?(:invalid_shortcode)
       halt(422, errors[:invalid_shortcode].first)
+    elsif errors.key?(:invalid_url)
+      halt(400, errors[:invalid_url].first)
     else
       halt(400)
     end
