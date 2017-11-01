@@ -9,6 +9,7 @@ Run `sudo ./installer.sh` to install the needed dependencies to run the applicat
 
 ## Run the Api
 Run `puma` to start the application in development mode.
+
 Run `puma -e production` to start the application in production mode. (No real difference from development mode)
 
 ## Test
