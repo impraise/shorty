@@ -5,7 +5,7 @@ This is the solution I came up with for the Shorty Challenge. I use Sinatra to h
 
 ## Install
 
-Run `sudo ./installer.sh` to install the needed dependencies to run the application.
+Run `sudo chmod +x ./installer.sh` to install the needed dependencies to run the application.
 
 ## Run the Api
 Run `puma` to start the application in development mode.
