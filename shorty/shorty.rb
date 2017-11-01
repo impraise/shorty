@@ -68,6 +68,6 @@ class Shorty < Sequel::Model
   def get_url
     self.redirect_count += 1
     self.last_seen_date = Time.now.iso8601
-    self.url if save #TODO error handling?
+    self.url if save
   end
 end
