@@ -1,12 +1,7 @@
 require 'sqlite3'
 require 'sequel'
 
-DB = Sequel.sqlite("database-#{ENVIRONMENT}.sqlite3")
-
-if ENVIRONMENT == 'test'
-  DB[:shorties].truncate
-  DB[:collisions].truncate
-end
+DB = Sequel.sqlite("database-#{ENV['RACK_ENV']}.sqlite3")
 
 DB.create_table? :shorties do
   primary_key :id

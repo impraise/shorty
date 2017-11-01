@@ -1,7 +1,4 @@
-require 'hashids'
 require 'uri'
-
-#TODO private vs public
 
 class Shorty < Sequel::Model
   #Initialization

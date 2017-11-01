@@ -1,6 +1,10 @@
 require 'hashids'
 
 class Shortcoder
+  def self.hashid
+    @@hashid ||= Hashids.new("not too much salt", 6)
+  end
+
   def self.decode(shortcode)
     if collision = Collision.where(shortcode: shortcode).first
       collision.shorty_id
@@ -18,10 +22,6 @@ class Shortcoder
     else
       code
     end
-  end
-
-  def self.hashid
-    @@hashid ||= Hashids.new("not too much salt", 6)
   end
 
   def self.add_to_collisions(shortcode, shorty_id)
