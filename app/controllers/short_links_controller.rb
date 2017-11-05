@@ -1,0 +1,2 @@
+class ShortLinksController < ApplicationController
+end
