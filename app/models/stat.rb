@@ -1,3 +1,3 @@
 class Stat < ApplicationRecord
-  belongs_to :shortlink
+  belongs_to :short_link
 end

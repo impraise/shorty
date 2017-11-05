@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171105105552) do
+ActiveRecord::Schema.define(version: 20171105111549) do
 
   create_table "short_links", force: :cascade do |t|
     t.string   "url"
@@ -24,10 +24,10 @@ ActiveRecord::Schema.define(version: 20171105105552) do
     t.datetime "start_date"
     t.integer  "redirect_count"
     t.datetime "last_seen_date"
-    t.integer  "shortlink_id"
+    t.integer  "short_link_id"
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
-    t.index ["shortlink_id"], name: "index_stats_on_shortlink_id"
+    t.index ["short_link_id"], name: "index_stats_on_short_link_id"
   end
 
 end

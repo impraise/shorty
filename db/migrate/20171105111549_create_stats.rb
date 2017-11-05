@@ -4,7 +4,7 @@ class CreateStats < ActiveRecord::Migration[5.0]
       t.datetime :start_date
       t.integer :redirect_count
       t.datetime :last_seen_date
-      t.references :shortlink, foreign_key: true
+      t.references :short_link, foreign_key: true
 
       t.timestamps
     end
