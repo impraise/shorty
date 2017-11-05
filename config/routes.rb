@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
-  resources :short_links
-  get '/:shortcode' => 'short_links#get_short_code'
-  resources :stats
+  namespace :api do
+    namespace :v1, defaults: { format: :json } do
+      resources :short_links
+      resources :stats
+      get 'get_short_code/:shortcode' => 'short_links#get_short_code'
+    end
+  end
 end
