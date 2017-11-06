@@ -1,7 +1,6 @@
 module Api
   module V1
     class ShortLinksController < ApplicationController
-
       rescue_from ActionController::ParameterMissing, with: :bad_request
 
       def create
@@ -21,12 +20,12 @@ module Api
       private
 
       def render_errors(errors)
-        err = errors.details[:shortcode][0][:error]
+        err = errors.messages[:shortcode][0]
         case err
-        when :taken
+        when 'has already been taken'
           @errors = 'shortcode already in use'
           render status: 409
-        when :invalid
+        when 'is invalid'
           @errors = 'shortcode has invalid format'
           render status: 422
         end
