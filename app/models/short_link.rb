@@ -1,14 +1,21 @@
 class ShortLink < ApplicationRecord
   has_one :stat, dependent: :destroy
 
-  validates :url, presence: true
-  validates :shortcode, format: { with: /\A[0-9a-zA-Z_]{6}\z/i }
+  # validates :url, presence: true
+  validates :shortcode, format: { with: /\A[0-9a-zA-Z_]{6}\z/i }, allow_nil: true
 
   ALPHABET = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_".split(//)
 
-  def generate_shortcode
+  before_validation { generate_shortcode(:shortcode) }
+
+  def generate_shortcode(shortcode)
+    return if valid_preferential_shortcode?(self[shortcode])
     begin
-      slug = (0...6).map { ALPHABET[rand(ALPHABET.length)] }.join
-    end while ShortLink.find_by_shortcode(slug).present?
+      self[shortcode] = (0...6).map { ALPHABET[rand(ALPHABET.length)] }.join
+    end while ShortLink.exists?(shortcode => self[shortcode])
+  end
+
+  def valid_preferential_shortcode?(shortcode)
+    !(shortcode !~ /\A[0-9a-zA-Z_]{6}\z/i)
   end
 end
