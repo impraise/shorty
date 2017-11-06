@@ -2,8 +2,8 @@ class ShortLink < ApplicationRecord
   has_one :stat, dependent: :destroy
 
   validates :url, presence: true
-  validates :shortcode, format: { with: /\A[0-9a-zA-Z_]{6}\z/i }, allow_nil: true
   validates :shortcode, uniqueness: true
+  validates :shortcode, format: { with: /\A[0-9a-zA-Z_]{6}\z/i }, allow_nil: true
 
   ALPHABET = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_".split(//)
 
