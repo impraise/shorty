@@ -4,7 +4,7 @@ Rails.application.routes.draw do
       resources :short_links
       post 'shorten' => 'short_links#create'
       resources :stats
-      get 'get_short_code/:shortcode' => 'short_links#get_short_code'
+      get 'fetch_short_code/:shortcode' => 'short_links#fetch_short_code'
     end
   end
 end
