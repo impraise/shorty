@@ -13,9 +13,19 @@ class Api::V1::ShortLinksController < ApplicationController
   def fetch_short_code
     @short_link = ShortLink.find_by_shortcode!(params[:shortcode])
     json_response(@short_link.shortcode, 302, @short_link.url)
+    update_stats_redirect_count
   end
 
   private
+
+  def update_stats_redirect_count
+    stats = @short_link.stat
+    stats.tap do |stat|
+      stat.redirect_count += 1
+      stat.last_seen_date = DateTime.now.in_time_zone('UTC').iso8601
+    end
+    stats.save
+  end
 
   def short_link_params
     params.permit(:url, :shortcode)

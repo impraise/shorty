@@ -26,6 +26,6 @@ class ShortLink < ApplicationRecord
   end
 
   def url_encode_date
-    Stat.create!(start_date: DateTime.now.iso8601, short_link_id: id)
+    Stat.create!(start_date: DateTime.now.in_time_zone('UTC').iso8601, short_link_id: id)
   end
 end
