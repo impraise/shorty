@@ -15,7 +15,6 @@ class ShortLink < ApplicationRecord
     begin
       self[shortcode] = (0...6).map { ALPHABET[rand(ALPHABET.length)] }.join
     end while shortcode_exists?(shortcode)
-    binding.pry
   end
 
   def valid_preferential_shortcode?(shortcode)
