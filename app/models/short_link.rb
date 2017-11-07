@@ -10,9 +10,14 @@ class ShortLink < ApplicationRecord
   before_create { generate_shortcode(:shortcode) }
 
   def generate_shortcode(shortcode)
+    return if valid_preferential_shortcode?(shortcode)
     begin
       self[shortcode] = (0...6).map { ALPHABET[rand(ALPHABET.length)] }.join
     end while shortcode_exists?(shortcode)
+  end
+
+  def valid_preferential_shortcode?(shortcode)
+    !!(self[shortcode] =~ /\A[0-9a-zA-Z_]{6}\z/i) && !shortcode_exists?(shortcode)
   end
 
   def shortcode_exists?(shortcode)
