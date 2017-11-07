@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  apipie
+
   namespace :api do
     namespace :v1, defaults: { format: :json } do
       resources :short_links

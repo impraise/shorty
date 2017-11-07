@@ -1,0 +1,96 @@
+{
+  "short_links#create": [
+    {
+      "verb": "POST",
+      "path": "/api/v1/shorten",
+      "versions": [
+        "1.0"
+      ],
+      "query": null,
+      "request_data": "url=&shortcode=U59GGW",
+      "response_data": {
+        "errors": "Validation failed: Url can't be blank, Shortcode has already been taken"
+      },
+      "code": 400,
+      "show_in_doc": 1,
+      "recorded": true
+    },
+    {
+      "verb": "POST",
+      "path": "/api/v1/shorten",
+      "versions": [
+        "1.0"
+      ],
+      "query": null,
+      "request_data": "url=http%3A%2F%2Fexample.com%2F&shortcode=1234567",
+      "response_data": {
+        "errors": "Validation failed: Shortcode is invalid"
+      },
+      "code": 422,
+      "show_in_doc": 0,
+      "recorded": true
+    },
+    {
+      "verb": "POST",
+      "path": "/api/v1/shorten",
+      "versions": [
+        "1.0"
+      ],
+      "query": null,
+      "request_data": "url=http%3A%2F%2Fexample.com%2F&shortcode=TnWPEU",
+      "response_data": {
+        "errors": "Validation failed: Shortcode has already been taken"
+      },
+      "code": 409,
+      "show_in_doc": 0,
+      "recorded": true
+    },
+    {
+      "verb": "POST",
+      "path": "/api/v1/shorten",
+      "versions": [
+        "1.0"
+      ],
+      "query": null,
+      "request_data": "url=http%3A%2F%2Fexample.com%2F&shortcode=123456",
+      "response_data": {
+        "shortcode": "123456"
+      },
+      "code": 201,
+      "show_in_doc": 0,
+      "recorded": true
+    }
+  ],
+  "short_links#fetch_short_code": [
+    {
+      "verb": "GET",
+      "path": "/api/v1/fetch_short_code/T93oqi",
+      "versions": [
+        "1.0"
+      ],
+      "query": "T93oqi",
+      "request_data": null,
+      "response_data": {
+        "shortcode": "T93oqi"
+      },
+      "code": 302,
+      "show_in_doc": 1,
+      "recorded": true
+    },
+    {
+      "verb": "GET",
+      "path": "/api/v1/fetch_short_code/pjUoDn",
+      "versions": [
+        "1.0"
+      ],
+      "query": "pjUoDn",
+      "request_data": null,
+      "response_data": {
+        "shortcode": "pjUoDn"
+      },
+      "code": 302,
+      "show_in_doc": 0,
+      "recorded": true
+    }
+  ]
+}
