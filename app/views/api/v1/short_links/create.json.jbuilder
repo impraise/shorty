@@ -1,2 +1,3 @@
-json.shortcode @short_link.shortcode unless @errors
-json.errors @errors if @errors
+json.ignore_nil!
+binding.pry
+@short_link.valid? ? (json.shortcode @object) : (json.errors @object)

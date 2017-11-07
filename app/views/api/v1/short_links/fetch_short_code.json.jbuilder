@@ -1,2 +1,2 @@
-json.shortcode @short_link.shortcode
-json.url @short_link.url
+json.ignore_nil!
+@short_link ? (json.shortcode @object) : (json.errors @object)
