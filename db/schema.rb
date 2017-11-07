@@ -22,11 +22,11 @@ ActiveRecord::Schema.define(version: 20171105111549) do
 
   create_table "stats", force: :cascade do |t|
     t.datetime "start_date"
-    t.integer  "redirect_count"
+    t.integer  "redirect_count", default: 0
     t.datetime "last_seen_date"
     t.integer  "short_link_id"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
     t.index ["short_link_id"], name: "index_stats_on_short_link_id"
   end
 
