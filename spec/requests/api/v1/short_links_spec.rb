@@ -8,24 +8,33 @@ RSpec.describe 'Shorty api', type: :request do
   let(:shortcode) { short_link.shortcode }
 
   describe 'POST /shorten' do
-    context 'creates new short link' do
+    context 'tries to create a new short_link' do
+      it 'returns 400 missing parameter' do
+        post '/api/v1/shorten', params: { url: "", shortcode: shortcode }
+        expect(response.code).to eq '400'
+        expect(JSON.parse(response.body)['errors']).to include("can't be blank")
+      end
 
       it 'returns 402 invalid format' do
-        post '/api/v1/shorten', short_link: { url: "http://example.com/", shortcode: "1234567" }
+        post '/api/v1/shorten', params: { url: "http://example.com/", shortcode: "1234567" }
         expect(response.code).to eq '422'
-        expect(JSON.parse(response.body)['errors']).to eq('shortcode has invalid format')
+        expect(JSON.parse(response.body)['errors']).to include('is invalid')
       end
 
       it 'returns 409 already in use' do
-        post '/api/v1/shorten', short_link: { url: "http://example.com/", shortcode: shortcode }
+        post '/api/v1/shorten', params: { url: "http://example.com/", shortcode: shortcode }
         expect(response.code).to eq '409'
-        expect(JSON.parse(response.body)['errors']).to eq('shortcode already in use')
+        expect(JSON.parse(response.body)['errors']).to include('been taken')
+      end
+
+      it 'returns 201 created' do
+        post '/api/v1/shorten', params: { url: "http://example.com/", shortcode: '123456' }
+        expect(response.code).to eq '201'
+        expect(JSON.parse(response.body)['shortcode']).to eq('123456')
       end
     end
   end
 
-
-  # test for GET request on /:shortcode
   describe 'GET /api/v1/fetch_short_code/:shortcode' do
     before { get "/api/v1/fetch_short_code/#{shortcode}", params: shortcode }
 
