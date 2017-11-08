@@ -12,12 +12,15 @@
 
 ActiveRecord::Schema.define(version: 20171105111549) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "short_links", force: :cascade do |t|
     t.string   "url"
     t.string   "shortcode"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["shortcode"], name: "index_short_links_on_shortcode", unique: true
+    t.index ["shortcode"], name: "index_short_links_on_shortcode", unique: true, using: :btree
   end
 
   create_table "stats", force: :cascade do |t|
@@ -27,7 +30,8 @@ ActiveRecord::Schema.define(version: 20171105111549) do
     t.integer  "short_link_id"
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
-    t.index ["short_link_id"], name: "index_stats_on_short_link_id"
+    t.index ["short_link_id"], name: "index_stats_on_short_link_id", using: :btree
   end
 
+  add_foreign_key "stats", "short_links"
 end
