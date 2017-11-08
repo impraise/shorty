@@ -1,4 +1,5 @@
 class Api::V1::ShortLinksController < ApplicationController
+  before_action :find_stats, only: [:fetch_stats]
 
   api :POST, '/api/v1/shorten', 'Creating shortcodes'
   param :url, String, desc: 'full url', required: true
