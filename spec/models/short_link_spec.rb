@@ -1,9 +1,10 @@
 require 'rails_helper'
+require 'support/shared_factories'
 
 RSpec.describe ShortLink, type: :model do
-  describe 'shortlink' do
-    let!(:short_link) { create(:short_link) }
+  include_context 'shared factories'
 
+  describe 'shortlink' do
     # checks if ShortLink has a 1 to 1 relation with Stat
     it { should have_one(:stat) }
 
@@ -19,6 +20,11 @@ RSpec.describe ShortLink, type: :model do
     it 'checks for valid pref shortcode' do
       short_link = ShortLink.new(url: 'http://example.com', shortcode: '123456')
       expect(short_link.valid_preferential_shortcode?(:shortcode)).to eq true
+    end
+
+    it 'creates an associated stats record' do
+      short_link = ShortLink.create(url: 'http://example.com', shortcode: '123456')
+      expect(short_link.url_encode_date).to be_a_kind_of(Stat)
     end
   end
 
