@@ -1,7 +1,7 @@
 class Api::V1::ShortLinksController < ApplicationController
   before_action :find_stats, only: [:fetch_stats]
 
-  api :POST, '/api/v1/shorten', 'Creating shortcodes'
+  api :POST, '/v1/shorten', 'Creating shortcodes'
   param :url, String, desc: 'full url', required: true
   param :shortcode, String, desc: 'preferential shortcode', required: false
   def create
@@ -9,7 +9,7 @@ class Api::V1::ShortLinksController < ApplicationController
     json_response(@short_link.shortcode, :created) if @short_link.save!
   end
 
-  api :GET, '/api/v1/fetch_short_code/:shortcode', 'Fetches shortcode and redirects to original url'
+  api :GET, '/v1/fetch_short_code/:shortcode', 'Fetches shortcode and redirects to original url'
   param :shortcode, String, desc: 'preferential shortcode', required: false
   def fetch_short_code
     @short_link = ShortLink.find_by_shortcode!(params[:shortcode])
