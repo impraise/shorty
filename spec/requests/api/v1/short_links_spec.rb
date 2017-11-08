@@ -1,11 +1,9 @@
 require 'spec_helper'
 require 'rails_helper'
+require 'support/shared_factories'
 
-RSpec.describe 'Shorty api', type: :request do
-
-  let!(:short_link) { create(:short_link) }
-  let(:short_link_id) { short_link.id }
-  let(:shortcode) { short_link.shortcode }
+RSpec.describe 'ShortLinks', type: :request do
+  include_context 'shared factories'
 
   describe 'POST /shorten' do
     context 'tries to create a new short_link' do
