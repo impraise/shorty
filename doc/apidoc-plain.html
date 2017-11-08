@@ -1,0 +1,184 @@
+  <h4><a href='#short_links'>Short links</a></h4>
+  <ul>
+      <li><a href='#short_links-create'>create</a></li>
+      <li><a href='#short_links-fetch_short_code'>fetch_short_code</a></li>
+  </ul>
+  <h4><a href='#stats'>Stats</a></h4>
+  <ul>
+      <li><a href='#stats-fetch_stats'>fetch_stats</a></li>
+  </ul>
+
+
+
+  <hr/>
+
+  <div>
+    <h2 id="short_links">
+      <a href='#short_links'>Short links</a><br>
+      <small></small>
+    </h2>
+  </div>
+
+
+  <div>
+
+      <hr/>
+
+      <h3 id="short_links-create">
+      <a href='#short_links'>Short links</a> / <a href='#short_links-create'>create</a>
+      </h3>
+
+      <div>
+          <h4>
+              POST /api/api/v1/shorten
+            <br>
+            <small>Creating shortcodes</small>
+          </h4>
+      </div>
+
+      <div>
+        
+          <h4>Examples</h4>
+            <pre class="wiki">POST /api/v1/shorten
+url=&amp;shortcode=cqNArk
+400
+{
+  &quot;errors&quot;: &quot;Validation failed: Url can&#39;t be blank, Shortcode has already been taken&quot;
+}</pre>
+
+
+          <h4>Params</h4>
+          <ul>
+    <li>
+      <strong>url </strong>:
+      <small>
+        required
+        
+          [ 
+<p>Must be a String</p>
+ ]
+      </small>
+      
+<p>full url</p>
+
+    </li>
+    
+    <li>
+      <strong>shortcode </strong>:
+      <small>
+        optional
+        
+          [ 
+<p>Must be a String</p>
+ ]
+      </small>
+      
+<p>preferential shortcode</p>
+
+    </li>
+    
+</ul>
+
+      </div>
+      <hr/>
+
+      <h3 id="short_links-fetch_short_code">
+      <a href='#short_links'>Short links</a> / <a href='#short_links-fetch_short_code'>fetch_short_code</a>
+      </h3>
+
+      <div>
+          <h4>
+              GET /api/api/v1/fetch_short_code/:shortcode
+            <br>
+            <small>Fetches shortcode and redirects to original url</small>
+          </h4>
+      </div>
+
+      <div>
+        
+          <h4>Examples</h4>
+            <pre class="wiki">GET /api/v1/fetch_short_code/dZR1dW?dZR1dW
+302
+{
+  &quot;shortcode&quot;: &quot;dZR1dW&quot;
+}</pre>
+
+
+          <h4>Params</h4>
+          <ul>
+    <li>
+      <strong>shortcode </strong>:
+      <small>
+        optional
+        
+          [ 
+<p>Must be a String</p>
+ ]
+      </small>
+      
+<p>preferential shortcode</p>
+
+    </li>
+    
+</ul>
+
+      </div>
+  </div>
+
+  <hr/>
+
+  <div>
+    <h2 id="stats">
+      <a href='#stats'>Stats</a><br>
+      <small></small>
+    </h2>
+  </div>
+
+
+  <div>
+
+      <hr/>
+
+      <h3 id="stats-fetch_stats">
+      <a href='#stats'>Stats</a> / <a href='#stats-fetch_stats'>fetch_stats</a>
+      </h3>
+
+      <div>
+          <h4>
+              GET /api/v1/:shortcode/stats
+            <br>
+            <small></small>
+          </h4>
+      </div>
+
+      <div>
+        
+          <h4>Examples</h4>
+            <pre class="wiki">GET /api/v1/tgsbNA/stats
+200
+{
+  &quot;start_date&quot;: &quot;2017-11-08T10:48:31.000Z&quot;,
+  &quot;redirect_count&quot;: 0
+}</pre>
+
+
+          <h4>Params</h4>
+          <ul>
+    <li>
+      <strong>shortcode </strong>:
+      <small>
+        optional
+        
+          [ 
+<p>Must be a String</p>
+ ]
+      </small>
+      
+<p>short link shortcode</p>
+
+    </li>
+    
+</ul>
+
+      </div>
+  </div>
