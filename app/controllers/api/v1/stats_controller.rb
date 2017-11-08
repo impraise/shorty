@@ -1,6 +1,8 @@
 class Api::V1::StatsController < ApplicationController
   before_action :find_stats, only: [:fetch_stats]
 
+  api :GET, '/v1/:shortcode/stats'
+  param :shortcode, String, desc: 'short link shortcode'
   def fetch_stats
     relevant_attrs = select_attrs(@stats)
     json_response(relevant_attrs, :ok)

@@ -7,7 +7,7 @@
         "1.0"
       ],
       "query": null,
-      "request_data": "url=&shortcode=U59GGW",
+      "request_data": "url=&shortcode=cqNArk",
       "response_data": {
         "errors": "Validation failed: Url can't be blank, Shortcode has already been taken"
       },
@@ -37,7 +37,7 @@
         "1.0"
       ],
       "query": null,
-      "request_data": "url=http%3A%2F%2Fexample.com%2F&shortcode=TnWPEU",
+      "request_data": "url=http%3A%2F%2Fexample.com%2F&shortcode=z860FP",
       "response_data": {
         "errors": "Validation failed: Shortcode has already been taken"
       },
@@ -64,14 +64,14 @@
   "short_links#fetch_short_code": [
     {
       "verb": "GET",
-      "path": "/api/v1/fetch_short_code/T93oqi",
+      "path": "/api/v1/fetch_short_code/dZR1dW",
       "versions": [
         "1.0"
       ],
-      "query": "T93oqi",
+      "query": "dZR1dW",
       "request_data": null,
       "response_data": {
-        "shortcode": "T93oqi"
+        "shortcode": "dZR1dW"
       },
       "code": 302,
       "show_in_doc": 1,
@@ -79,16 +79,81 @@
     },
     {
       "verb": "GET",
-      "path": "/api/v1/fetch_short_code/pjUoDn",
+      "path": "/api/v1/fetch_short_code/W0vtwB",
       "versions": [
         "1.0"
       ],
-      "query": "pjUoDn",
+      "query": "W0vtwB",
       "request_data": null,
       "response_data": {
-        "shortcode": "pjUoDn"
+        "shortcode": "W0vtwB"
       },
       "code": 302,
+      "show_in_doc": 0,
+      "recorded": true
+    }
+  ],
+  "stats#fetch_stats": [
+    {
+      "verb": "GET",
+      "path": "/api/v1/tgsbNA/stats",
+      "versions": [
+        "1.0"
+      ],
+      "query": null,
+      "request_data": null,
+      "response_data": {
+        "start_date": "2017-11-08T10:48:31.000Z",
+        "redirect_count": 0
+      },
+      "code": 200,
+      "show_in_doc": 1,
+      "recorded": true
+    },
+    {
+      "verb": "GET",
+      "path": "/api/v1/abcdefa/stats",
+      "versions": [
+        "1.0"
+      ],
+      "query": null,
+      "request_data": null,
+      "response_data": {
+        "errors": "The shortcode cannot be found in the system"
+      },
+      "code": 404,
+      "show_in_doc": 0,
+      "recorded": true
+    },
+    {
+      "verb": "GET",
+      "path": "/api/v1/wG9FaR/stats",
+      "versions": [
+        "1.0"
+      ],
+      "query": null,
+      "request_data": null,
+      "response_data": {
+        "start_date": "2017-11-08T10:48:31.000Z",
+        "redirect_count": 0
+      },
+      "code": 200,
+      "show_in_doc": 0,
+      "recorded": true
+    },
+    {
+      "verb": "GET",
+      "path": "/api/v1/6Iiov2/stats",
+      "versions": [
+        "1.0"
+      ],
+      "query": null,
+      "request_data": null,
+      "response_data": {
+        "start_date": "2017-11-08T10:48:31.000Z",
+        "redirect_count": 0
+      },
+      "code": 200,
       "show_in_doc": 0,
       "recorded": true
     }
