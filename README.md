@@ -1,36 +1,23 @@
 Shorty Challenge
 ================
 
-The trendy modern question for developer inteviews seems to be, "how to create an url shortner". Not wanting to fall too far from the cool kids, we have a challenge for you!
-
-## The Challenge
-
-The challenge, if you choose to accept it, is to create a micro service to shorten urls, in the style that TinyURL and bit.ly made popular.
-
-## Rules
-
-1. The service must expose HTTP endpoints according to the definition below.
-2. The service must be self contained, you can use any language and technology you like, but it must be possible to set it up from a fresh install of Ubuntu Server 14.04, by following the steps you write in the README.
-3. It must be well tested, it must also be possible to run the entire test suit with a single command from the directory of your repository.
-4. The service must be versioned using git and submitted by making a Pull Request against this repository, git history **should** be meaningful.
-5. You don't have to use a datastore, you can have all data in memory, but we'd be more impressed if you do use one.
-
-## Tips
-
-* Less is more, small is beautiful, you know the drill — stick to the requirements.
-* Use the right tool for the job, rails is highly discouraged.
-* Don't try to make the microservice play well with others, the system is all yours.
-* No need to take care of domains, that's for a reverse proxy to handle.
-* Unit tests > Integration tests, but be careful with untested parts of the system.
-
-**Good Luck!** — not that you need any ;)
+This is a Rails API handling requests.
+Json responses are built with Jbuilder.
+API Documentation is put together with the Apipie gem.
+httpie used as HTTP client for making requests to the API.
 
 -------------------------------------------------------------------------
+## Installation
+
+run ./shorty.sh from within the project's directory and bundle install after cloning the repository.
 
 ## API Documentation
 
-**All responses must be encoded in JSON and have the appropriate Content-Type header**
+Available at ```http://localhost:3000/apipie```
 
+## Tests
+
+run the ```bundle exec rspec``` command from within the project's directory for running the full test suite.
 
 ### POST /shorten
 
@@ -69,7 +56,6 @@ Error | Description
 400   | ```url``` is not present
 409   | The the desired shortcode is already in use. **Shortcodes are case-sensitive**.
 422   | The shortcode fails to meet the following regexp: ```^[0-9a-zA-Z_]{4,}$```.
-
 
 ### GET /:shortcode
 
@@ -123,14 +109,12 @@ Content-Type: "application/json"
 
 Attribute         | Description
 --------------    | -----------
-**startDate**     | date when the url was encoded, conformant to [ISO8601](http://en.wikipedia.org/wiki/ISO_8601)
-**redirectCount** | number of times the endpoint ```GET /shortcode``` was called
-lastSeenDate      | date of the last time the a redirect was issued, not present if ```redirectCount == 0```
+**last_seen_date**    | date of the last time the a redirect was issued, not present if ```redirectCount == 0```
+**redirect_count** | number of times the endpoint ```GET /shortcode``` was called
+**start_date**     | date when the url was encoded, conformant to [ISO8601](http://en.wikipedia.org/wiki/ISO_8601)
 
 ##### Errors
 
 Error | Description
 ----- | ------------
 404   | The ```shortcode``` cannot be found in the system
-
-

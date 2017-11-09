@@ -1,7 +1,9 @@
 class Api::V1::StatsController < ApplicationController
   before_action :find_stats, only: [:fetch_stats]
 
-  api :GET, '/v1/:shortcode/stats'
+  api :GET, '/v1/:shortcode/stats',
+  'Returns the datetime of when a shortcode was generated,
+   counts for redirect hits, and the last time the redirect was hit.'
   param :shortcode, String, desc: 'short link shortcode'
   def fetch_stats
     relevant_attrs = select_attrs(@stats)
