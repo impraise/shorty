@@ -5,7 +5,7 @@ class ShortLink < ApplicationRecord
   validates :shortcode, uniqueness: true
   validates :shortcode, format: { with: /\A[0-9a-zA-Z_]{6}\z/i }, allow_nil: true
 
-  ALPHABET = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_".split(//)
+  ALPHABET = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_'.split(//)
 
   before_create { generate_shortcode(:shortcode) }
   after_create :url_encode_date
