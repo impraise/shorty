@@ -34,7 +34,7 @@ RSpec.describe 'ShortLinks', type: :request do
   end
 
   describe 'GET /api/v1/fetch_short_code/:shortcode' do
-    before { get "/api/v1/fetch_short_code/#{shortcode}", params: shortcode }
+    before { get "/api/v1/fetch_short_code/#{shortcode}" }
 
     context 'when shortcode exists' do
       it 'returns the shortcode' do
