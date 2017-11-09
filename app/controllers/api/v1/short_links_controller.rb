@@ -20,12 +20,7 @@ class Api::V1::ShortLinksController < ApplicationController
   private
 
   def update_stats_redirect_count
-    stats = @short_link.stat
-    stats.tap do |stat|
-      stat.redirect_count += 1
-      stat.last_seen_date = DateTime.now.in_time_zone('UTC').iso8601
-    end
-    stats.save
+    @short_link.stat.update_from_endpoint
   end
 
   def short_link_params
