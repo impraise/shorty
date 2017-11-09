@@ -16,7 +16,7 @@ RSpec.describe 'Stats', type: :request do
     end
 
     before { get "/api/v1/#{shortcode}/stats" }
-    context 'when shortcode does exists' do
+    context 'when shortcode does exist' do
 
       it "returns stats object" do
         expect(JSON.parse(response.body)).not_to be_empty
