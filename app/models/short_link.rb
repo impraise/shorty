@@ -10,9 +10,10 @@ class ShortLink < ApplicationRecord
 
   def generate_shortcode(shortcode)
     return if valid_preferential_shortcode?(shortcode)
-    begin
+    loop do
       self[shortcode] = SecureRandom.urlsafe_base64(4)
-    end while shortcode_exists?(shortcode)
+      break unless shortcode_exists?(shortcode)
+    end
   end
 
   def valid_preferential_shortcode?(shortcode)
