@@ -2,7 +2,8 @@ require 'securerandom'
 require 'redis'
 
 class Shorty
-  attr_reader :url, :shortcode
+  attr_reader :url
+  attr_accessor :shortcode, :last_seen_date, :redirect_count, :start_date
 
   SHORTCODE_POST_REGEX = /^[0-9a-zA-Z_]{4,}$/
   SHORTCODE_SAVE_REGEX = /^[0-9a-zA-Z_]{6}$/
@@ -10,6 +11,9 @@ class Shorty
   def initialize(attributes)
     @url = attributes[:url]
     @shortcode = attributes[:shortcode]
+    @start_date = attributes[:start_date]
+    @last_seen_date = attributes[:last_seen_date]
+    @redirect_count = attributes[:redirect_count]
   end
 
   # Save the Shorty attributes and return the saved Shorty record.
@@ -18,8 +22,11 @@ class Shorty
     # If not, then generate a new one.
     shortcode = self.has_valid_shortcode? ? self.shortcode : self.generate_shortcode
 
-    attributes = { url: self.url, shortcode: shortcode }
-    Shorty.redis_conn.set(shortcode, attributes.to_json)
+    self.shortcode = shortcode
+    self.redirect_count = 0
+    self.start_date = self.iso_8601_time_format
+
+    Shorty.redis_conn.set(shortcode, self.attributes.to_json)
 
     Shorty.find(shortcode)
   end
@@ -34,8 +41,38 @@ class Shorty
     Shorty.new(symbolize_hash_keys(JSON.parse(shorty_record)))
   end
 
+  def update_last_seen_and_redirect_count
+    self.last_seen_date = self.iso_8601_time_format
+    self.redirect_count += 1
+    Shorty.redis_conn.set(shortcode, self.attributes.to_json)
+  end
+
   def has_valid_shortcode?
     self.shortcode.to_s.match(SHORTCODE_POST_REGEX)
+  end
+
+  def stats_attributes
+    {
+        startDate: self.start_date,
+        lastSeenDate: self.last_seen_date,
+        redirectCount: self.redirect_count,
+    }
+  end
+
+  protected
+
+  def iso_8601_time_format
+    Time.now.strftime('%Y-%m-%dT%H:%M:%S.%L%Z')
+  end
+
+  def attributes
+    {
+        url: self.url,
+        shortcode: self.shortcode,
+        redirect_count: self.redirect_count,
+        start_date: self.start_date,
+        last_seen_date: self.last_seen_date
+    }
   end
 
   private

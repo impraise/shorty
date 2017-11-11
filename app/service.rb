@@ -8,6 +8,11 @@ before do
 end
 
 helpers do
+  def short_code_not_found_response
+    status 404
+    {message: 'The `shortcode` cannot be found in the system'}.to_json
+  end
+
   def send_json_response(status, json)
     status status
     json.to_json
@@ -40,10 +45,29 @@ post '/shorten' do
 end
 
 get '/:shortcode' do
+  shortcode = params[:shortcode]
 
+  shorty_record = Shorty.find(shortcode)
+  if shorty_record
+    shorty_record.update_last_seen_and_redirect_count
+
+    status 302
+    headers 'Location' => shorty_record.url
+
+    return
+  end
+
+  short_code_not_found_response
 end
 
 get '/:shortcode/stats' do
+  shortcode = params[:shortcode]
 
+  shorty_record = Shorty.find(shortcode)
+  if shorty_record
+    return send_json_response(200, shorty_record.stats_attributes)
+  end
+
+  short_code_not_found_response
 end
 
