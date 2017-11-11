@@ -44,7 +44,7 @@ class Shorty
   def update_last_seen_and_redirect_count
     self.last_seen_date = self.iso_8601_time_format
     self.redirect_count += 1
-    Shorty.redis_conn.set(shortcode, self.attributes.to_json)
+    Shorty.redis_conn.set(self.shortcode, self.attributes.to_json)
   end
 
   def has_valid_shortcode?
@@ -75,12 +75,6 @@ class Shorty
     }
   end
 
-  private
-  # Establish Redis connection
-  def self.redis_conn
-    @redis_conn ||= Redis.new
-  end
-
   # Returns uniq shortcode which matches ^[0-9a-zA-Z_]{6}$ pattern
   def generate_shortcode
     shortcode = SecureRandom.urlsafe_base64(4)
@@ -92,6 +86,12 @@ class Shorty
     end
 
     shortcode
+  end
+
+  private
+  # Establish Redis connection
+  def self.redis_conn
+    @redis_conn ||= Redis.new
   end
 
   # Convert all the keys of the hash to symbols.

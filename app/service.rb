@@ -13,9 +13,9 @@ helpers do
     {message: 'The `shortcode` cannot be found in the system'}.to_json
   end
 
-  def send_json_response(status, json)
+  def send_json_response(status, hash)
     status status
-    json.to_json
+    hash.to_json
   end
 end
 
